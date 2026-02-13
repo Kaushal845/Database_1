@@ -1,0 +1,1087 @@
+{
+  "fields": {
+    "username": {
+      "appearances": 50,
+      "type_counts": {
+        "string": 50
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "blanchardcarl",
+        "burtonshawn",
+        "brooke03",
+        "markdavis",
+        "morganerin"
+      ]
+    },
+    "phone": {
+      "appearances": 15,
+      "type_counts": {
+        "string": 15
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "+1-580-228-2616x359",
+        "(398)702-8437x248",
+        "305.262.0913x98604",
+        "992.602.6025x1993",
+        "(629)429-4273x5532"
+      ]
+    },
+    "ip_address": {
+      "appearances": 38,
+      "type_counts": {
+        "ip_address": 38
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "52.252.166.109",
+        "71.252.76.25",
+        "187.33.67.30",
+        "129.177.235.185",
+        "210.221.194.5"
+      ]
+    },
+    "device_id": {
+      "appearances": 33,
+      "type_counts": {
+        "uuid": 33
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.877165",
+      "sample_values": [
+        "9c5fe974-b5c8-4cd7-bedc-8168697fc5fa",
+        "9eff4e8d-edc1-4b9d-ac09-afbe8377ed73",
+        "ab8e9915-8734-43e3-a0cc-c3933490e0cd",
+        "41c91a1e-434b-4fbf-903e-6aab495f5cce",
+        "f3751d8b-cdad-46e3-86fa-db71a24cf632"
+      ]
+    },
+    "device_model": {
+      "appearances": 43,
+      "type_counts": {
+        "string": 43
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "OnePlus 12",
+        "iPhone 14",
+        "Samsung S23",
+        "Pixel 8"
+      ]
+    },
+    "altitude": {
+      "appearances": 33,
+      "type_counts": {
+        "float": 33
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.877165",
+      "sample_values": [
+        "97.27",
+        "1702.5",
+        "733.61",
+        "2274.74",
+        "1706.32"
+      ]
+    },
+    "speed": {
+      "appearances": 27,
+      "type_counts": {
+        "float": 27
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.877165",
+      "sample_values": [
+        "32.13",
+        "87.83",
+        "78.26",
+        "52.58",
+        "97.99"
+      ]
+    },
+    "direction": {
+      "appearances": 15,
+      "type_counts": {
+        "string": 15
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "E",
+        "S",
+        "W",
+        "N"
+      ]
+    },
+    "city": {
+      "appearances": 32,
+      "type_counts": {
+        "string": 32
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "New Carolineton",
+        "West Melissaburgh",
+        "North William",
+        "North Richardfort",
+        "Williamsburgh"
+      ]
+    },
+    "country": {
+      "appearances": 37,
+      "type_counts": {
+        "string": 37
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "Liechtenstein",
+        "Saint Pierre and Miquelon",
+        "Cambodia",
+        "Palestinian Territory",
+        "Heard Island and McDonald Islands"
+      ]
+    },
+    "timestamp": {
+      "appearances": 41,
+      "type_counts": {
+        "timestamp": 41
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "2026-02-13T20:48:50.151510",
+        "2026-02-13T20:48:50.161734",
+        "2026-02-13T20:48:50.177426",
+        "2026-02-13T20:48:50.193412",
+        "2026-02-13T20:48:50.208580"
+      ]
+    },
+    "session_id": {
+      "appearances": 34,
+      "type_counts": {
+        "uuid": 34
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.877165",
+      "sample_values": [
+        "c47bf0d2-c9df-45eb-bd07-6657991450fd",
+        "0d9fcff1-1b6d-4654-9fb7-bbcc2cf1b659",
+        "77b23e2a-2d33-4198-90d7-effb25774625",
+        "19a42323-ae30-4cbb-ad2a-aba37dafb4e4",
+        "a633e6dd-d516-42d9-99a5-795ca6e0ae88"
+      ]
+    },
+    "steps": {
+      "appearances": 16,
+      "type_counts": {
+        "integer": 16
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "9197",
+        "8645",
+        "1137",
+        "9528",
+        "6693"
+      ]
+    },
+    "spo2": {
+      "appearances": 49,
+      "type_counts": {
+        "integer": 49
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "96",
+        "93",
+        "92",
+        "92",
+        "100"
+      ]
+    },
+    "temperature_c": {
+      "appearances": 34,
+      "type_counts": {
+        "float": 34
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "-5.0",
+        "28.3",
+        "43.4",
+        "24.6",
+        "2.7"
+      ]
+    },
+    "humidity": {
+      "appearances": 37,
+      "type_counts": {
+        "integer": 37
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "24",
+        "66",
+        "81",
+        "91",
+        "43"
+      ]
+    },
+    "air_quality": {
+      "appearances": 32,
+      "type_counts": {
+        "string": 32
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "moderate",
+        "hazardous",
+        "good",
+        "bad"
+      ]
+    },
+    "purchase_value": {
+      "appearances": 49,
+      "type_counts": {
+        "float": 49
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "36.45",
+        "172.35",
+        "33.95",
+        "423.82",
+        "492.2"
+      ]
+    },
+    "item": {
+      "appearances": 18,
+      "type_counts": {
+        "string": 17,
+        "null": 1
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.861631",
+      "sample_values": [
+        "bag",
+        "laptop",
+        "phone",
+        "shoes",
+        "book"
+      ]
+    },
+    "payment_status": {
+      "appearances": 32,
+      "type_counts": {
+        "string": 32
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.908856",
+      "sample_values": [
+        "pending",
+        "success",
+        "failed"
+      ]
+    },
+    "language": {
+      "appearances": 26,
+      "type_counts": {
+        "string": 26
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.878164",
+      "sample_values": [
+        "Nauru",
+        "Igbo",
+        "Bambara",
+        "Indonesian",
+        "Croatian"
+      ]
+    },
+    "timezone": {
+      "appearances": 41,
+      "type_counts": {
+        "string": 41
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "America/El_Salvador",
+        "Asia/Makassar",
+        "America/Havana",
+        "Atlantic/Cape_Verde",
+        "Asia/Tashkent"
+      ]
+    },
+    "ram_usage": {
+      "appearances": 37,
+      "type_counts": {
+        "integer": 37
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "35",
+        "31",
+        "24",
+        "91",
+        "60"
+      ]
+    },
+    "error_code": {
+      "appearances": 16,
+      "type_counts": {
+        "integer": 11,
+        "null": 5
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.861631",
+      "sample_values": [
+        "100",
+        "None",
+        "403",
+        "None",
+        "403"
+      ]
+    },
+    "comment": {
+      "appearances": 21,
+      "type_counts": {
+        "string": 21
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.861631",
+      "sample_values": [
+        "Morning poor strategy public near.",
+        "Open focus watch.",
+        "Difficult door fear happy tough message least return.",
+        "Other poor this.",
+        "While garden with off."
+      ]
+    },
+    "avatar_url": {
+      "appearances": 33,
+      "type_counts": {
+        "url": 33
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.908856",
+      "sample_values": [
+        "https://placekitten.com/144/882",
+        "https://picsum.photos/548/97",
+        "https://placekitten.com/915/888",
+        "https://dummyimage.com/1020x417",
+        "https://placekitten.com/310/743"
+      ]
+    },
+    "last_seen": {
+      "appearances": 15,
+      "type_counts": {
+        "timestamp": 15
+      },
+      "first_seen": "2026-02-13T20:48:50.153000",
+      "last_seen": "2026-02-13T20:48:50.878164",
+      "sample_values": [
+        "2026-02-13T19:53:50.151510",
+        "2026-02-13T18:10:50.193412",
+        "2026-02-13T18:51:50.318503",
+        "2026-02-13T17:15:50.334432",
+        "2026-02-13T17:18:50.412432"
+      ]
+    },
+    "name": {
+      "appearances": 32,
+      "type_counts": {
+        "string": 32
+      },
+      "first_seen": "2026-02-13T20:48:50.167723",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "Brian Sims",
+        "Brian Dominguez",
+        "Wendy Savage",
+        "Amber Reese",
+        "Andrew Le"
+      ]
+    },
+    "weather": {
+      "appearances": 41,
+      "type_counts": {
+        "string": 41
+      },
+      "first_seen": "2026-02-13T20:48:50.167723",
+      "last_seen": "2026-02-13T20:48:50.907880",
+      "sample_values": [
+        "stormy",
+        "rainy",
+        "sunny",
+        "snow",
+        "cloudy"
+      ]
+    },
+    "action": {
+      "appearances": 28,
+      "type_counts": {
+        "string": 28
+      },
+      "first_seen": "2026-02-13T20:48:50.167723",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "logout",
+        "view",
+        "login",
+        "click",
+        "purchase"
+      ]
+    },
+    "subscription": {
+      "appearances": 40,
+      "type_counts": {
+        "string": 40
+      },
+      "first_seen": "2026-02-13T20:48:50.167723",
+      "last_seen": "2026-02-13T20:48:50.908856",
+      "sample_values": [
+        "free",
+        "premium",
+        "basic",
+        "trial"
+      ]
+    },
+    "friends_count": {
+      "appearances": 18,
+      "type_counts": {
+        "integer": 18
+      },
+      "first_seen": "2026-02-13T20:48:50.167723",
+      "last_seen": "2026-02-13T20:48:50.831812",
+      "sample_values": [
+        "3531",
+        "326",
+        "3692",
+        "420",
+        "1082"
+      ]
+    },
+    "app_version": {
+      "appearances": 16,
+      "type_counts": {
+        "string": 16
+      },
+      "first_seen": "2026-02-13T20:48:50.178445",
+      "last_seen": "2026-02-13T20:48:50.830809",
+      "sample_values": [
+        "v4.2.6",
+        "v4.5.8",
+        "v4.9.9",
+        "v5.2.3",
+        "v2.8.4"
+      ]
+    },
+    "cpu_usage": {
+      "appearances": 23,
+      "type_counts": {
+        "integer": 23
+      },
+      "first_seen": "2026-02-13T20:48:50.178445",
+      "last_seen": "2026-02-13T20:48:50.878164",
+      "sample_values": [
+        "66",
+        "95",
+        "49",
+        "39",
+        "52"
+      ]
+    },
+    "disk_usage": {
+      "appearances": 5,
+      "type_counts": {
+        "integer": 5
+      },
+      "first_seen": "2026-02-13T20:48:50.178445",
+      "last_seen": "2026-02-13T20:48:50.708371",
+      "sample_values": [
+        "9",
+        "14",
+        "23",
+        "83",
+        "71"
+      ]
+    },
+    "email": {
+      "appearances": 15,
+      "type_counts": {
+        "email": 15
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "oellis@example.org",
+        "cortezsusan@example.net",
+        "wmarshall@example.org",
+        "swest@example.net",
+        "timward@example.com"
+      ]
+    },
+    "os": {
+      "appearances": 7,
+      "type_counts": {
+        "string": 7
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "MacOS",
+        "Android",
+        "iOS",
+        "Windows"
+      ]
+    },
+    "charging": {
+      "appearances": 10,
+      "type_counts": {
+        "boolean": 10
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.877165",
+      "sample_values": [
+        "True",
+        "False",
+        "False",
+        "False",
+        "True"
+      ]
+    },
+    "sleep_hours": {
+      "appearances": 21,
+      "type_counts": {
+        "float": 21
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "8.3",
+        "3.3",
+        "7.2",
+        "4.7",
+        "3.4"
+      ]
+    },
+    "signal_strength": {
+      "appearances": 16,
+      "type_counts": {
+        "integer": 16
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.755311",
+      "sample_values": [
+        "1",
+        "4",
+        "1",
+        "3",
+        "5"
+      ]
+    },
+    "is_active": {
+      "appearances": 8,
+      "type_counts": {
+        "boolean": 8
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.878164",
+      "sample_values": [
+        "True",
+        "False",
+        "False",
+        "False",
+        "True"
+      ]
+    },
+    "metadata_sensor_data_version": {
+      "appearances": 15,
+      "type_counts": {
+        "string": 15
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.878164",
+      "sample_values": [
+        "2.1"
+      ]
+    },
+    "metadata_sensor_data_calibrated": {
+      "appearances": 15,
+      "type_counts": {
+        "boolean": 15
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.878164",
+      "sample_values": [
+        "True",
+        "False",
+        "True",
+        "True",
+        "False"
+      ]
+    },
+    "metadata_sensor_data_readings": {
+      "appearances": 15,
+      "type_counts": {
+        "list": 15
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.878164",
+      "sample_values": [
+        "[4, 2, 6]",
+        "[8, 5, 4]",
+        "[5, 10, 1]",
+        "[2, 8, 3]",
+        "[9, 9, 5]"
+      ]
+    },
+    "metadata_tags": {
+      "appearances": 11,
+      "type_counts": {
+        "list": 11
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.878164",
+      "sample_values": [
+        "['able', 'piece', 'public']",
+        "['half', 'in', 'beautiful']",
+        "['special']",
+        "['no']",
+        "['team', 'war']"
+      ]
+    },
+    "metadata_is_bot": {
+      "appearances": 19,
+      "type_counts": {
+        "boolean": 19
+      },
+      "first_seen": "2026-02-13T20:48:50.193412",
+      "last_seen": "2026-02-13T20:48:50.908856",
+      "sample_values": [
+        "False",
+        "False",
+        "False",
+        "False",
+        "False"
+      ]
+    },
+    "network": {
+      "appearances": 26,
+      "type_counts": {
+        "string": 26
+      },
+      "first_seen": "2026-02-13T20:48:50.224456",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "Ethernet",
+        "Offline",
+        "4G",
+        "WiFi",
+        "5G"
+      ]
+    },
+    "gps_lon": {
+      "appearances": 6,
+      "type_counts": {
+        "float": 6
+      },
+      "first_seen": "2026-02-13T20:48:50.240510",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "178.134777",
+        "-50.215239",
+        "141.162348",
+        "-69.257133",
+        "164.129043"
+      ]
+    },
+    "is_background": {
+      "appearances": 4,
+      "type_counts": {
+        "boolean": 4
+      },
+      "first_seen": "2026-02-13T20:48:50.272385",
+      "last_seen": "2026-02-13T20:48:50.708371",
+      "sample_values": [
+        "True",
+        "True",
+        "False",
+        "False"
+      ]
+    },
+    "metadata_internal_id": {
+      "appearances": 13,
+      "type_counts": {
+        "string": 13
+      },
+      "first_seen": "2026-02-13T20:48:50.288929",
+      "last_seen": "2026-02-13T20:48:50.908856",
+      "sample_values": [
+        "ID-2002-wR",
+        "ID-4937-Gq",
+        "ID-9165-aG",
+        "ID-6505-UJ",
+        "ID-6176-Xy"
+      ]
+    },
+    "postal_code": {
+      "appearances": 3,
+      "type_counts": {
+        "string": 3
+      },
+      "first_seen": "2026-02-13T20:48:50.319859",
+      "last_seen": "2026-02-13T20:48:50.630465",
+      "sample_values": [
+        "94835",
+        "05024",
+        "66250"
+      ]
+    },
+    "mood": {
+      "appearances": 5,
+      "type_counts": {
+        "string": 5
+      },
+      "first_seen": "2026-02-13T20:48:50.319859",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "excited",
+        "neutral",
+        "happy",
+        "sad"
+      ]
+    },
+    "retry_count": {
+      "appearances": 5,
+      "type_counts": {
+        "integer": 5
+      },
+      "first_seen": "2026-02-13T20:48:50.401628",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "2",
+        "3",
+        "0",
+        "3",
+        "4"
+      ]
+    },
+    "stress_level": {
+      "appearances": 5,
+      "type_counts": {
+        "string": 5
+      },
+      "first_seen": "2026-02-13T20:48:50.428466",
+      "last_seen": "2026-02-13T20:48:50.893097",
+      "sample_values": [
+        "low",
+        "high"
+      ]
+    },
+    "gps_lat": {
+      "appearances": 2,
+      "type_counts": {
+        "float": 2
+      },
+      "first_seen": "2026-02-13T20:48:50.458304",
+      "last_seen": "2026-02-13T20:48:50.661834",
+      "sample_values": [
+        "-7.792284",
+        "21.032701"
+      ]
+    },
+    "heart_rate": {
+      "appearances": 4,
+      "type_counts": {
+        "integer": 4
+      },
+      "first_seen": "2026-02-13T20:48:50.630465",
+      "last_seen": "2026-02-13T20:48:50.800147",
+      "sample_values": [
+        "115",
+        "119",
+        "108",
+        "62"
+      ]
+    },
+    "age": {
+      "appearances": 1,
+      "type_counts": {
+        "integer": 1
+      },
+      "first_seen": "2026-02-13T20:48:50.815482",
+      "last_seen": "2026-02-13T20:48:50.815482",
+      "sample_values": [
+        "46"
+      ]
+    },
+    "battery": {
+      "appearances": 1,
+      "type_counts": {
+        "integer": 1
+      },
+      "first_seen": "2026-02-13T20:48:50.830809",
+      "last_seen": "2026-02-13T20:48:50.830809",
+      "sample_values": [
+        "39"
+      ]
+    }
+  },
+  "normalization_rules": {},
+  "placement_decisions": {
+    "username": {
+      "backend": "Both",
+      "reason": "Mandatory field 'username' stored in both backends for join capability",
+      "decided_at": "2026-02-13T20:48:50.153000"
+    },
+    "sys_ingested_at": {
+      "backend": "Both",
+      "reason": "Mandatory field 'sys_ingested_at' stored in both backends for join capability",
+      "decided_at": "2026-02-13T20:48:50.153568"
+    },
+    "t_stamp": {
+      "backend": "Both",
+      "reason": "Mandatory field 't_stamp' stored in both backends for join capability",
+      "decided_at": "2026-02-13T20:48:50.153568"
+    },
+    "spo2": {
+      "backend": "SQL",
+      "reason": "Field 'spo2' has high frequency (100.0%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.288929"
+    },
+    "purchase_value": {
+      "backend": "SQL",
+      "reason": "Field 'purchase_value' has high frequency (100.0%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.292433"
+    },
+    "timestamp": {
+      "backend": "SQL",
+      "reason": "Field 'timestamp' has high frequency (90.9%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.303469"
+    },
+    "ip_address": {
+      "backend": "SQL",
+      "reason": "Field 'ip_address' has high frequency (83.3%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.319859"
+    },
+    "subscription": {
+      "backend": "SQL",
+      "reason": "Field 'subscription' has high frequency (83.3%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.324385"
+    },
+    "device_model": {
+      "backend": "SQL",
+      "reason": "Field 'device_model' has high frequency (76.9%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.335433"
+    },
+    "weather": {
+      "backend": "SQL",
+      "reason": "Field 'weather' has high frequency (76.9%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.339434"
+    },
+    "humidity": {
+      "backend": "SQL",
+      "reason": "Field 'humidity' has high frequency (76.9%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.343467"
+    },
+    "timezone": {
+      "backend": "SQL",
+      "reason": "Field 'timezone' has high frequency (76.9%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.347472"
+    },
+    "avatar_url": {
+      "backend": "SQL",
+      "reason": "Field 'avatar_url' has high frequency (76.9%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.351471"
+    },
+    "city": {
+      "backend": "SQL",
+      "reason": "Field 'city' has high frequency (71.4%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.359858"
+    },
+    "air_quality": {
+      "backend": "SQL",
+      "reason": "Field 'air_quality' has high frequency (71.4%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.363364"
+    },
+    "action": {
+      "backend": "SQL",
+      "reason": "Field 'action' has high frequency (71.4%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.367433"
+    },
+    "ram_usage": {
+      "backend": "SQL",
+      "reason": "Field 'ram_usage' has high frequency (71.4%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.370433"
+    },
+    "name": {
+      "backend": "SQL",
+      "reason": "Field 'name' has high frequency (66.7%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.379470"
+    },
+    "speed": {
+      "backend": "SQL",
+      "reason": "Field 'speed' has high frequency (66.7%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.383725"
+    },
+    "country": {
+      "backend": "SQL",
+      "reason": "Field 'country' has high frequency (66.7%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.386722"
+    },
+    "session_id": {
+      "backend": "SQL",
+      "reason": "Field 'session_id' has high frequency (62.5%) and type stability (100.0%) - optimal for SQL",
+      "decided_at": "2026-02-13T20:48:50.394630"
+    },
+    "device_id": {
+      "backend": "MongoDB",
+      "reason": "Field 'device_id' has low frequency (58.8%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.401628"
+    },
+    "temperature_c": {
+      "backend": "MongoDB",
+      "reason": "Field 'temperature_c' has low frequency (58.8%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.401628"
+    },
+    "language": {
+      "backend": "MongoDB",
+      "reason": "Field 'language' has low frequency (58.8%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.401628"
+    },
+    "network": {
+      "backend": "MongoDB",
+      "reason": "Field 'network' has low frequency (55.6%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.412432"
+    },
+    "payment_status": {
+      "backend": "MongoDB",
+      "reason": "Field 'payment_status' has low frequency (55.6%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.413470"
+    },
+    "comment": {
+      "backend": "MongoDB",
+      "reason": "Field 'comment' has low frequency (55.6%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.413470"
+    },
+    "phone": {
+      "backend": "MongoDB",
+      "reason": "Field 'phone' has low frequency (50.0%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.443664"
+    },
+    "altitude": {
+      "backend": "MongoDB",
+      "reason": "Field 'altitude' has low frequency (50.0%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.443664"
+    },
+    "steps": {
+      "backend": "MongoDB",
+      "reason": "Field 'steps' has low frequency (50.0%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.443664"
+    },
+    "cpu_usage": {
+      "backend": "MongoDB",
+      "reason": "Field 'cpu_usage' has low frequency (50.0%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.444744"
+    },
+    "sleep_hours": {
+      "backend": "MongoDB",
+      "reason": "Field 'sleep_hours' has low frequency (43.5%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.490756"
+    },
+    "item": {
+      "backend": "MongoDB",
+      "reason": "Field 'item' has low frequency (40.0%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.521805"
+    },
+    "signal_strength": {
+      "backend": "MongoDB",
+      "reason": "Field 'signal_strength' has low frequency (40.0%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.522324"
+    },
+    "friends_count": {
+      "backend": "MongoDB",
+      "reason": "Field 'friends_count' has low frequency (38.5%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.536261"
+    },
+    "metadata_is_bot": {
+      "backend": "MongoDB",
+      "reason": "Field 'metadata_is_bot' has low frequency (34.5%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.584414"
+    },
+    "metadata_sensor_data_version": {
+      "backend": "MongoDB",
+      "reason": "Field 'metadata_sensor_data_version' has low frequency (33.3%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.600742"
+    },
+    "metadata_sensor_data_calibrated": {
+      "backend": "MongoDB",
+      "reason": "Field 'metadata_sensor_data_calibrated' has low frequency (33.3%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.600742"
+    },
+    "metadata_sensor_data_readings": {
+      "backend": "MongoDB",
+      "reason": "Field 'metadata_sensor_data_readings' contains nested structures (type: list) - better suited for MongoDB",
+      "decided_at": "2026-02-13T20:48:50.600742"
+    },
+    "app_version": {
+      "backend": "MongoDB",
+      "reason": "Field 'app_version' has low frequency (32.3%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.615279"
+    },
+    "direction": {
+      "backend": "MongoDB",
+      "reason": "Field 'direction' has low frequency (30.3%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.646473"
+    },
+    "email": {
+      "backend": "MongoDB",
+      "reason": "Field 'email' has low frequency (27.0%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.708371"
+    },
+    "last_seen": {
+      "backend": "MongoDB",
+      "reason": "Field 'last_seen' has low frequency (27.0%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.709382"
+    },
+    "error_code": {
+      "backend": "MongoDB",
+      "reason": "Field 'error_code' has low frequency (26.3%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.724286"
+    },
+    "metadata_tags": {
+      "backend": "MongoDB",
+      "reason": "Field 'metadata_tags' contains nested structures (type: list) - better suited for MongoDB",
+      "decided_at": "2026-02-13T20:48:50.801690"
+    },
+    "metadata_internal_id": {
+      "backend": "MongoDB",
+      "reason": "Field 'metadata_internal_id' has low frequency (22.7%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.816468"
+    },
+    "charging": {
+      "backend": "MongoDB",
+      "reason": "Field 'charging' has low frequency (20.8%) - storing in MongoDB for sparse data flexibility",
+      "decided_at": "2026-02-13T20:48:50.878164"
+    }
+  },
+  "total_records": 50,
+  "last_updated": "2026-02-13T20:48:50.916711",
+  "session_start": "2026-02-13T20:48:44.440578"
+}

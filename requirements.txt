@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+faker
+sse-starlette
+pymongo
+requests
