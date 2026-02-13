@@ -10,7 +10,7 @@ print("=" * 70)
 # Configuration
 API_URL = 'http://127.0.0.1:8000'
 BATCH_SIZE = 50
-TOTAL_BATCHES = 2
+TOTAL_BATCHES = 25
 
 # Test API connection
 print(f"\nTesting connection to {API_URL}...")
