@@ -7,7 +7,6 @@ from datetime import datetime
 import json
 
 from metadata_store import MetadataStore
-from field_normalizer import FieldNormalizer
 from type_detector import TypeDetector
 from placement_heuristics import PlacementHeuristics
 from database_managers import SQLManager, MongoDBManager
@@ -16,11 +15,10 @@ from database_managers import SQLManager, MongoDBManager
 class IngestionPipeline:
     """
     Autonomous data ingestion system that:
-    1. Normalizes field names
-    2. Tracks field frequency and type stability
-    3. Decides SQL vs MongoDB placement dynamically
-    4. Handles bi-temporal timestamps
-    5. Maintains traceability via username
+    1. Tracks field frequency and type stability
+    2. Decides SQL vs MongoDB placement dynamically
+    3. Handles bi-temporal timestamps
+    4. Maintains traceability via username
     """
     
     def __init__(self, 
@@ -31,7 +29,6 @@ class IngestionPipeline:
         
         # Initialize components
         self.metadata_store = MetadataStore(metadata_file)
-        self.field_normalizer = FieldNormalizer()
         self.type_detector = TypeDetector()
         self.placement_heuristics = PlacementHeuristics(self.metadata_store)
         
@@ -76,32 +73,23 @@ class IngestionPipeline:
         
         return flat_record, nested_fields if parent_key == '' else {}
     
-    def _normalize_and_track(self, record: Dict[str, Any]) -> Dict[str, Any]:
+    def _track_stats(self, record: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Normalize field names and track statistics.
-        Returns: Dictionary with normalized keys
+        Track field statistics.
+        Returns: Dictionary with original keys
         """
-        normalized_record = {}
+        tracked_record = {}
         
-        for original_key, value in record.items():
-            # Normalize the key
-            normalized_key = self.field_normalizer.normalize(original_key)
-            
-            # Store normalization rule if new
-            if original_key != normalized_key:
-                existing_norm = self.metadata_store.get_normalized_key(original_key)
-                if existing_norm == original_key:  # Not yet recorded
-                    self.metadata_store.add_normalization_rule(original_key, normalized_key)
-            
+        for key, value in record.items():
             # Detect type
             detected_type = self.type_detector.detect_type(value)
             
             # Update field statistics
-            self.metadata_store.update_field_stats(normalized_key, detected_type, value)
+            self.metadata_store.update_field_stats(key, detected_type, value)
             
-            normalized_record[normalized_key] = value
+            tracked_record[key] = value
         
-        return normalized_record
+        return tracked_record
     
     def _add_temporal_timestamps(self, record: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -168,11 +156,10 @@ class IngestionPipeline:
         
         Steps:
         1. Flatten nested structures
-        2. Normalize field names
-        3. Track statistics
-        4. Add bi-temporal timestamps
-        5. Decide placement (SQL/MongoDB)
-        6. Insert into appropriate backend(s)
+        2. Track statistics
+        3. Add bi-temporal timestamps
+        4. Decide placement (SQL/MongoDB)
+        5. Insert into appropriate backend(s)
         
         Returns: True if successful, False otherwise
         """
@@ -180,22 +167,21 @@ class IngestionPipeline:
             # Step 1: Flatten nested structures for tracking
             flat_record, nested_fields = self._flatten_record(raw_record)
             
-            # Step 2: Normalize field names and track statistics
-            normalized_record = self._normalize_and_track(flat_record)
+            # Step 2: Track statistics
+            tracked_record = self._track_stats(flat_record)
             
             # Preserve original nested structure for MongoDB
             for nested_key, nested_value in nested_fields.items():
-                normalized_nested_key = self.field_normalizer.normalize(nested_key)
-                normalized_record[normalized_nested_key] = nested_value
+                tracked_record[nested_key] = nested_value
             
             # Step 3: Add bi-temporal timestamps
-            normalized_record = self._add_temporal_timestamps(normalized_record)
+            tracked_record = self._add_temporal_timestamps(tracked_record)
             
             # Step 4: Increment record count
             self.metadata_store.increment_total_records()
             
             # Step 5: Split record by placement
-            sql_record, mongo_record = self._split_by_placement(normalized_record)
+            sql_record, mongo_record = self._split_by_placement(tracked_record)
             
             # Step 6: Insert into databases
             sql_success = False

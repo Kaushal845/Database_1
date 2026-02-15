@@ -34,7 +34,6 @@ class MetadataStore:
         """Initialize empty metadata structure"""
         return {
             'fields': {},  # Field-level tracking
-            'normalization_rules': {},  # Mapping of observed keys to normalized keys
             'placement_decisions': {},  # SQL vs MongoDB decisions
             'total_records': 0,
             'last_updated': datetime.utcnow().isoformat(),
@@ -81,15 +80,6 @@ class MetadataStore:
             if len(field_data['sample_values']) < 5:
                 if value not in field_data['sample_values']:
                     field_data['sample_values'].append(str(value)[:100])  # Truncate long values
-    
-    def add_normalization_rule(self, original_key: str, normalized_key: str):
-        """Store a normalization mapping"""
-        with self.lock:
-            self.metadata['normalization_rules'][original_key] = normalized_key
-    
-    def get_normalized_key(self, original_key: str) -> str:
-        """Get normalized key for an original key"""
-        return self.metadata['normalization_rules'].get(original_key, original_key)
     
     def set_placement_decision(self, normalized_key: str, backend: str, reason: str):
         """Store placement decision for a field"""
@@ -138,7 +128,6 @@ class MetadataStore:
         return {
             'total_records': self.metadata['total_records'],
             'unique_fields': len(self.metadata['fields']),
-            'normalization_rules': len(self.metadata['normalization_rules']),
             'placement_decisions': len(self.metadata['placement_decisions']),
             'session_start': self.metadata['session_start'],
             'last_updated': self.metadata['last_updated']

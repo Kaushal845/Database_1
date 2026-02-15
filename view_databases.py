@@ -222,7 +222,6 @@ class DatabaseViewer:
         print(f"\n📈 Ingestion Stats:")
         print(f"   Total records processed: {self.metadata.get('total_records', 0):,}")
         print(f"   Unique fields discovered: {len(self.metadata.get('fields', {}))}")
-        print(f"   Normalization rules: {len(self.metadata.get('normalization_rules', {}))}")
         print(f"   Placement decisions: {len(self.metadata.get('placement_decisions', {}))}")
         
         print(f"\n⏰ Timeline:")

@@ -110,7 +110,6 @@ class DataConsumer:
             print(f"MongoDB inserts: {stats['pipeline']['mongodb_inserts']}")
             print(f"Errors: {stats['pipeline']['errors']}")
             print(f"Unique fields discovered: {stats['metadata']['unique_fields']}")
-            print(f"Normalization rules: {stats['metadata']['normalization_rules']}")
             print(f"Placement decisions made: {stats['metadata']['placement_decisions']}")
         
         except KeyboardInterrupt:
@@ -134,10 +133,9 @@ if __name__ == "__main__":
     print("=" * 70)
     print("\nThis system will:")
     print("1. Fetch JSON records from the FastAPI server")
-    print("2. Normalize field names dynamically")
-    print("3. Track field frequency and type stability")
-    print("4. Decide SQL vs MongoDB placement automatically")
-    print("5. Store data with bi-temporal timestamps")
+    print("2. Track field frequency and type stability")
+    print("3. Decide SQL vs MongoDB placement automatically")
+    print("4. Store data with bi-temporal timestamps")
     print("\nPress Ctrl+C to stop at any time")
     print("=" * 70)
     
