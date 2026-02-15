@@ -132,3 +132,58 @@ class MetadataStore:
             'session_start': self.metadata['session_start'],
             'last_updated': self.metadata['last_updated']
         }
+    
+    def get_field_stats(self, normalized_key: str) -> Dict[str, Any]:
+        """
+        Get comprehensive statistics for a field including frequency,
+        type stability, and drift information.
+        """
+        field_data = self.metadata['fields'].get(normalized_key)
+        if not field_data:
+            return {
+                'frequency': 0.0,
+                'type_stability': 0.0,
+                'drift_score': 0.0,
+                'appearances': 0,
+                'null_ratio': 1.0,
+                'dominant_type': 'unknown'
+            }
+        
+        # Calculate frequency
+        frequency = self.get_field_frequency(normalized_key)
+        
+        # Calculate type stability and drift
+        dominant_type, type_stability = self.get_field_type_stability(normalized_key)
+        drift_score = (100.0 - type_stability) / 100.0  # Convert to 0-1 range
+        
+        # Calculate null ratio (if tracked)
+        total_records = self.metadata['total_records']
+        appearances = field_data['appearances']
+        null_ratio = 1.0 - (appearances / total_records) if total_records > 0 else 1.0
+        
+        return {
+            'frequency': frequency,
+            'type_stability': type_stability,
+            'drift_score': drift_score,
+            'appearances': appearances,
+            'null_ratio': null_ratio,
+            'dominant_type': dominant_type,
+            'type_counts': field_data.get('type_counts', {})
+        }
+    
+    def mark_quarantined(self, normalized_key: str, drift_score: float):
+        """Mark a field as quarantined due to severe type drift"""
+        with self.lock:
+            if 'quarantined_fields' not in self.metadata:
+                self.metadata['quarantined_fields'] = {}
+            
+            self.metadata['quarantined_fields'][normalized_key] = {
+                'drift_score': drift_score,
+                'quarantined_at': datetime.utcnow().isoformat(),
+                'reason': f"Severe type drift detected (score: {drift_score:.2f})"
+            }
+    
+    def is_quarantined(self, normalized_key: str) -> bool:
+        """Check if a field is quarantined"""
+        quarantined = self.metadata.get('quarantined_fields', {})
+        return normalized_key in quarantined
