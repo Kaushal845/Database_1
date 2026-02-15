@@ -45,10 +45,9 @@ Real-world data streams are messy:
 ### The Solution
 
 An intelligent pipeline that:
-1. **Normalizes** field names dynamically
-2. **Tracks** field statistics (frequency, type stability)
-3. **Decides** SQL vs MongoDB placement using heuristics
-4. **Stores** data with traceability (username + dual timestamps)
+1. **Tracks** field statistics (frequency, type stability)
+2. **Decides** SQL vs MongoDB placement using heuristics
+3. **Stores** data with traceability (username + dual timestamps)
 
 
 ---
@@ -72,10 +71,9 @@ An intelligent pipeline that:
 │              Ingestion Pipeline                         │
 │           (ingestion_pipeline.py)                       │
 │                                                         │
-│  1. Field Normalizer    → Resolve naming ambiguities   │
-│  2. Type Detector       → Semantic type detection      │
-│  3. Metadata Store      → Track frequency & stability  │
-│  4. Placement Logic     → Decide SQL vs MongoDB        │
+│  1. Type Detector       → Semantic type detection      │
+│  2. Metadata Store      → Track frequency & stability  │
+│  3. Placement Logic     → Decide SQL vs MongoDB        │
 └────────────────────┬────────────────────────────────────┘
                      │
        ┌─────────────┴──────────────┐
@@ -393,33 +391,7 @@ consumer.consume_continuous(
 
 ##  How It Works
 
-### 1. Field Normalization
-
-When a record arrives:
-
-```python
-# Input
-{
-    "userName": "john",
-    "emailAddress": "john@test.com",
-    "IP": "192.168.1.1"
-}
-
-# After normalization
-{
-    "username": "john",
-    "email": "john@test.com",
-    "ip_address": "192.168.1.1"
-}
-```
-
-**Rules:**
-1. Convert camelCase → snake_case
-2. Lowercase all field names
-3. Apply semantic equivalence patterns
-4. Store mapping for consistency
-
-### 2. Type Detection
+### 1. Type Detection
 
 Semantic analysis differentiates:
 
@@ -430,7 +402,7 @@ Semantic analysis differentiates:
 "user@x.com"  → 'email'        (email pattern)
 ```
 
-### 3. Frequency & Type Stability Tracking
+### 2. Frequency & Type Stability Tracking
 
 For each field:
 
@@ -447,7 +419,7 @@ For each field:
 }
 ```
 
-### 4. Placement Decision
+### 3. Placement Decision
 
 **Decision Tree:**
 
@@ -579,7 +551,6 @@ SQL inserts: 1250
 MongoDB inserts: 1250
 Errors: 0
 Unique fields discovered: 58
-Normalization rules: 12
 Placement decisions made: 60
 
 ======================================================================

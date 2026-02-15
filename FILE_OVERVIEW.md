@@ -12,17 +12,12 @@
 
 - **ingestion_pipeline.py**
   - Core orchestration logic for data ingestion
-  - Normalizes fields, detects types, updates metadata, routes to SQL/MongoDB
-  - Features: Autonomous placement, normalization, type detection, statistics
+  - Detects types, updates metadata, routes to SQL/MongoDB
+  - Features: Autonomous placement, type detection, statistics
 
 - **metadata_store.py**
-  - Persistent storage for field statistics, normalization rules, and placement decisions
-  - Features: Tracks frequency, type stability, normalization mappings, and more
-
-- **field_normalizer.py**
-  - Handles field name normalization and semantic equivalence
-  - Prevents duplicate columns due to naming variations
-  - Features: Regex-based normalization, persistent mapping
+  - Persistent storage for field statistics and placement decisions
+  - Features: Tracks frequency, type stability, and more
 
 - **type_detector.py**
   - Detects semantic type of each field value (e.g., IP, UUID, float, string)
