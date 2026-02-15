@@ -7,7 +7,7 @@
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
@@ -24,7 +24,7 @@
 
 ---
 
-## 🎯 Overview
+##  Overview
 
 This system solves a critical challenge in modern data engineering: **autonomous data placement**. Unlike traditional ETL systems with predefined schemas, our system:
 
@@ -50,41 +50,10 @@ An intelligent pipeline that:
 3. **Decides** SQL vs MongoDB placement using heuristics
 4. **Stores** data with traceability (username + dual timestamps)
 
----
-
-## ✨ Features
-
-### 🔄 Dynamic Field Normalization
-- Resolves naming ambiguities (`userName` → `user_name`)
-- Case-insensitive matching (`IP` → `ip`)
-- Semantic equivalence rules (`emailAddress` → `email`)
-
-### 📊 Intelligent Placement Heuristics
-- **High frequency + stable type** → SQL
-- **Low frequency or nested** → MongoDB
-- **Mandatory fields** → Both (for joins)
-
-### 🕐 Bi-Temporal Timestamps
-- `t_stamp`: Client timestamp (from JSON)
-- `sys_ingested_at`: Server timestamp (unique join key)
-
-### 💾 Persistent Metadata
-- Survives system restarts
-- Tracks field statistics
-- Stores placement decisions
-
-### 🔍 Semantic Type Detection
-- Distinguishes `"1.2.3.4"` (IP) from `1.2` (float)
-- Recognizes UUIDs, emails, URLs, timestamps
-
-### 📝 Comprehensive Reporting
-- Answers all assignment questions
-- Field-by-field analysis
-- Placement justifications
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -119,7 +88,7 @@ An intelligent pipeline that:
 
 ---
 
-## 🌐 Data Generator API
+##  Data Generator API
 
 The system includes a FastAPI-based synthetic data generator (`main.py`) that produces realistic JSON records for testing and demonstration purposes. This component operates independently and can be used for various data ingestion experiments.
 
@@ -222,7 +191,7 @@ The API will be available at `http://127.0.0.1:8000` with interactive docs at `h
 
 ---
 
-## 📦 Installation
+##  Installation
 
 ### Prerequisites
 
@@ -266,7 +235,7 @@ sudo service mongodb start
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Method 1: Quick Test (Recommended for First Run)
 
@@ -326,19 +295,7 @@ python data_consumer.py 50 10
 python data_consumer.py 100 100
 ```
 
-### 4. Generate Technical Report
-
-After ingestion completes:
-
-```bash
-python report_generator.py
-```
-
-This creates `TECHNICAL_REPORT.md` with detailed analysis.
-
----
-
-## 📖 Usage
+## Usage
 
 ### Basic Ingestion
 
@@ -434,7 +391,7 @@ consumer.consume_continuous(
 
 ---
 
-## 🔧 How It Works
+##  How It Works
 
 ### 1. Field Normalization
 
@@ -507,13 +464,8 @@ Frequency >= 60% AND Type Stability >= 80%?
   YES → SQL
   NO  → Continue
 
-Frequency < 60%?
-  YES → MongoDB
-  NO  → Continue
-
-Type Stability < 80%?
-  YES → MongoDB
-  NO  → MongoDB (default)
+Else:
+  MongoDB
 ```
 
 ### 5. Data Splitting
@@ -558,7 +510,7 @@ mongo_result = db.ingested_records.find({
 
 ---
 
-## ⚙️ Configuration
+##  Configuration
 
 ### Placement Thresholds
 
@@ -594,209 +546,6 @@ consumer = DataConsumer(api_url='http://127.0.0.1:8000')
 
 ---
 
-## 🐛 Troubleshooting
-
-### Issue: Cannot connect to API
-
-**Error:**
-```
-[Consumer] ✗ Cannot connect to API
-```
-
-**Solution:**
-1. Ensure FastAPI server is running:
-   ```bash
-   uvicorn main:app --reload --port 8000
-   ```
-2. Check if port 8000 is available:
-   ```bash
-   netstat -an | findstr 8000  # Windows
-   lsof -i :8000               # Linux/Mac
-   ```
-3. Use `quick_test.py` for automatic connection testing:
-   ```bash
-   python quick_test.py
-   ```
-   The script will exit with a clear error if API is unreachable.
-
-### Issue: MongoDB connection failed
-
-**Error:**
-```
-[MongoDB] Connection failed: ServerSelectionTimeoutError
-```
-
-**Solution:**
-1. System continues with SQL only - this is expected behavior
-2. To use MongoDB:
-   ```bash
-   # Windows
-   mongod
-
-   # Linux/Mac
-   sudo service mongodb start
-   ```
-
-### Issue: Permission denied on database file
-
-**Error:**
-```
-sqlite3.OperationalError: unable to open database file
-```
-
-**Solution:**
-1. Ensure write permissions in current directory
-2. Or specify absolute path:
-   ```python
-   pipeline = IngestionPipeline(sql_db='C:/path/to/ingestion_data.db')
-   ```
-
-### Issue: Field normalization not working
-
-**Problem:** Same field creating multiple columns
-
-**Solution:**
-1. Check `metadata_store.json` for existing mappings
-2. Delete metadata file to reset (only during testing):
-   ```bash
-   rm metadata_store.json
-   ```
-3. Restart ingestion
-
----
-
-## 📁 Project Structure
-
-```
-Databases-1/
-│
-├── main.py                      # FastAPI data generator
-├── data_consumer.py             # API client & ingestion orchestrator
-├── quick_test.py                # Streamlined test script (no prompts)
-├── ingestion_pipeline.py        # Main ingestion logic
-├── metadata_store.py            # Persistent metadata storage
-├── field_normalizer.py          # Field name normalization
-├── type_detector.py             # Semantic type detection
-├── placement_heuristics.py      # SQL vs MongoDB decision logic
-├── database_managers.py         # SQL & MongoDB interfaces
-├── report_generator.py          # Technical report generator
-│
-├── requirements.txt             # Python dependencies
-├── readme_old.md                # Legacy data generator README
-├── README.md                    # This file - Complete system documentation
-├── LICENSE                      # MIT License
-│
-├── metadata_store.json          # Generated: Persistent metadata
-├── ingestion_data.db            # Generated: SQLite database
-├── TECHNICAL_REPORT.md          # Generated: Assignment report
-│
-└── __pycache__/                 # Python cache
-```
-
----
-
-## 📊 Technical Report
-
-After running the ingestion system, generate the comprehensive technical report:
-
-```bash
-python report_generator.py
-```
-
-The report (`TECHNICAL_REPORT.md`) includes:
-
-1. **Normalization Strategy** - How field ambiguities were resolved
-2. **Placement Heuristics** - Thresholds and decision logic
-3. **Uniqueness Detection** - How unique fields were identified
-4. **Value Interpretation** - Semantic type detection methodology
-5. **Mixed Data Handling** - Type drifting strategies
-6. **System Statistics** - Comprehensive metrics
-7. **Field Analysis** - Per-field breakdown
-8. **Architecture** - System design overview
-
----
-
-## 🎓 Assignment Questions Answered
-
-### Q1: How did you resolve type naming ambiguities?
-
-✅ Multi-stage normalization:
-- CamelCase → snake_case conversion
-- Lowercase standardization
-- Semantic equivalence patterns
-- Persistent mapping storage
-
-### Q2: What thresholds were used for placement decisions?
-
-✅ Dynamic thresholds:
-- Frequency: 60%
-- Type Stability: 80%
-- Min Observations: 10 records
-- Priority-based decision tree
-
-### Q3: How did you identify unique fields?
-
-✅ Multi-factor analysis:
-- Name-based heuristics (contains 'id', 'uuid', 'key')
-- Type-based heuristics (UUID, integer IDs)
-- Cardinality analysis (>90% unique values)
-
-### Q4: How did you differentiate "1.2.3.4" (IP) from 1.2 (float)?
-
-✅ Cascading type detection:
-- Python type checking (int, float, bool)
-- Regex pattern matching (IP, UUID, email)
-- Validation (IP octets 0-255)
-- Order matters: IP check before generic string
-
-### Q5: How did you handle type drifting?
-
-✅ Adaptive strategy:
-- Track type occurrences per field
-- Calculate type stability percentage
-- Adjust placement when stability drops
-- Store as TEXT in SQL, native types in MongoDB
-
----
-
-## 📈 Example Output
-
-### Console Output (data_consumer.py)
-
-```
-====================================================================
-AUTONOMOUS DATA INGESTION SYSTEM
-====================================================================
-
-[Pipeline] Initialized successfully
-[Pipeline] Loaded 0 known fields
-[Consumer] Testing connection to http://127.0.0.1:8000...
-[Consumer] ✓ API server is reachable
-
-[Consumer] Configuration:
-  - Batch size: 100 records
-  - Total batches: 10
-  - Total records: 1,000
-  - API URL: http://127.0.0.1:8000
-
-[Consumer] === Batch 1/10 ===
-[SQL] Added column: email (VARCHAR(255))
-[SQL] Added column: age (INTEGER)
-[Pipeline] Processed 50 records (SQL: 50, MongoDB: 50)
-[Pipeline] Processed 100 records (SQL: 100, MongoDB: 100)
-
-[Consumer] === Batch 2/10 ===
-...
-
-=== Final Statistics ===
-Total records processed: 1000
-SQL inserts: 1000
-MongoDB inserts: 1000
-Errors: 0
-Unique fields discovered: 42
-Normalization rules: 8
-Placement decisions made: 42
-```
 
 ### Quick Test Output (quick_test.py)
 
@@ -873,43 +622,3 @@ db.ingested_records.find().limit(1).pretty()
 }
 ```
 
----
-
-## 🤝 Contributing
-
-This project is part of a database coursework assignment. For questions or issues:
-
-1. Check the [Troubleshooting](#troubleshooting) section
-2. Review the generated `TECHNICAL_REPORT.md`
-3. Examine `metadata_store.json` for system state
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- **Course:** Database Systems
-- **Data Generator:** Based on Course_Resources by YogeshKMeena
-- **Assignment:** Autonomous Data Ingestion System
-
----
-
-## 📞 Support
-
-For technical questions about the implementation:
-
-1. Read this README thoroughly
-2. Generate and review `TECHNICAL_REPORT.md`
-3. Check metadata file: `metadata_store.json`
-4. Review module docstrings
-
----
-
-**Built with ❤️ for Database Systems Course**
-
-*Last Updated: February 2026*
