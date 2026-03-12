@@ -1,12 +1,12 @@
 {
   "fields": {
     "username": {
-      "appearances": 3750,
+      "appearances": 17000,
       "type_counts": {
-        "string": 3750
+        "string": 17000
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.950383",
+      "last_seen": "2026-03-12T12:01:19.298726",
       "sample_values": [
         "frusso",
         "williamsstephen",
@@ -16,12 +16,12 @@
       ]
     },
     "name": {
-      "appearances": 2427,
+      "appearances": 10668,
       "type_counts": {
-        "string": 2427
+        "string": 10668
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.950383",
+      "last_seen": "2026-03-12T12:01:19.242998",
       "sample_values": [
         "Lawrence Barron",
         "Kelsey Bishop",
@@ -31,12 +31,12 @@
       ]
     },
     "phone": {
-      "appearances": 999,
+      "appearances": 4443,
       "type_counts": {
-        "string": 999
+        "string": 4443
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.903351",
+      "last_seen": "2026-03-12T12:01:19.063991",
       "sample_values": [
         "001-993-713-7710x5814",
         "940-340-6339",
@@ -46,12 +46,12 @@
       ]
     },
     "altitude": {
-      "appearances": 2382,
+      "appearances": 10784,
       "type_counts": {
-        "float": 2382
+        "float": 10784
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.190090",
       "sample_values": [
         "1702.5",
         "733.61",
@@ -61,12 +61,12 @@
       ]
     },
     "speed": {
-      "appearances": 2007,
+      "appearances": 9183,
       "type_counts": {
-        "float": 2007
+        "float": 9183
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.253904",
       "sample_values": [
         "87.83",
         "78.26",
@@ -76,12 +76,12 @@
       ]
     },
     "country": {
-      "appearances": 2922,
+      "appearances": 13182,
       "type_counts": {
-        "string": 2922
+        "string": 13182
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.256933",
       "sample_values": [
         "Guernsey",
         "Cocos (Keeling) Islands",
@@ -91,12 +91,12 @@
       ]
     },
     "timestamp": {
-      "appearances": 2952,
+      "appearances": 13246,
       "type_counts": {
-        "timestamp": 2952
+        "timestamp": 13246
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.138413",
       "sample_values": [
         "2026-02-13T21:01:33.387464",
         "2026-02-13T21:01:33.402963",
@@ -106,12 +106,12 @@
       ]
     },
     "steps": {
-      "appearances": 1296,
+      "appearances": 5972,
       "type_counts": {
-        "integer": 1296
+        "integer": 5972
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.140417",
       "sample_values": [
         "8645",
         "1137",
@@ -121,12 +121,12 @@
       ]
     },
     "spo2": {
-      "appearances": 3507,
+      "appearances": 15645,
       "type_counts": {
-        "integer": 3507
+        "integer": 15645
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.317726",
       "sample_values": [
         "93",
         "92",
@@ -136,12 +136,12 @@
       ]
     },
     "weather": {
-      "appearances": 3078,
+      "appearances": 13907,
       "type_counts": {
-        "string": 3078
+        "string": 13907
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.264724",
       "sample_values": [
         "stormy",
         "rainy",
@@ -151,12 +151,12 @@
       ]
     },
     "humidity": {
-      "appearances": 2934,
+      "appearances": 13227,
       "type_counts": {
-        "integer": 2934
+        "integer": 13227
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.321832",
       "sample_values": [
         "66",
         "81",
@@ -166,12 +166,12 @@
       ]
     },
     "action": {
-      "appearances": 1992,
+      "appearances": 8987,
       "type_counts": {
-        "string": 1992
+        "string": 8987
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.324726",
       "sample_values": [
         "logout",
         "view",
@@ -181,12 +181,12 @@
       ]
     },
     "purchase_value": {
-      "appearances": 3492,
+      "appearances": 15747,
       "type_counts": {
-        "float": 3492
+        "float": 15747
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.326727",
       "sample_values": [
         "172.35",
         "33.95",
@@ -196,12 +196,12 @@
       ]
     },
     "payment_status": {
-      "appearances": 2154,
+      "appearances": 9569,
       "type_counts": {
-        "string": 2154
+        "string": 9569
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.328724",
       "sample_values": [
         "success",
         "failed",
@@ -209,12 +209,12 @@
       ]
     },
     "subscription": {
-      "appearances": 3066,
+      "appearances": 13729,
       "type_counts": {
-        "string": 3066
+        "string": 13729
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.330726",
       "sample_values": [
         "free",
         "premium",
@@ -223,12 +223,12 @@
       ]
     },
     "language": {
-      "appearances": 2268,
+      "appearances": 10384,
       "type_counts": {
-        "string": 2268
+        "string": 10384
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.918512",
+      "last_seen": "2026-03-12T12:01:19.332726",
       "sample_values": [
         "Ossetian",
         "Kikuyu",
@@ -238,12 +238,12 @@
       ]
     },
     "ram_usage": {
-      "appearances": 2553,
+      "appearances": 11550,
       "type_counts": {
-        "integer": 2553
+        "integer": 11550
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.217148",
       "sample_values": [
         "31",
         "24",
@@ -253,12 +253,12 @@
       ]
     },
     "comment": {
-      "appearances": 1122,
+      "appearances": 5152,
       "type_counts": {
-        "string": 1122
+        "string": 5152
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.159279",
       "sample_values": [
         "Fine game out there itself mention reach ground.",
         "Impact tell sometimes treatment because yeah.",
@@ -268,12 +268,12 @@
       ]
     },
     "avatar_url": {
-      "appearances": 2259,
+      "appearances": 10481,
       "type_counts": {
-        "url": 2259
+        "url": 10481
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.340833",
       "sample_values": [
         "https://placekitten.com/166/362",
         "https://placekitten.com/282/355",
@@ -283,12 +283,12 @@
       ]
     },
     "friends_count": {
-      "appearances": 1452,
+      "appearances": 6495,
       "type_counts": {
-        "integer": 1452
+        "integer": 6495
       },
       "first_seen": "2026-02-13T21:01:33.388463",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.285809",
       "sample_values": [
         "3531",
         "326",
@@ -298,12 +298,12 @@
       ]
     },
     "ip_address": {
-      "appearances": 2748,
+      "appearances": 12281,
       "type_counts": {
-        "ip_address": 2748
+        "ip_address": 12281
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.950383",
+      "last_seen": "2026-03-12T12:01:19.301837",
       "sample_values": [
         "108.221.226.26",
         "130.13.198.113",
@@ -313,12 +313,12 @@
       ]
     },
     "device_id": {
-      "appearances": 2511,
+      "appearances": 11342,
       "type_counts": {
-        "uuid": 2511
+        "uuid": 11342
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.903351",
+      "last_seen": "2026-03-12T12:01:19.303764",
       "sample_values": [
         "7e07f1eb-bbc5-413b-bed8-f406f87c7ae0",
         "a2777c9c-d4a5-4621-b19d-73c1c5baf42a",
@@ -328,12 +328,12 @@
       ]
     },
     "device_model": {
-      "appearances": 3216,
+      "appearances": 14551,
       "type_counts": {
-        "string": 3216
+        "string": 14551
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.950383",
+      "last_seen": "2026-03-12T12:01:19.305824",
       "sample_values": [
         "iPhone 14",
         "Samsung S23",
@@ -342,12 +342,12 @@
       ]
     },
     "app_version": {
-      "appearances": 1545,
+      "appearances": 7094,
       "type_counts": {
-        "string": 1545
+        "string": 7094
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.307731",
       "sample_values": [
         "v4.2.6",
         "v4.5.8",
@@ -357,12 +357,12 @@
       ]
     },
     "city": {
-      "appearances": 2124,
+      "appearances": 9796,
       "type_counts": {
-        "string": 2124
+        "string": 9796
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.312772",
       "sample_values": [
         "West Craig",
         "Leahton",
@@ -372,12 +372,12 @@
       ]
     },
     "session_id": {
-      "appearances": 2604,
+      "appearances": 11643,
       "type_counts": {
-        "uuid": 2604
+        "uuid": 11643
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.314769",
       "sample_values": [
         "fc32f5fc-d204-407e-8a99-7187406443d4",
         "8125167a-2ad0-41a5-b820-272f2a7d7b91",
@@ -387,12 +387,12 @@
       ]
     },
     "temperature_c": {
-      "appearances": 2277,
+      "appearances": 10244,
       "type_counts": {
-        "float": 2277
+        "float": 10244
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.319772",
       "sample_values": [
         "28.3",
         "43.4",
@@ -402,12 +402,12 @@
       ]
     },
     "air_quality": {
-      "appearances": 2610,
+      "appearances": 11953,
       "type_counts": {
-        "string": 2610
+        "string": 11953
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.322768",
       "sample_values": [
         "hazardous",
         "good",
@@ -416,12 +416,12 @@
       ]
     },
     "cpu_usage": {
-      "appearances": 2112,
+      "appearances": 9547,
       "type_counts": {
-        "integer": 2112
+        "integer": 9547
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.918512",
+      "last_seen": "2026-03-12T12:01:19.335836",
       "sample_values": [
         "66",
         "95",
@@ -431,12 +431,12 @@
       ]
     },
     "disk_usage": {
-      "appearances": 321,
+      "appearances": 1555,
       "type_counts": {
-        "integer": 321
+        "integer": 1555
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.732446",
+      "last_seen": "2026-03-12T12:01:18.972669",
       "sample_values": [
         "9",
         "14",
@@ -446,13 +446,13 @@
       ]
     },
     "error_code": {
-      "appearances": 1233,
+      "appearances": 5395,
       "type_counts": {
-        "null": 186,
-        "integer": 1047
+        "null": 840,
+        "integer": 4555
       },
       "first_seen": "2026-02-13T21:01:33.403802",
-      "last_seen": "2026-02-15T12:08:28.858269",
+      "last_seen": "2026-03-12T12:01:19.281685",
       "sample_values": [
         "None",
         "403",
@@ -462,12 +462,12 @@
       ]
     },
     "email": {
-      "appearances": 1110,
+      "appearances": 5082,
       "type_counts": {
-        "email": 1110
+        "email": 5082
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.872439",
+      "last_seen": "2026-03-12T12:01:19.300828",
       "sample_values": [
         "troyharrison@example.org",
         "uwheeler@example.com",
@@ -477,12 +477,12 @@
       ]
     },
     "os": {
-      "appearances": 498,
+      "appearances": 2179,
       "type_counts": {
-        "string": 498
+        "string": 2179
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:18.495456",
       "sample_values": [
         "MacOS",
         "Android",
@@ -492,12 +492,12 @@
       ]
     },
     "charging": {
-      "appearances": 888,
+      "appearances": 4123,
       "type_counts": {
-        "boolean": 888
+        "boolean": 4123
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.934388",
+      "last_seen": "2026-03-12T12:01:19.309823",
       "sample_values": [
         "True",
         "False",
@@ -507,12 +507,12 @@
       ]
     },
     "sleep_hours": {
-      "appearances": 1353,
+      "appearances": 6025,
       "type_counts": {
-        "float": 1353
+        "float": 6025
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.903351",
+      "last_seen": "2026-03-12T12:01:19.199000",
       "sample_values": [
         "8.3",
         "3.3",
@@ -522,13 +522,13 @@
       ]
     },
     "item": {
-      "appearances": 1428,
+      "appearances": 6601,
       "type_counts": {
-        "string": 1167,
-        "null": 261
+        "string": 5419,
+        "null": 1182
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.028724",
       "sample_values": [
         "bag",
         "laptop",
@@ -538,12 +538,12 @@
       ]
     },
     "timezone": {
-      "appearances": 3057,
+      "appearances": 14031,
       "type_counts": {
-        "string": 3057
+        "string": 14031
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.333839",
       "sample_values": [
         "Europe/Vaduz",
         "Europe/Tirane",
@@ -553,12 +553,12 @@
       ]
     },
     "signal_strength": {
-      "appearances": 999,
+      "appearances": 4456,
       "type_counts": {
-        "integer": 999
+        "integer": 4456
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.903351",
+      "last_seen": "2026-03-12T12:01:19.338770",
       "sample_values": [
         "1",
         "4",
@@ -568,12 +568,12 @@
       ]
     },
     "is_active": {
-      "appearances": 999,
+      "appearances": 4546,
       "type_counts": {
-        "boolean": 999
+        "boolean": 4546
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.283686",
       "sample_values": [
         "True",
         "False",
@@ -583,12 +583,12 @@
       ]
     },
     "last_seen": {
-      "appearances": 1404,
+      "appearances": 6407,
       "type_counts": {
-        "timestamp": 1404
+        "timestamp": 6407
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:18.708681",
       "sample_values": [
         "2026-02-13T18:23:33.418667",
         "2026-02-13T19:04:33.541620",
@@ -598,23 +598,23 @@
       ]
     },
     "metadata_sensor_data_version": {
-      "appearances": 1104,
+      "appearances": 5128,
       "type_counts": {
-        "string": 1104
+        "string": 5128
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.903351",
+      "last_seen": "2026-03-12T12:01:19.163286",
       "sample_values": [
         "2.1"
       ]
     },
     "metadata_sensor_data_calibrated": {
-      "appearances": 1104,
+      "appearances": 5128,
       "type_counts": {
-        "boolean": 1104
+        "boolean": 5128
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.903351",
+      "last_seen": "2026-03-12T12:01:19.165277",
       "sample_values": [
         "True",
         "False",
@@ -624,12 +624,12 @@
       ]
     },
     "metadata_sensor_data_readings": {
-      "appearances": 1104,
+      "appearances": 5128,
       "type_counts": {
-        "list": 1104
+        "list": 5128
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.903351",
+      "last_seen": "2026-03-12T12:01:19.167287",
       "sample_values": [
         "[4, 2, 6]",
         "[8, 5, 4]",
@@ -639,12 +639,12 @@
       ]
     },
     "metadata_tags": {
-      "appearances": 1131,
+      "appearances": 5048,
       "type_counts": {
-        "list": 1131
+        "list": 5048
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.342290",
       "sample_values": [
         "['better', 'whom', 'theory']",
         "['detail', 'difference', 'write']",
@@ -654,12 +654,12 @@
       ]
     },
     "metadata_is_bot": {
-      "appearances": 1131,
+      "appearances": 5057,
       "type_counts": {
-        "boolean": 1131
+        "boolean": 5057
       },
       "first_seen": "2026-02-13T21:01:33.419668",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.226587",
       "sample_values": [
         "False",
         "False",
@@ -669,12 +669,12 @@
       ]
     },
     "network": {
-      "appearances": 1905,
+      "appearances": 8728,
       "type_counts": {
-        "string": 1905
+        "string": 8728
       },
       "first_seen": "2026-02-13T21:01:33.448726",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.310772",
       "sample_values": [
         "Ethernet",
         "Offline",
@@ -684,12 +684,12 @@
       ]
     },
     "gps_lon": {
-      "appearances": 801,
+      "appearances": 3782,
       "type_counts": {
-        "float": 801
+        "float": 3782
       },
       "first_seen": "2026-02-13T21:01:33.463922",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.251994",
       "sample_values": [
         "142.520751",
         "-109.092079",
@@ -699,12 +699,12 @@
       ]
     },
     "is_background": {
-      "appearances": 489,
+      "appearances": 2340,
       "type_counts": {
-        "boolean": 489
+        "boolean": 2340
       },
       "first_seen": "2026-02-13T21:01:33.496577",
-      "last_seen": "2026-02-15T12:08:28.887961",
+      "last_seen": "2026-03-12T12:01:19.221586",
       "sample_values": [
         "True",
         "True",
@@ -714,12 +714,12 @@
       ]
     },
     "direction": {
-      "appearances": 960,
+      "appearances": 4314,
       "type_counts": {
-        "string": 960
+        "string": 4314
       },
       "first_seen": "2026-02-13T21:01:33.511826",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:18.943919",
       "sample_values": [
         "S",
         "W",
@@ -728,12 +728,12 @@
       ]
     },
     "metadata_internal_id": {
-      "appearances": 1107,
+      "appearances": 4934,
       "type_counts": {
-        "string": 1107
+        "string": 4934
       },
       "first_seen": "2026-02-13T21:01:33.512335",
-      "last_seen": "2026-02-15T12:08:28.887961",
+      "last_seen": "2026-03-12T12:01:19.228588",
       "sample_values": [
         "ID-2950-zL",
         "ID-9986-OQ",
@@ -743,12 +743,12 @@
       ]
     },
     "postal_code": {
-      "appearances": 189,
+      "appearances": 872,
       "type_counts": {
-        "string": 189
+        "string": 872
       },
       "first_seen": "2026-02-13T21:01:33.544768",
-      "last_seen": "2026-02-15T12:08:28.763051",
+      "last_seen": "2026-03-12T12:01:17.148699",
       "sample_values": [
         "10527",
         "29575",
@@ -758,12 +758,12 @@
       ]
     },
     "mood": {
-      "appearances": 513,
+      "appearances": 2311,
       "type_counts": {
-        "string": 513
+        "string": 2311
       },
       "first_seen": "2026-02-13T21:01:33.544768",
-      "last_seen": "2026-02-15T12:08:28.935840",
+      "last_seen": "2026-03-12T12:01:19.262901",
       "sample_values": [
         "excited",
         "neutral",
@@ -773,12 +773,12 @@
       ]
     },
     "retry_count": {
-      "appearances": 462,
+      "appearances": 2085,
       "type_counts": {
-        "integer": 462
+        "integer": 2085
       },
       "first_seen": "2026-02-13T21:01:33.619583",
-      "last_seen": "2026-02-15T12:08:28.918512",
+      "last_seen": "2026-03-12T12:01:17.479900",
       "sample_values": [
         "2",
         "3",
@@ -788,12 +788,12 @@
       ]
     },
     "stress_level": {
-      "appearances": 519,
+      "appearances": 2273,
       "type_counts": {
-        "string": 519
+        "string": 2273
       },
       "first_seen": "2026-02-13T21:01:33.650607",
-      "last_seen": "2026-02-15T12:08:28.918512",
+      "last_seen": "2026-03-12T12:01:19.143912",
       "sample_values": [
         "low",
         "high",
@@ -801,12 +801,12 @@
       ]
     },
     "gps_lat": {
-      "appearances": 285,
+      "appearances": 1290,
       "type_counts": {
-        "float": 285
+        "float": 1290
       },
       "first_seen": "2026-02-13T21:01:33.680304",
-      "last_seen": "2026-02-15T12:08:28.747242",
+      "last_seen": "2026-03-12T12:01:18.260044",
       "sample_values": [
         "66.753387",
         "-53.7604875",
@@ -816,12 +816,12 @@
       ]
     },
     "heart_rate": {
-      "appearances": 678,
+      "appearances": 3192,
       "type_counts": {
-        "integer": 678
+        "integer": 3192
       },
       "first_seen": "2026-02-13T21:01:33.849976",
-      "last_seen": "2026-02-15T12:08:28.951365",
+      "last_seen": "2026-03-12T12:01:19.316831",
       "sample_values": [
         "115",
         "119",
@@ -831,12 +831,12 @@
       ]
     },
     "age": {
-      "appearances": 264,
+      "appearances": 1219,
       "type_counts": {
-        "integer": 264
+        "integer": 1219
       },
       "first_seen": "2026-02-13T21:01:34.035128",
-      "last_seen": "2026-02-15T12:08:28.858269",
+      "last_seen": "2026-03-12T12:01:16.748029",
       "sample_values": [
         "46",
         "65",
@@ -846,12 +846,12 @@
       ]
     },
     "battery": {
-      "appearances": 252,
+      "appearances": 1225,
       "type_counts": {
-        "integer": 252
+        "integer": 1225
       },
       "first_seen": "2026-02-13T21:01:34.053171",
-      "last_seen": "2026-02-15T12:08:28.732446",
+      "last_seen": "2026-03-12T12:01:18.602330",
       "sample_values": [
         "39",
         "49",
@@ -1163,7 +1163,7 @@
       "decided_at": "2026-02-13T21:01:37.450391"
     }
   },
-  "total_records": 3750,
-  "last_updated": "2026-02-15T12:08:28.968762",
+  "total_records": 17000,
+  "last_updated": "2026-03-12T12:01:19.382866",
   "session_start": "2026-02-13T21:01:33.319099"
 }

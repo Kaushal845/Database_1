@@ -12,10 +12,12 @@ class MetadataStore:
     """
     Persistent storage for field classifications, frequency tracking, and type stability.
     This allows the system to remember decisions across restarts.
+    Auto-saves after each record update to ensure persistence.
     """
     
-    def __init__(self, storage_file='metadata_store.json'):
+    def __init__(self, storage_file='metadata_store.json', auto_save=True):
         self.storage_file = storage_file
+        self.auto_save = auto_save
         self.lock = threading.Lock()
         self.metadata = self._load_metadata()
         
@@ -35,6 +37,7 @@ class MetadataStore:
         return {
             'fields': {},  # Field-level tracking
             'placement_decisions': {},  # SQL vs MongoDB decisions
+            'current_placement': {},  # Current placement of each field (SQL/MongoDB)
             'total_records': 0,
             'last_updated': datetime.utcnow().isoformat(),
             'session_start': datetime.utcnow().isoformat()
@@ -51,9 +54,11 @@ class MetadataStore:
                 print(f"Error saving metadata: {e}")
     
     def increment_total_records(self):
-        """Increment total record count"""
+        """Increment total record count and auto-save if enabled"""
         with self.lock:
             self.metadata['total_records'] += 1
+        if self.auto_save:
+            self.save()
     
     def update_field_stats(self, normalized_key: str, data_type: str, value: Any):
         """Update statistics for a specific field"""
@@ -80,15 +85,23 @@ class MetadataStore:
             if len(field_data['sample_values']) < 5:
                 if value not in field_data['sample_values']:
                     field_data['sample_values'].append(str(value)[:100])  # Truncate long values
+        
+        if self.auto_save:
+            self.save()
     
     def set_placement_decision(self, normalized_key: str, backend: str, reason: str):
-        """Store placement decision for a field"""
+        """Store placement decision for a field and update current placement"""
         with self.lock:
             self.metadata['placement_decisions'][normalized_key] = {
                 'backend': backend,  # 'SQL' or 'MongoDB'
                 'reason': reason,
                 'decided_at': datetime.utcnow().isoformat()
             }
+            # Update current placement
+            self.metadata['current_placement'][normalized_key] = backend
+        
+        if self.auto_save:
+            self.save()
     
     def get_placement_decision(self, normalized_key: str) -> Dict[str, str]:
         """Get placement decision for a field"""
@@ -182,8 +195,33 @@ class MetadataStore:
                 'quarantined_at': datetime.utcnow().isoformat(),
                 'reason': f"Severe type drift detected (score: {drift_score:.2f})"
             }
+        
+        if self.auto_save:
+            self.save()
     
     def is_quarantined(self, normalized_key: str) -> bool:
         """Check if a field is quarantined"""
         quarantined = self.metadata.get('quarantined_fields', {})
         return normalized_key in quarantined
+    
+    def get_field_placement(self, normalized_key: str) -> str:
+        """Get current placement of a field (SQL or MongoDB)"""
+        return self.metadata.get('current_placement', {}).get(normalized_key, 'unknown')
+    
+    def get_fields_by_placement(self, backend: str) -> List[str]:
+        """Get all fields currently placed in a specific backend (SQL or MongoDB)"""
+        current_placement = self.metadata.get('current_placement', {})
+        return [field for field, placement in current_placement.items() if placement == backend]
+    
+    def get_placement_summary(self) -> Dict[str, Any]:
+        """Get summary of field placements across backends"""
+        current_placement = self.metadata.get('current_placement', {})
+        sql_fields = [f for f, p in current_placement.items() if p == 'SQL']
+        mongo_fields = [f for f, p in current_placement.items() if p == 'MongoDB']
+        
+        return {
+            'sql_field_count': len(sql_fields),
+            'mongodb_field_count': len(mongo_fields),
+            'sql_fields': sql_fields,
+            'mongodb_fields': mongo_fields
+        }
