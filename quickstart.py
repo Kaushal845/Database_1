@@ -4,7 +4,12 @@ Quick Start Script - Easy setup and execution
 import sys
 import subprocess
 import time
-import os
+import json
+import shutil
+from pathlib import Path
+
+
+PROJECT_MONGO_DBS = ["ingestion_db", "assignment2_test_db"]
 
 
 def check_dependencies():
@@ -57,7 +62,110 @@ def check_api_server():
         return False
 
 
+def _clean_mongodb_databases(db_names, mongo_uri='mongodb://localhost:27017/'):
+    """Drop project MongoDB databases and return removed/missing names."""
+    removed = []
+    missing = []
+
+    try:
+        from pymongo import MongoClient
+        client = MongoClient(mongo_uri, serverSelectionTimeoutMS=3000)
+        client.admin.command('ping')
+    except Exception:
+        return removed, missing, "MongoDB unavailable, skipped Mongo cleanup."
+
+    try:
+        existing = set(client.list_database_names())
+        for db_name in db_names:
+            if db_name in existing:
+                client.drop_database(db_name)
+                removed.append(db_name)
+            else:
+                missing.append(db_name)
+    finally:
+        client.close()
+
+    return removed, missing, None
+
+
+def clean_generated_files(force: bool = False, clean_mongo: bool = True):
+    """Delete generated project artifacts and caches."""
+    root = Path(__file__).resolve().parent
+    removed = []
+    missing = []
+
+    file_targets = [
+        root / "ingestion_data.db",
+        root / "metadata_store.json",
+    ]
+    dir_targets = [
+        root / ".pytest_cache",
+        root / "__pycache__",
+    ]
+
+    for cache_dir in root.rglob("__pycache__"):
+        if cache_dir not in dir_targets:
+            dir_targets.append(cache_dir)
+
+    if not force:
+        print("This will delete generated local artifacts:")
+        print("- ingestion_data.db")
+        print("- metadata_store.json")
+        print("- .pytest_cache/")
+        print("- all __pycache__/ directories")
+        if clean_mongo:
+            print(f"- MongoDB databases: {', '.join(PROJECT_MONGO_DBS)}")
+        confirmation = input("Proceed? [y/N]: ").strip().lower()
+        if confirmation not in {"y", "yes"}:
+            print("Cleanup cancelled.")
+            return
+
+    for path in file_targets:
+        if path.exists():
+            path.unlink()
+            removed.append(str(path.relative_to(root)))
+        else:
+            missing.append(str(path.relative_to(root)))
+
+    for path in dir_targets:
+        if path.exists() and path.is_dir():
+            shutil.rmtree(path)
+            removed.append(str(path.relative_to(root)) + "/")
+
+    for pyc_file in root.rglob("*.pyc"):
+        pyc_file.unlink()
+        removed.append(str(pyc_file.relative_to(root)))
+
+    mongo_note = None
+    mongo_removed = []
+    mongo_missing = []
+    if clean_mongo:
+        mongo_removed, mongo_missing, mongo_note = _clean_mongodb_databases(PROJECT_MONGO_DBS)
+        for db_name in mongo_removed:
+            removed.append(f"MongoDB:{db_name}")
+        for db_name in mongo_missing:
+            missing.append(f"MongoDB:{db_name}")
+
+    print("\nCleanup complete.")
+    if removed:
+        print("Removed:")
+        for item in sorted(set(removed)):
+            print(f"- {item}")
+    if missing:
+        print("Not found (already clean):")
+        for item in sorted(set(missing)):
+            print(f"- {item}")
+    if mongo_note:
+        print(f"- {mongo_note}")
+
+
 def main():
+    if len(sys.argv) > 1 and sys.argv[1].lower() in {"clean", "--clean"}:
+        force = any(arg in {"-y", "--yes"} for arg in sys.argv[2:])
+        clean_mongo = not any(arg in {"--skip-mongo", "--no-mongo"} for arg in sys.argv[2:])
+        clean_generated_files(force=force, clean_mongo=clean_mongo)
+        return
+
     print("=" * 70)
     print("AUTONOMOUS DATA INGESTION SYSTEM - QUICK START")
     print("=" * 70)
@@ -70,6 +178,17 @@ def main():
     
     # Step 3: Check if API server is running
     api_running = check_api_server()
+
+    schema = None
+    if api_running:
+        try:
+            import requests
+            schema_resp = requests.get('http://127.0.0.1:8000/schema', timeout=2)
+            if schema_resp.status_code == 200:
+                schema = schema_resp.json()
+                print("✓ Generator schema fetched")
+        except Exception:
+            schema = None
     
     if not api_running:
         print("\n" + "=" * 70)
@@ -143,41 +262,43 @@ def main():
         # Import and run
         from data_consumer import DataConsumer
         
-        consumer = DataConsumer(api_url='http://127.0.0.1:8000')
+        consumer = DataConsumer(api_url='http://127.0.0.1:8000', schema=schema)
         consumer.consume_continuous(
             batch_size=batch_size,
             total_batches=total_batches,
-            delay=0.5
+            delay=0.5,
+            close_on_finish=False,
         )
-        
-        # Step 6: Generate report
+
+        # Step 6: Sample metadata-driven read query
         print("\n" + "=" * 70)
-        print("GENERATING REPORT")
+        print("RUNNING SAMPLE READ QUERY")
         print("=" * 70)
-        
-        from report_generator import ReportGenerator
-        from metadata_store import MetadataStore
-        
-        metadata_store = MetadataStore('metadata_store.json')
-        generator = ReportGenerator(metadata_store)
-        generator.generate_full_report()
+        read_response = consumer.execute_query(
+            {
+                "operation": "read",
+                "fields": ["username", "email", "orders", "comments"],
+                "limit": 3,
+            }
+        )
+        print(json.dumps(read_response, indent=2)[:1200])
         
         print("\n" + "=" * 70)
         print("COMPLETE!")
         print("=" * 70)
         print("\n✓ Data ingestion complete")
-        print("✓ Technical report generated: TECHNICAL_REPORT.md")
         print(f"✓ Metadata saved: metadata_store.json")
         print(f"✓ SQL database: ingestion_data.db")
         if has_mongo:
-            print(f"✓ MongoDB: ingestion_db.ingested_records")
+            print(f"✓ MongoDB: ingestion_db collections")
         
         print("\nNext steps:")
-        print("1. Read TECHNICAL_REPORT.md for detailed analysis")
+        print("1. Read docs/ASSIGNMENT2_TECHNICAL_REPORT.md for detailed analysis")
         print("2. Query the databases:")
         print("   - SQLite: sqlite3 ingestion_data.db")
         if has_mongo:
             print("   - MongoDB: mongo ingestion_db")
+        consumer.close()
         
     except KeyboardInterrupt:
         print("\n\n❌ Interrupted by user")
@@ -185,6 +306,9 @@ def main():
         print(f"\n\n❌ Error: {e}")
         import traceback
         traceback.print_exc()
+    finally:
+        if 'consumer' in locals():
+            consumer.close()
 
 
 if __name__ == "__main__":

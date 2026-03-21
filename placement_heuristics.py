@@ -22,6 +22,7 @@ class PlacementHeuristics:
     2. Type Stability: Fields with consistent types -> SQL
     3. Atomicity: Nested/array fields -> MongoDB
     4. Mandatory: username, sys_ingested_at, t_stamp -> BOTH
+    5. Low-observation fields -> Buffer until enough evidence is collected
     """
     
     # Zone-based thresholds (soft boundaries)
@@ -40,7 +41,7 @@ class PlacementHeuristics:
     # Legacy thresholds (maintained for compatibility)
     FREQUENCY_THRESHOLD = 60.0  # Percentage
     TYPE_STABILITY_THRESHOLD = 80.0  # Percentage
-    MIN_OBSERVATIONS = 10  # Minimum records before making placement decision
+    MIN_OBSERVATIONS = 10  # Minimum records before moving a field out of Buffer
     
     # Confidence and drift thresholds
     CONFIDENCE_THRESHOLD = 0.65
@@ -69,12 +70,12 @@ class PlacementHeuristics:
         4. Booster signal promotion (semantic, uniqueness, consistency)
         5. Drift-based degradation (gradual response)
         
-        Returns: 'SQL', 'MongoDB', or 'Both'
+        Returns: 'SQL', 'MongoDB', 'Buffer', or 'Both'
         """
         
-        # Check if already decided
+        # Check if already decided. Re-evaluate Buffer fields as observations grow.
         existing_decision = self.metadata_store.get_placement_decision(normalized_key)
-        if existing_decision:
+        if existing_decision and existing_decision['backend'] != 'Buffer':
             return existing_decision['backend']
         
         # Step 1: Mandatory fields go to BOTH backends for traceability
@@ -87,13 +88,18 @@ class PlacementHeuristics:
         # Get field statistics
         field_data = self.metadata_store.metadata['fields'].get(normalized_key)
         if not field_data:
-            # New field - defer decision
-            return 'MongoDB'  # Default to MongoDB for unknown fields
+            reason = f"Field '{normalized_key}' unseen before - routing to Buffer"
+            self.metadata_store.set_placement_decision(normalized_key, 'Buffer', reason)
+            return 'Buffer'
         
         # Check if we have enough observations
         if field_data['appearances'] < self.MIN_OBSERVATIONS:
-            # Not enough data - defer to MongoDB (flexible schema)
-            return 'MongoDB'
+            reason = (
+                f"Field '{normalized_key}' has only {field_data['appearances']} observations "
+                f"(< {self.MIN_OBSERVATIONS}) - keeping in Buffer"
+            )
+            self.metadata_store.set_placement_decision(normalized_key, 'Buffer', reason)
+            return 'Buffer'
         
         # Step 2: Get comprehensive field statistics
         stats = self.metadata_store.get_field_stats(normalized_key)

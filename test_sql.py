@@ -4,7 +4,7 @@ Tests all SQL components including SQLManager, schema creation, and data operati
 """
 import sys
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 
 
@@ -149,8 +149,8 @@ def test_insert_records(sql_manager):
         test_records = [
             {
                 'username': 'test_user_1',
-                'sys_ingested_at': datetime.utcnow().isoformat() + '.000001',
-                't_stamp': datetime.utcnow().isoformat(),
+                'sys_ingested_at': datetime.now(timezone.utc).isoformat() + '.000001',
+                't_stamp': datetime.now(timezone.utc).isoformat(),
                 'email': 'user1@test.com',
                 'age': 25,
                 'ip_address': '192.168.1.1',
@@ -161,8 +161,8 @@ def test_insert_records(sql_manager):
             },
             {
                 'username': 'test_user_2',
-                'sys_ingested_at': datetime.utcnow().isoformat() + '.000002',
-                't_stamp': datetime.utcnow().isoformat(),
+                'sys_ingested_at': datetime.now(timezone.utc).isoformat() + '.000002',
+                't_stamp': datetime.now(timezone.utc).isoformat(),
                 'email': 'user2@test.com',
                 'age': 30,
                 'ip_address': '10.0.0.1',
@@ -173,8 +173,8 @@ def test_insert_records(sql_manager):
             },
             {
                 'username': 'test_user_3',
-                'sys_ingested_at': datetime.utcnow().isoformat() + '.000003',
-                't_stamp': datetime.utcnow().isoformat(),
+                'sys_ingested_at': datetime.now(timezone.utc).isoformat() + '.000003',
+                't_stamp': datetime.now(timezone.utc).isoformat(),
                 'email': 'user3@test.com',
                 'age': 35,
                 'ip_address': '172.16.0.1',
@@ -293,8 +293,8 @@ def test_null_handling(sql_manager):
         print("\nInserting record with NULL values:")
         record_with_nulls = {
             'username': 'null_test_user',
-            'sys_ingested_at': datetime.utcnow().isoformat() + '.000004',
-            't_stamp': datetime.utcnow().isoformat(),
+            'sys_ingested_at': datetime.now(timezone.utc).isoformat() + '.000004',
+            't_stamp': datetime.now(timezone.utc).isoformat(),
             'email': None,  # NULL
             'age': None,    # NULL
             'is_active': True
@@ -390,8 +390,8 @@ def test_unique_constraints(sql_manager):
         print("\nAttempting to insert duplicate sys_ingested_at:")
         duplicate_record = {
             'username': 'duplicate_test',
-            'sys_ingested_at': datetime.utcnow().isoformat() + '.000001',  # Same as first record
-            't_stamp': datetime.utcnow().isoformat(),
+            'sys_ingested_at': datetime.now(timezone.utc).isoformat() + '.000001',  # Same as first record
+            't_stamp': datetime.now(timezone.utc).isoformat(),
             'email': 'duplicate@test.com'
         }
         
@@ -524,3 +524,4 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
+

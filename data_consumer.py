@@ -4,7 +4,7 @@ Data Consumer - Fetches records from FastAPI stream and ingests them
 import requests
 import json
 import time
-from typing import Optional
+from typing import Optional, Dict, Any
 from ingestion_pipeline import IngestionPipeline
 
 
@@ -15,10 +15,16 @@ class DataConsumer:
     
     def __init__(self, 
                  api_url='http://127.0.0.1:8000',
-                 pipeline: Optional[IngestionPipeline] = None):
+                 pipeline: Optional[IngestionPipeline] = None,
+                 schema: Optional[Dict[str, Any]] = None):
         self.api_url = api_url
         self.pipeline = pipeline or IngestionPipeline()
         self.is_running = False
+        self._closed = False
+
+        if schema:
+            schema_info = self.pipeline.register_schema(schema)
+            print(f"[Consumer] Registered schema version {schema_info['schema_version']}")
     
     def fetch_single_record(self) -> Optional[dict]:
         """
@@ -76,7 +82,13 @@ class DataConsumer:
         except Exception as e:
             print(f"[Consumer] Error fetching batch: {e}")
     
-    def consume_continuous(self, batch_size: int = 100, total_batches: int = 10, delay: float = 1.0):
+    def consume_continuous(
+        self,
+        batch_size: int = 100,
+        total_batches: int = 10,
+        delay: float = 1.0,
+        close_on_finish: bool = True,
+    ):
         """
         Continuously fetch and ingest data in batches.
         
@@ -84,6 +96,7 @@ class DataConsumer:
             batch_size: Number of records per batch
             total_batches: Total number of batches to fetch
             delay: Delay between batches (seconds)
+            close_on_finish: Close the pipeline after consumption completes
         """
         self.is_running = True
         print(f"[Consumer] Starting continuous consumption: {total_batches} batches of {batch_size} records")
@@ -117,11 +130,23 @@ class DataConsumer:
             self.is_running = False
         
         finally:
-            self.pipeline.close()
+            if close_on_finish:
+                self.close()
     
     def stop(self):
         """Stop continuous consumption"""
         self.is_running = False
+
+    def close(self):
+        """Close underlying resources once."""
+        if self._closed:
+            return
+        self.pipeline.close()
+        self._closed = True
+
+    def execute_query(self, query_request: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute Assignment-2 metadata-driven CRUD query."""
+        return self.pipeline.execute_crud(query_request)
 
 
 # Main execution
@@ -170,18 +195,30 @@ if __name__ == "__main__":
         print("[Consumer]   uvicorn main:app --reload --port 8000")
         sys.exit(1)
     
+    schema = None
+    if len(sys.argv) > 3:
+        schema_path = sys.argv[3]
+        try:
+            with open(schema_path, 'r', encoding='utf-8') as schema_file:
+                schema = json.load(schema_file)
+            print(f"[Consumer] Loaded schema from: {schema_path}")
+        except Exception as error:
+            print(f"[Consumer] Warning: failed to load schema file {schema_path}: {error}")
+
     # Create consumer and start ingestion
     print(f"\n[Consumer] Configuration:")
     print(f"  - Batch size: {batch_size} records")
     print(f"  - Total batches: {total_batches}")
     print(f"  - Total records: {batch_size * total_batches}")
     print(f"  - API URL: {API_URL}")
+    if schema:
+        print("  - Schema registration: Enabled")
     print()
     
     input("Press Enter to start ingestion...")
     print()
     
-    consumer = DataConsumer(api_url=API_URL)
+    consumer = DataConsumer(api_url=API_URL, schema=schema)
     consumer.consume_continuous(
         batch_size=batch_size,
         total_batches=total_batches,

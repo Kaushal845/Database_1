@@ -1,37 +1,38 @@
 ## Main System Files
 
 - **main.py**
-  - FastAPI server for synthetic data generation (JSON records)
-  - Used for testing and simulating real-world data streams
-  - Features: REST API, batch endpoints, realistic/nested data
+  - FastAPI server for Assignment-2 synthetic data generation
+  - Emits nested and repeating entities for normalization/document strategy tests
+  - Endpoints: `/`, `/record/{count}`, `/schema`, `/health`
 
 - **data_consumer.py**
-  - Client for consuming data from the FastAPI server
-  - Orchestrates ingestion pipeline and batch processing
-  - Features: API connectivity, batch ingestion, progress reporting
+  - Client for consuming generator stream and sending to ingestion pipeline
+  - Supports optional schema registration and CRUD query passthrough
 
 - **ingestion_pipeline.py**
-  - Core orchestration logic for data ingestion
-  - Detects types, updates metadata, routes to SQL/MongoDB
-  - Features: Autonomous placement, type detection, statistics
+  - Assignment-2 core orchestrator
+  - Implements schema registration, classification, buffer routing, normalization, Mongo strategy, and CRUD entrypoint
+
+- **query_engine.py**
+  - Metadata-driven CRUD query generator and executor
+  - Converts JSON operations into SQL/Mongo actions and merges responses
 
 - **metadata_store.py**
-  - Persistent storage for field statistics and placement decisions
-  - Features: Tracks frequency, type stability, and more
+  - Persistent metadata manager
+  - Tracks schema versions, field mappings, placement decisions, buffer state, normalization map, and Mongo strategy map
 
 - **type_detector.py**
   - Detects semantic type of each field value (e.g., IP, UUID, float, string)
   - Features: Pattern matching, type coercion, SQL type mapping
 
 - **placement_heuristics.py**
-  - Decision engine for routing fields to SQL, MongoDB, or both
-  - Uses frequency and type stability thresholds
-  - Features: Rule-based placement, adaptive to data drift
+  - Decision engine for routing fields to SQL, MongoDB, Buffer, or Both
+  - Uses frequency, type stability, confidence, and drift rules
 
 - **database_managers.py**
-  - Interfaces for SQL (SQLite) and MongoDB backends
-  - Handles schema evolution, inserts, and indexing
-  - Features: Dynamic schema, unique constraints, flexible storage
+  - SQL and MongoDB data access managers
+  - SQL: dynamic root schema + normalized child-table support with FK constraints
+  - Mongo: multi-collection operations with in-memory fallback
 
 - **view_databases.py**
   - Utility for inspecting contents of SQL and MongoDB databases
@@ -51,8 +52,21 @@
 - **test_mongodb.py**
   - Unit tests for MongoDB backend (connection, insert, query)
 
+- **tests/test_assignment2_pipeline.py**
+  - Pytest suite for Assignment-2 pipeline behavior
+  - Covers schema registration, buffer transitions, normalization, and CRUD cycle
+
+- **tests/test_generator.py**
+  - Pytest coverage for generator endpoints and emitted Assignment-2 structures
+
+- **pytest.ini**
+  - Pytest discovery configuration (restricts collection to tests folder)
+
 - **readme.md**
-  - Main project documentation (features, setup, usage, architecture)
+  - Detailed Assignment-2 documentation
+
+- **README_SHORT.md**
+  - Short run instructions
 
 - **LICENSE**
   - MIT License for open source use
@@ -62,5 +76,18 @@
 ## Generated/Runtime Files
 
 - **metadata_store.json**
-  - Persistent metadata (field stats, normalization, placement)
+  - Persistent metadata (schema registry, mappings, normalization, placement, buffer, strategies)
+
+---
+
+## Docs Folder
+
+- **docs/ASSIGNMENT2_TECHNICAL_REPORT.md**
+  - Mandatory report-question coverage for Assignment-2
+
+- **docs/ARCHITECTURE_ASSIGNMENT2.md**
+  - Pipeline architecture and design notes
+
+- **docs/CRUD_JSON_INTERFACE.md**
+  - JSON request/response reference for metadata-driven CRUD
 

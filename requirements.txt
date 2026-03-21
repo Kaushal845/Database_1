@@ -4,3 +4,5 @@ faker
 sse-starlette
 pymongo
 requests
+pytest
+httpx
