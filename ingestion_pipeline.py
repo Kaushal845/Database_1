@@ -10,6 +10,10 @@ from type_detector import TypeDetector
 from placement_heuristics import PlacementHeuristics
 from database_managers import SQLManager, MongoDBManager
 from query_engine import MetadataDrivenQueryEngine
+from logging_utils import get_logger
+
+
+logger = get_logger("pipeline")
 
 
 class IngestionPipeline:
@@ -54,8 +58,13 @@ class IngestionPipeline:
             'fields_discovered': 0
         }
         
-        print("[Pipeline] Initialized successfully")
-        print(f"[Pipeline] Loaded {len(self.metadata_store.metadata['fields'])} known fields")
+        logger.info(
+            "Initialized pipeline (sql_db=%s, mongo_db=%s, metadata_file=%s)",
+            sql_db,
+            mongo_db,
+            metadata_file,
+        )
+        logger.info("Loaded %s known fields from metadata", len(self.metadata_store.metadata['fields']))
 
     def register_schema(self, schema: Dict[str, Any]) -> Dict[str, Any]:
         """Register user-provided JSON schema for ingestion constraints."""
@@ -162,6 +171,7 @@ class IngestionPipeline:
         """Route a scalar top-level field to SQL, MongoDB, Both, or Buffer."""
         previous_mapping = self.metadata_store.get_field_mapping(field_name)
         placement = self.placement_heuristics.decide_placement(field_name)
+        logger.debug("Field '%s' scalar placement resolved to %s", field_name, placement)
 
         if placement == 'Buffer':
             unresolved_fields[field_name] = value
@@ -261,6 +271,13 @@ class IngestionPipeline:
             if self.mongo_manager.remove_buffer_field(sys_ingested_at, field_name, 'buffer_records'):
                 migrated_count += 1
 
+        if migrated_count > 0:
+            logger.info(
+                "Drained %s buffered values for field '%s' into %s",
+                migrated_count,
+                field_name,
+                final_backend,
+            )
         return migrated_count
 
     def _normalize_entities(
@@ -296,6 +313,12 @@ class IngestionPipeline:
                 entity_path=entity_path,
                 columns=list(column_types.keys()),
             )
+            logger.debug(
+                "Normalized entity '%s' into table '%s' with %s rows",
+                entity_path,
+                table_name,
+                len(scalar_rows),
+            )
             self.metadata_store.set_field_mapping(
                 entity_path,
                 backend='Both',
@@ -319,6 +342,13 @@ class IngestionPipeline:
             previous_mapping = self.metadata_store.get_field_mapping(field_name)
             mode, collection_name = self._decide_mongo_mode(field_name, value)
             placement = self.placement_heuristics.decide_placement(field_name)
+            logger.debug(
+                "Nested field '%s' placement=%s mongo_mode=%s collection=%s",
+                field_name,
+                placement,
+                mode,
+                collection_name,
+            )
             if placement == 'Buffer':
                 unresolved_fields[field_name] = value
                 self.metadata_store.add_buffer_observation(field_name, value)
@@ -452,6 +482,11 @@ class IngestionPipeline:
                 buffer_success = self.mongo_manager.insert_record(buffer_payload, collection_name='buffer_records')
                 if buffer_success:
                     self.stats['buffer_inserts'] += 1
+                    logger.debug(
+                        "Buffered unresolved fields for %s: %s",
+                        enriched_record['sys_ingested_at'],
+                        sorted(unresolved_fields.keys()),
+                    )
             
             # Update statistics
             self.stats['total_processed'] += 1
@@ -462,14 +497,19 @@ class IngestionPipeline:
             
             # Log progress every 50 records
             if self.stats['total_processed'] % 50 == 0:
-                print(f"[Pipeline] Processed {self.stats['total_processed']} records "
-                      f"(SQL: {self.stats['sql_inserts']}, MongoDB: {self.stats['mongodb_inserts']}, "
-                      f"Buffer: {self.stats['buffer_inserts']})")
+                logger.info(
+                    "Processed=%s sql_inserts=%s mongo_inserts=%s buffer_inserts=%s errors=%s",
+                    self.stats['total_processed'],
+                    self.stats['sql_inserts'],
+                    self.stats['mongodb_inserts'],
+                    self.stats['buffer_inserts'],
+                    self.stats['errors'],
+                )
             
             return sql_success or mongo_success
         
         except Exception as e:
-            print(f"[Pipeline] Error ingesting record: {e}")
+            logger.exception("Error ingesting record: %s", e)
             self.stats['errors'] += 1
             return False
     
@@ -489,6 +529,7 @@ class IngestionPipeline:
 
     def execute_crud(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """Execute metadata-driven CRUD request."""
+        logger.debug("Executing CRUD request: operation=%s", request.get('operation'))
         return self.query_engine.execute(request)
     
     def get_statistics(self) -> Dict[str, Any]:
@@ -511,11 +552,11 @@ class IngestionPipeline:
         """
         Cleanup: Save metadata and close database connections.
         """
-        print("[Pipeline] Shutting down...")
+        logger.info("Shutting down pipeline")
         self.metadata_store.save()
         self.sql_manager.close()
         self.mongo_manager.close()
-        print("[Pipeline] Shutdown complete")
+        logger.info("Pipeline shutdown complete")
 
 
 # Example usage

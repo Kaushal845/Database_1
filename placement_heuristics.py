@@ -5,6 +5,10 @@ Based on frequency, type stability, and data characteristics
 from typing import Dict, Any, List
 from metadata_store import MetadataStore
 from type_detector import TypeDetector
+from logging_utils import get_logger
+
+
+logger = get_logger("placement")
 
 
 class PlacementHeuristics:
@@ -265,15 +269,21 @@ class PlacementHeuristics:
             # Minor to moderate drift (0.10 - 0.25)
             if current_decision == 'SQL':
                 # Downgrade from SQL to MongoDB
-                print(f"[PlacementHeuristics] Moderate drift detected for '{normalized_key}' "
-                      f"({drift_score:.2f}), downgrading SQL -> MongoDB")
+                logger.warning(
+                    "Moderate drift detected for '%s' (%.2f); downgrading SQL -> MongoDB",
+                    normalized_key,
+                    drift_score,
+                )
                 return 'MongoDB'
             # If already MongoDB, keep it
             return 'MongoDB'
         else:
             # Severe drift (>= 0.25)
-            print(f"[PlacementHeuristics] Severe drift detected for '{normalized_key}' "
-                  f"({drift_score:.2f}), quarantining to MongoDB")
+            logger.warning(
+                "Severe drift detected for '%s' (%.2f); quarantining to MongoDB",
+                normalized_key,
+                drift_score,
+            )
             self.metadata_store.mark_quarantined(normalized_key, drift_score)
             return 'MongoDB'
     

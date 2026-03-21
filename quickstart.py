@@ -7,9 +7,11 @@ import time
 import json
 import shutil
 from pathlib import Path
+from logging_utils import setup_logging, get_logger
 
 
 PROJECT_MONGO_DBS = ["ingestion_db", "assignment2_test_db"]
+logger = get_logger("quickstart")
 
 
 def check_dependencies():
@@ -160,9 +162,20 @@ def clean_generated_files(force: bool = False, clean_mongo: bool = True):
 
 
 def main():
+    arg_set = {arg.lower() for arg in sys.argv[1:]}
+    if "--verbose" in arg_set or "-v" in arg_set:
+        setup_logging("DEBUG")
+    elif "--quiet" in arg_set or "-q" in arg_set:
+        setup_logging("WARNING")
+    else:
+        setup_logging()
+
+    logger.info("Quickstart launched with args: %s", sys.argv[1:])
+
     if len(sys.argv) > 1 and sys.argv[1].lower() in {"clean", "--clean"}:
         force = any(arg in {"-y", "--yes"} for arg in sys.argv[2:])
         clean_mongo = not any(arg in {"--skip-mongo", "--no-mongo"} for arg in sys.argv[2:])
+        logger.info("Running clean command (force=%s clean_mongo=%s)", force, clean_mongo)
         clean_generated_files(force=force, clean_mongo=clean_mongo)
         return
 

@@ -8,6 +8,11 @@ from datetime import datetime, timezone
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
 from type_detector import TypeDetector
+from logging_utils import get_logger
+
+
+sql_logger = get_logger("sql")
+mongo_logger = get_logger("mongo")
 
 
 class InMemoryInsertResult:
@@ -141,7 +146,7 @@ class SQLManager:
                 alter_query = f"ALTER TABLE ingested_records ADD COLUMN {safe_column} {sql_type}"
                 self.cursor.execute(alter_query)
                 self.connection.commit()
-                print(f"[SQL] Added column: {safe_column} ({sql_type})")
+                sql_logger.info("Added column %s (%s)", safe_column, sql_type)
                 
                 # Add unique constraint if needed (requires separate index)
                 if unique and column_name not in ['username', 't_stamp']:
@@ -149,12 +154,15 @@ class SQLManager:
                         index_query = f"CREATE UNIQUE INDEX idx_{safe_column} ON ingested_records({safe_column})"
                         self.cursor.execute(index_query)
                         self.connection.commit()
-                        print(f"[SQL] Added unique index on: {safe_column}")
+                        sql_logger.info("Added unique index on %s", safe_column)
                     except sqlite3.IntegrityError:
-                        print(f"[SQL] Could not add unique constraint on {safe_column} - duplicate values exist")
+                        sql_logger.warning(
+                            "Could not add unique index on %s because duplicate values exist",
+                            safe_column,
+                        )
         
         except Exception as e:
-            print(f"[SQL] Error adding column {column_name}: {e}")
+            sql_logger.error("Error adding column %s: %s", column_name, e)
     
     def insert_record(self, record: Dict[str, Any]) -> bool:
         """
@@ -190,10 +198,10 @@ class SQLManager:
             return True
         
         except sqlite3.IntegrityError as e:
-            print(f"[SQL] Integrity error: {e}")
+            sql_logger.warning("Integrity error inserting SQL record: %s", e)
             return False
         except Exception as e:
-            print(f"[SQL] Insert error: {e}")
+            sql_logger.error("Insert error: %s", e)
             return False
     
     def get_record_count(self) -> int:
@@ -290,7 +298,7 @@ class SQLManager:
             self.connection.commit()
             return self.cursor.rowcount > 0
         except Exception as error:
-            print(f"[SQL] Update error for field '{safe_field}': {error}")
+            sql_logger.error("Update error for field '%s': %s", safe_field, error)
             return False
 
     def delete_records(self, table_name: str, filters: Dict[str, Any]) -> int:
@@ -343,10 +351,10 @@ class MongoDBManager:
             self.db = self.client[db_name]
             self.collection = self.db['ingested_records']
             self._initialize_indexes()
-            print("[MongoDB] Connected successfully")
+            mongo_logger.info("Connected successfully (database=%s)", db_name)
         except ConnectionFailure as e:
-            print(f"[MongoDB] Connection failed: {e}")
-            print("[MongoDB] Using in-memory fallback collections")
+            mongo_logger.warning("Connection failed: %s", e)
+            mongo_logger.warning("Using in-memory fallback collections")
             self.using_memory_fallback = True
             self.client = None
             self.db = None
@@ -368,9 +376,9 @@ class MongoDBManager:
                 self.collection.create_index('sys_ingested_at', unique=True)
                 # Index on username for queries
                 self.collection.create_index('username')
-                print("[MongoDB] Indexes created")
+                mongo_logger.info("Indexes created on ingested_records")
             except Exception as e:
-                print(f"[MongoDB] Index creation error: {e}")
+                mongo_logger.error("Index creation error: %s", e)
     
     def insert_record(self, record: Dict[str, Any], collection_name: str = 'ingested_records') -> bool:
         """
@@ -395,7 +403,7 @@ class MongoDBManager:
             return True
         
         except Exception as e:
-            print(f"[MongoDB] Insert error: {e}")
+            mongo_logger.error("Insert error into %s: %s", collection_name, e)
             return False
     
     def get_record_count(self, collection_name: str = 'ingested_records') -> int:
@@ -406,7 +414,7 @@ class MongoDBManager:
         try:
             return collection.count_documents({})
         except Exception as e:
-            print(f"[MongoDB] Count error: {e}")
+            mongo_logger.error("Count error in %s: %s", collection_name, e)
             return 0
 
     def find_records(

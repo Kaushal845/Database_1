@@ -6,6 +6,10 @@ import json
 import time
 from typing import Optional, Dict, Any
 from ingestion_pipeline import IngestionPipeline
+from logging_utils import get_logger
+
+
+logger = get_logger("consumer")
 
 
 class DataConsumer:
@@ -24,7 +28,7 @@ class DataConsumer:
 
         if schema:
             schema_info = self.pipeline.register_schema(schema)
-            print(f"[Consumer] Registered schema version {schema_info['schema_version']}")
+            logger.info("Registered schema version %s", schema_info['schema_version'])
     
     def fetch_single_record(self) -> Optional[dict]:
         """
@@ -35,10 +39,10 @@ class DataConsumer:
             if response.status_code == 200:
                 return response.json()
             else:
-                print(f"[Consumer] Error: HTTP {response.status_code}")
+                logger.error("Single record fetch failed with HTTP %s", response.status_code)
                 return None
         except Exception as e:
-            print(f"[Consumer] Error fetching record: {e}")
+            logger.error("Single record fetch exception: %s", e)
             return None
     
     def fetch_batch(self, count: int):
@@ -48,12 +52,12 @@ class DataConsumer:
         """
         try:
             url = f"{self.api_url}/record/{count}"
-            print(f"[Consumer] Fetching {count} records from {url}")
+            logger.info("Fetching batch of %s records from %s", count, url)
             
             response = requests.get(url, stream=True, timeout=30)
             
             if response.status_code != 200:
-                print(f"[Consumer] Error: HTTP {response.status_code}")
+                logger.error("Batch fetch failed with HTTP %s", response.status_code)
                 return
             
             # Parse SSE stream
@@ -72,15 +76,15 @@ class DataConsumer:
                             
                             # Progress update every 100 records
                             if records_processed % 100 == 0:
-                                print(f"[Consumer] Fetched and ingested {records_processed}/{count} records")
+                                logger.info("Fetched and ingested %s/%s records", records_processed, count)
                         
                         except json.JSONDecodeError as e:
-                            print(f"[Consumer] JSON decode error: {e}")
+                            logger.warning("Skipping malformed SSE payload: %s", e)
             
-            print(f"[Consumer] Batch complete: {records_processed} records ingested")
+            logger.info("Batch complete: %s records ingested", records_processed)
         
         except Exception as e:
-            print(f"[Consumer] Error fetching batch: {e}")
+            logger.error("Batch fetch exception: %s", e)
     
     def consume_continuous(
         self,
@@ -99,34 +103,45 @@ class DataConsumer:
             close_on_finish: Close the pipeline after consumption completes
         """
         self.is_running = True
-        print(f"[Consumer] Starting continuous consumption: {total_batches} batches of {batch_size} records")
+        logger.info(
+            "Starting continuous consumption: batches=%s batch_size=%s delay=%ss",
+            total_batches,
+            batch_size,
+            delay,
+        )
         
         try:
             for batch_num in range(1, total_batches + 1):
                 if not self.is_running:
                     break
                 
-                print(f"\n[Consumer] === Batch {batch_num}/{total_batches} ===")
+                logger.info("Starting batch %s/%s", batch_num, total_batches)
                 self.fetch_batch(batch_size)
                 
                 if batch_num < total_batches:
-                    print(f"[Consumer] Waiting {delay}s before next batch...")
+                    logger.debug("Sleeping for %ss before next batch", delay)
                     time.sleep(delay)
             
-            print("\n[Consumer] Consumption complete!")
+            logger.info("Consumption complete")
             
             # Print final statistics
             stats = self.pipeline.get_statistics()
-            print("\n=== Final Statistics ===")
-            print(f"Total records processed: {stats['pipeline']['total_processed']}")
-            print(f"SQL inserts: {stats['pipeline']['sql_inserts']}")
-            print(f"MongoDB inserts: {stats['pipeline']['mongodb_inserts']}")
-            print(f"Errors: {stats['pipeline']['errors']}")
-            print(f"Unique fields discovered: {stats['metadata']['unique_fields']}")
-            print(f"Placement decisions made: {stats['metadata']['placement_decisions']}")
+            logger.info(
+                "Final stats: processed=%s sql_inserts=%s mongo_inserts=%s buffer_inserts=%s errors=%s",
+                stats['pipeline']['total_processed'],
+                stats['pipeline']['sql_inserts'],
+                stats['pipeline']['mongodb_inserts'],
+                stats['pipeline'].get('buffer_inserts', 0),
+                stats['pipeline']['errors'],
+            )
+            logger.info(
+                "Metadata summary: unique_fields=%s placement_decisions=%s",
+                stats['metadata']['unique_fields'],
+                stats['metadata']['placement_decisions'],
+            )
         
         except KeyboardInterrupt:
-            print("\n[Consumer] Interrupted by user")
+            logger.warning("Interrupted by user")
             self.is_running = False
         
         finally:

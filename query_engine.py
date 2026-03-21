@@ -5,6 +5,10 @@ from typing import Any, Callable, Dict, List, Optional
 
 from database_managers import SQLManager, MongoDBManager
 from metadata_store import MetadataStore
+from logging_utils import get_logger
+
+
+logger = get_logger("query_engine")
 
 
 class MetadataDrivenQueryEngine:
@@ -24,6 +28,7 @@ class MetadataDrivenQueryEngine:
 
     def execute(self, request: Dict[str, Any]) -> Dict[str, Any]:
         operation = request.get("operation", "").lower().strip()
+        logger.info("Executing CRUD operation: %s", operation)
         if operation == "insert":
             return self._insert(request)
         if operation == "read":
@@ -52,6 +57,7 @@ class MetadataDrivenQueryEngine:
                     inserted += 1
                 else:
                     failed += 1
+            logger.info("Insert list completed: inserted=%s failed=%s", inserted, failed)
             return {
                 "success": failed == 0,
                 "operation": "insert",
@@ -60,6 +66,7 @@ class MetadataDrivenQueryEngine:
             }
 
         success = self.ingest_callback(data)
+        logger.info("Insert single record success=%s", success)
         return {
             "success": success,
             "operation": "insert",
@@ -136,6 +143,13 @@ class MetadataDrivenQueryEngine:
 
         plan = self._build_field_plan(fields)
         filter_plan = self._split_filters(filters)
+        logger.debug(
+            "Read query plan: sql_root=%s sql_child=%s mongo_root=%s mongo_ref=%s",
+            len(plan["sql_root_fields"]),
+            len(plan["sql_child_entities"]),
+            len(plan["mongo_root_fields"]),
+            len(plan["mongo_reference_entities"]),
+        )
 
         sql_rows = self.sql_manager.fetch_records(
             table_name="ingested_records",
@@ -204,6 +218,7 @@ class MetadataDrivenQueryEngine:
                     results_by_key[key][field_name] = payloads
 
         records = list(results_by_key.values())
+        logger.info("Read completed: records=%s limit=%s", len(records), limit)
         return {
             "success": True,
             "operation": "read",
@@ -243,6 +258,13 @@ class MetadataDrivenQueryEngine:
             if mapping.get("mongo_collection"):
                 mongo_deleted = self.mongo_manager.delete_records(filters, mapping["mongo_collection"])
 
+            logger.info(
+                "Entity delete completed: entity=%s sql_deleted=%s mongo_deleted=%s",
+                entity,
+                sql_deleted,
+                mongo_deleted,
+            )
+
             return {
                 "success": True,
                 "operation": "delete",
@@ -263,6 +285,13 @@ class MetadataDrivenQueryEngine:
             if mode != "reference" or not collection:
                 continue
             mongo_deleted += self.mongo_manager.delete_records(root_filter_plan["mongo"], collection)
+
+        logger.info(
+            "Root delete completed: sql_deleted=%s mongo_deleted=%s buffer_deleted=%s",
+            sql_deleted,
+            mongo_deleted,
+            buffer_deleted,
+        )
 
         return {
             "success": True,
@@ -289,6 +318,11 @@ class MetadataDrivenQueryEngine:
             }
 
         insert_result = self._insert({"operation": "insert", "data": data})
+        logger.info(
+            "Update completed with delete_then_insert: delete_success=%s insert_success=%s",
+            delete_result.get("success", False),
+            insert_result.get("success", False),
+        )
         return {
             "success": insert_result.get("success", False),
             "operation": "update",

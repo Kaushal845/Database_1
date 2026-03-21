@@ -18,6 +18,12 @@ uvicorn main:app --reload --port 8000
 python data_consumer.py
 ```
 
+Quickstart with detailed logs:
+
+```bash
+python quickstart.py --verbose
+```
+
 Optional:
 
 ```bash

@@ -6,6 +6,10 @@ import os
 import threading
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
+from logging_utils import get_logger
+
+
+logger = get_logger("metadata")
 
 
 class MetadataStore:
@@ -35,7 +39,8 @@ class MetadataStore:
             with open(self.storage_file, "r", encoding="utf-8") as file:
                 existing = json.load(file)
         except Exception as error:
-            print(f"Error loading metadata: {error}. Initializing fresh metadata.")
+            logger.error("Error loading metadata from %s: %s", self.storage_file, error)
+            logger.info("Initializing fresh metadata")
             return self._initialize_metadata()
 
         return self._upgrade_metadata(existing)
@@ -113,7 +118,7 @@ class MetadataStore:
                 with open(self.storage_file, "w", encoding="utf-8") as file:
                     json.dump(self.metadata, file, indent=2)
             except Exception as error:
-                print(f"Error saving metadata: {error}")
+                logger.error("Error saving metadata to %s: %s", self.storage_file, error)
 
     def increment_total_records(self):
         """Increment processed record count."""
