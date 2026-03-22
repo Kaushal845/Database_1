@@ -1,5 +1,8 @@
 # Autonomous Hybrid Ingestion Framework (Assignment 2)
 
+Group Name - Schemeless
+Members - Shardul Junagade, Kaushal Bule, Akash Gupta
+
 This repository contains the Assignment 2 submission for a metadata-driven hybrid data platform that ingests JSON, decides storage placement automatically, and exposes metadata-driven CRUD operations.
 
 ## Assignment Objective
@@ -266,6 +269,33 @@ Current suite includes Assignment 2 checks for:
 - Mongo decision telemetry persistence,
 - nested-field routing behavior,
 - generator endpoint and structure checks.
+
+## Ingestion Benchmark (Single Batch)
+
+To provide measurable runtime evidence, ingestion was benchmarked for one batch each at sizes:
+
+- 10, 20, 50, 100, 500, 1000
+
+Method used:
+
+- one run per batch size,
+- fresh isolated SQL file, metadata file, and Mongo database name for each run,
+- same API endpoint and consumer flow as normal ingestion.
+
+Measured results:
+
+| Batch Size | Elapsed (s) | Per Record (ms) | Throughput (rec/s) |
+|---:|---:|---:|---:|
+| 10 | 3.3421 | 334.211 | 2.99 |
+| 20 | 16.0346 | 801.729 | 1.25 |
+| 50 | 23.4952 | 469.903 | 2.13 |
+| 100 | 47.9602 | 479.602 | 2.09 |
+| 500 | 277.1893 | 554.379 | 1.80 |
+| 1000 | 538.6599 | 538.660 | 1.86 |
+
+Raw benchmark artifact is stored at:
+
+- docs/ingestion_benchmark_results.json
 
 
 ## Notes and Constraints

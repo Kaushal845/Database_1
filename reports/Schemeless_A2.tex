@@ -46,11 +46,11 @@
 \date{\today\\[0.3em]
 \small Repository: \href{https://github.com/Kaushal845/Database_1}{\texttt{Kaushal845/Database\_1}}}
 
-\usepackage{etoolbox}
-\apptocmd{\maketitle}{
-  \tableofcontents
-  \newpage
-}{}{}
+% \usepackage{etoolbox}
+% \apptocmd{\maketitle}{
+%   \tableofcontents
+%   \newpage
+% }{}{}
 
 \begin{document}
 \maketitle
@@ -380,6 +380,27 @@ The implementation focuses on practical performance under evolving schemas.
   \item Startup reconciliation drains historical buffered values for fields already resolved in metadata.
 \end{itemize}
 
+\textbf{Measured Ingestion Benchmark (single batch runs):}
+
+To add empirical evidence, we executed one ingestion batch for each size in \{10, 20, 50, 100, 500, 1000\}. Each run used a fresh isolated state (new SQL file, new metadata file, and new MongoDB database name) to avoid carry-over effects.
+
+\begin{center}
+\begin{tabular}{r r r r}
+\toprule
+\textbf{Batch Size} & \textbf{Elapsed (s)} & \textbf{Per Record (ms)} & \textbf{Throughput (rec/s)} \\
+\midrule
+10 & 3.3421 & 334.211 & 2.99 \\
+20 & 16.0346 & 801.729 & 1.25 \\
+50 & 23.4952 & 469.903 & 2.13 \\
+100 & 47.9602 & 479.602 & 2.09 \\
+500 & 277.1893 & 554.379 & 1.80 \\
+1000 & 538.6599 & 538.660 & 1.86 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+These measurements show stable behavior at larger batches with end-to-end ingestion throughput around $\sim 1.8$ to $2.1$ records/second in the current local environment, including API fetch, classification, metadata updates, and persistence.
+
 Extensive logging improved runtime traceability across components (consumer, pipeline, SQL manager, Mongo manager, metadata manager, and query engine), which reduces debugging time and makes backend decisions transparent during ingestion and CRUD execution.
 
 \subsection{Sources of Information}
@@ -459,11 +480,12 @@ Planned improvements:
   \item Improve read operations so users can request specific fields and fetch results page by page.
 \end{itemize}
 
-\newpage
 \section{Conclusion}
 The Assignment 2 objective has been implemented as a working metadata-driven hybrid database framework. The system now performs autonomous normalization, document strategy selection, and CRUD query generation while preserving consistency across SQL and MongoDB.
 
 Most importantly, the framework demonstrates the central idea of the assignment: database structure and query execution can be generated from metadata rather than hardcoded schemas, enabling flexibility for heterogeneous JSON data while retaining operational control.
+
+\newpage
 
 \appendix
 \section{Reproducibility Commands}

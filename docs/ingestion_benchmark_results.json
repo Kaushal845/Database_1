@@ -1,0 +1,42 @@
+{
+  "method": "One batch per run with isolated fresh SQL/Mongo/metadata state per size",
+  "endpoint": "http://127.0.0.1:8000/record/{count}",
+  "results": [
+    {
+      "batch_size": 10,
+      "processed": 10,
+      "elapsed_seconds": 3.3421,
+      "per_record_ms": 334.211
+    },
+    {
+      "batch_size": 20,
+      "processed": 20,
+      "elapsed_seconds": 16.0346,
+      "per_record_ms": 801.729
+    },
+    {
+      "batch_size": 50,
+      "processed": 50,
+      "elapsed_seconds": 23.4952,
+      "per_record_ms": 469.903
+    },
+    {
+      "batch_size": 100,
+      "processed": 100,
+      "elapsed_seconds": 47.9602,
+      "per_record_ms": 479.602
+    },
+    {
+      "batch_size": 500,
+      "processed": 500,
+      "elapsed_seconds": 277.1893,
+      "per_record_ms": 554.379
+    },
+    {
+      "batch_size": 1000,
+      "processed": 1000,
+      "elapsed_seconds": 538.6599,
+      "per_record_ms": 538.66
+    }
+  ]
+}
