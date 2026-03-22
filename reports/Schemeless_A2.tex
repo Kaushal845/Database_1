@@ -1,0 +1,299 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue,
+  pdftitle={Assignment 2 Technical Report},
+  pdfauthor={Database Hybrid Framework Team}
+}
+
+\lstdefinestyle{jsonstyle}{
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  frame=single,
+  columns=fullflexible,
+  showstringspaces=false,
+  keepspaces=true
+}
+\setlist[itemize,enumerate]{itemsep=0pt,topsep=0pt,parsep=0pt,partopsep=0pt}
+
+\title{\textbf{Autonomous Normalization and CRUD Engine for a Hybrid SQL--MongoDB Framework}\\[0.5em]
+\large Technical Report for CS 432: Databases -- Assignment 2}
+\author{Akash Gupta \and Kaushal Bule \and Shardul Junagade}
+\date{\today\\[0.3em]
+\small Repository: \href{https://github.com/Kaushal845/Database_1}{\texttt{Kaushal845/Database\_1}}}
+
+
+\begin{document}
+\maketitle
+\onehalfspacing
+
+\section{Executive Summary}
+This report presents the complete Assignment 2 implementation built on top of Assignment 1. The system now does more than field classification: it automatically decomposes repeating JSON entities into normalized relational tables, applies a document strategy (embed vs reference) for MongoDB, and generates CRUD execution plans from metadata.
+
+The design goal was to keep the framework flexible for semi-structured data while preserving data integrity and queryability. We therefore chose a metadata-first architecture where every major decision (placement, schema mapping, normalization, and document strategy) is persisted and reused across ingestion and query generation.
+
+\section{Project Scope and Deliverables}
+Compared to Assignment 1, the following capabilities were added and validated:
+\begin{itemize}[leftmargin=*]
+  \item Schema registration with version tracking.
+  \item Three-path routing: SQL, MongoDB, and Buffer for undecided fields.
+  \item SQL normalization engine for one-to-many repeating entities.
+  \item MongoDB document strategy with automatic embed/reference decisions.
+  \item Metadata-driven CRUD query engine (insert, read, update, delete).
+  \item End-to-end test suite with automated validation.
+  \item Operational improvements: cleanup command and improved observability logs.
+\end{itemize}
+
+\section{System Architecture}
+The framework is organized as a staged pipeline:
+\begin{enumerate}[leftmargin=*]
+  \item \textbf{Schema Registration}: user schema is stored in a registry with version history.
+  \item \textbf{Ingestion}: raw JSON records are accepted and enriched with temporal fields.
+  \item \textbf{Metadata Interpretation}: field paths and semantic types are tracked recursively.
+  \item \textbf{Classification}: each field is routed to SQL, MongoDB, Buffer, or Both.
+  \item \textbf{Storage Strategy Generation}:
+  \begin{itemize}[leftmargin=*]
+    \item SQL normalizer creates child tables for repeating entities.
+    \item Mongo strategy decides embed/reference and target collections.
+  \end{itemize}
+  \item \textbf{Query Generation}: CRUD requests are translated into SQL/Mongo operations and merged back to JSON.
+\end{enumerate}
+
+Core modules used in implementation:
+\begin{itemize}[leftmargin=*]
+  \item \texttt{ingestion\_pipeline.py}
+  \item \texttt{metadata\_store.py}
+  \item \texttt{placement\_heuristics.py}
+  \item \texttt{database\_managers.py}
+  \item \texttt{query\_engine.py}
+  \item \texttt{main.py} and \texttt{data\_consumer.py}
+\end{itemize}
+
+\section{Mandatory Report Questions}
+
+\subsection{Normalization Strategy}
+The normalization strategy is automatic and metadata-driven. During ingestion, the pipeline recursively scans each record and detects repeating entities when it finds arrays of objects. Each detected entity path is converted into a normalized child table with a deterministic name:
+\begin{center}
+\texttt{norm\_\{entity\_path\}}
+\end{center}
+Examples include \texttt{norm\_orders}, \texttt{norm\_comments}, and \texttt{norm\_devices}.
+
+Only scalar keys from each object are materialized as child columns. This allows the normalizer to preserve relational simplicity while still supporting varied JSON records.
+
+\textbf{Why this strategy works:}
+\begin{itemize}[leftmargin=*]
+  \item Repeating groups naturally map to one-to-many structure.
+  \item Parent-child decomposition avoids oversized root rows.
+  \item Structure evolves as new entities appear, without predefined SQL DDL files.
+\end{itemize}
+
+\subsection{Table Creation Logic (PK/FK/Indexes)}
+The table design follows referential safety and predictable joins.
+
+\textbf{Root table:}
+\begin{itemize}[leftmargin=*]
+  \item Table: \texttt{ingested\_records}
+  \item Primary key: \texttt{id} (auto increment)
+  \item Join key: \texttt{sys\_ingested\_at} (unique)
+\end{itemize}
+
+\textbf{Child tables:}
+\begin{itemize}[leftmargin=*]
+  \item Primary key: \texttt{id}
+  \item Foreign key: \texttt{parent\_sys\_ingested\_at} references root \texttt{sys\_ingested\_at}
+  \item Deletion behavior: \texttt{ON DELETE CASCADE}
+  \item Ordering support: \texttt{item\_index}
+  \item Performance index: child-table index on \texttt{parent\_sys\_ingested\_at}
+\end{itemize}
+
+This design ensures clean parent-child traversal and automatic cleanup during root deletions.
+
+\subsection{MongoDB Design Strategy (Embed vs Reference)}
+The Mongo strategy is entity-path based and rule-driven.
+
+\textbf{Embed mode:}
+\begin{itemize}[leftmargin=*]
+  \item Used for smaller nested objects and short arrays.
+  \item Stored directly in root collection \texttt{ingested\_records}.
+\end{itemize}
+
+\textbf{Reference mode:}
+\begin{itemize}[leftmargin=*]
+  \item Used for larger arrays of objects (for example, length $>3$).
+  \item Also used for broader nested objects likely to evolve independently.
+  \item Payloads are written to dedicated collections (for example \texttt{ref\_orders}).
+\end{itemize}
+
+Reference documents store \texttt{parent\_sys\_ingested\_at} and \texttt{entity\_path} so they remain joinable and queryable from metadata.
+
+\subsection{Metadata System}
+The metadata layer is the intelligence center of the framework. It records both schema-level and runtime decisions.
+
+Persisted metadata includes:
+\begin{itemize}[leftmargin=*]
+  \item \texttt{schema\_registry}: active schema and version history.
+  \item \texttt{fields}: appearance counts, type distributions, sampled values.
+  \item \texttt{placement\_decisions}: SQL/MongoDB/Buffer/Both with reasons.
+  \item \texttt{buffer}: unresolved observations and resolution state.
+  \item \texttt{field\_mappings}: backend and table/collection mapping.
+  \item \texttt{normalization}: child-table metadata by entity path.
+  \item \texttt{mongo\_strategy}: embed/reference strategy by entity path.
+\end{itemize}
+
+\textbf{How metadata is used:}
+\begin{itemize}[leftmargin=*]
+  \item Ingestion uses it to avoid repeated inference for finalized fields.
+  \item Query generation uses it to resolve where every requested field lives.
+  \item Buffer resolution uses it to migrate previously unresolved values to final backends.
+\end{itemize}
+
+\subsection{CRUD Query Generation}
+CRUD operations are submitted as JSON and executed through a metadata-driven query planner.
+
+\textbf{Insert:}
+\begin{itemize}[leftmargin=*]
+  \item JSON payload is routed through ingestion logic.
+  \item Data is split by mapping and written to SQL/Mongo/Buffer as needed.
+\end{itemize}
+
+\textbf{Read:}
+\begin{itemize}[leftmargin=*]
+  \item Requested fields are mapped to SQL root fields, SQL child tables, Mongo root fields, and Mongo reference collections.
+  \item Results are joined by \texttt{sys\_ingested\_at}.
+  \item Final response is merged back to a single JSON record list.
+\end{itemize}
+
+\textbf{Update:}
+\begin{itemize}[leftmargin=*]
+  \item Implemented with \texttt{delete\_then\_insert} for cross-backend consistency.
+\end{itemize}
+
+\textbf{Delete:}
+\begin{itemize}[leftmargin=*]
+  \item Supports root record deletion and entity-level deletion.
+  \item SQL child cleanup is automatic due to cascade constraints.
+  \item Mongo referenced entities are deleted using metadata strategy mappings.
+\end{itemize}
+
+Example read request:
+\begin{lstlisting}[style=jsonstyle]
+{
+  "operation": "read",
+  "fields": ["username", "comments"],
+  "filters": {"username": "user_17"}
+}
+\end{lstlisting}
+
+\subsection{Performance Considerations}
+The implementation focuses on practical performance under evolving schemas.
+
+\begin{itemize}[leftmargin=*]
+  \item Parent-key index on child tables reduces join lookup cost.
+  \item \texttt{ON DELETE CASCADE} removes the need for expensive manual child scans.
+  \item Metadata-guided reads avoid querying all backends for every field.
+  \item Reference mode reduces document rewrite overhead for large nested arrays.
+  \item Buffer staging avoids early schema churn on low-observation fields.
+\end{itemize}
+
+\textbf{Operational note:}
+Recent logging upgrades improved runtime traceability across components (consumer, pipeline, SQL manager, Mongo manager, metadata manager, and query engine), which reduces debugging time and makes backend decisions transparent during ingestion and CRUD execution.
+
+\subsection{Sources of Information}
+The implementation was guided by:
+\begin{itemize}[leftmargin=*]
+  \item Official SQLite documentation (foreign keys, indexes, ALTER TABLE behavior).
+  \item Official MongoDB documentation (embedding vs referencing patterns, collection-level indexing).
+  \item FastAPI and Pydantic documentation for generator and API integration patterns.
+  \item Assignment specification document.
+\end{itemize}
+
+\section{Summary of Implemented Features}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.27\textwidth} >{\raggedright\arraybackslash}p{0.68\textwidth}}
+\toprule
+\textbf{Criterion} & \textbf{What was implemented and how it is evidenced} \\
+\midrule
+Normalization Strategy & Automatic detection of arrays-of-objects and generation of normalized child tables with stable naming and parent linkage. Verified by tests that assert normalized table creation and metadata registration. \\
+\addlinespace
+MongoDB Design & Deterministic embed/reference strategy with per-entity metadata registration and dedicated reference collections for large nested structures. \\
+\addlinespace
+Query Engine & Metadata-driven CRUD planner that generates SQL and Mongo operations, merges results, and supports entity-level as well as root-level deletion. \\
+\addlinespace
+Metadata System & Persistent schema registry, field statistics, placement decisions, buffer lifecycle metadata, normalization map, and Mongo strategy map. \\
+\addlinespace
+CRUD Functionality & Insert/read/update/delete supported through JSON interface. Update implemented with delete-then-insert consistency strategy. \\
+\bottomrule
+\end{longtable}
+
+\section{Validation and Test Evidence}
+A dedicated pytest suite validates critical behavior:
+\begin{itemize}[leftmargin=*]
+  \item Schema registration and persistence.
+  \item Buffer-to-final transition behavior.
+  \item SQL normalization and metadata mappings.
+  \item Metadata-driven CRUD lifecycle.
+  \item Generator endpoint and structure checks.
+\end{itemize}
+
+At the time of writing, the suite passes fully (8 tests passed), confirming stable behavior for the implemented features.
+
+\section{Implementation Decisions and Trade-offs}
+A few practical choices were made to keep the system robust:
+\begin{itemize}[leftmargin=*]
+  \item Root records are persisted to both SQL and Mongo for traceability and easier cross-backend joins.
+  \item Buffer is treated as first-class storage, not only an in-memory state, so unresolved data is not lost.
+  \item Update uses delete-then-insert to avoid partial divergence across two backends.
+\end{itemize}
+
+These choices prioritize correctness and debuggability over aggressive micro-optimization.
+
+\section{Known Limitations and Future Improvements}
+Current limitations:
+\begin{itemize}[leftmargin=*]
+  \item Embed/reference thresholds are heuristic and static.
+  \item No adaptive cost model yet for query planning.
+  \item Update strategy may be expensive for very large records due to full rewrite behavior.
+\end{itemize}
+
+Planned improvements:
+\begin{itemize}[leftmargin=*]
+  \item Make embed vs reference decisions smarter by learning from actual usage over time.
+  \item Update only the changed parts of a record instead of deleting and writing the full record again.
+  \item Improve read operations so users can request specific fields and fetch results page by page.
+\end{itemize}
+
+\section{Conclusion}
+The Assignment 2 objective has been implemented as a working metadata-driven hybrid database framework. The system now performs autonomous normalization, document strategy selection, and CRUD query generation while preserving consistency across SQL and MongoDB.
+
+Most importantly, the framework demonstrates the central idea of the assignment: database structure and query execution can be generated from metadata rather than hardcoded schemas, enabling flexibility for heterogeneous JSON data while retaining operational control.
+
+\appendix
+\section{Reproducibility Commands}
+\begin{lstlisting}[style=jsonstyle]
+# Start generator
+uvicorn main:app --reload --port 8000
+
+# Ingest sample batches
+python data_consumer.py
+
+# Run full tests
+pytest -q
+
+# Clean generated artifacts and project DBs
+python quickstart.py clean --yes
+\end{lstlisting}
+
+\end{document}
