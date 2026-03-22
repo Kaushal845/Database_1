@@ -317,3 +317,140 @@ def test_metadata_driven_crud_cycle(tmp_path):
         assert final_read["count"] == 0
     finally:
         pipeline.close()
+
+
+def test_primitive_array_normalization_creates_value_table(tmp_path):
+    pipeline = _make_pipeline(tmp_path)
+    try:
+        assert pipeline.ingest_record(
+            {
+                "username": "primitive_array_user",
+                "tags": ["new", "sale", "popular"],
+            }
+        )
+
+        child_tables = pipeline.sql_manager.list_child_tables()
+        assert "norm_tags" in child_tables
+
+        parent_key = pipeline.sql_manager.connection.execute(
+            "SELECT sys_ingested_at FROM ingested_records WHERE username = ?",
+            ("primitive_array_user",),
+        ).fetchone()[0]
+
+        rows = pipeline.sql_manager.fetch_records(
+            table_name="norm_tags",
+            fields=["value", "item_index"],
+            filters={"parent_sys_ingested_at": parent_key},
+            limit=20,
+        )
+        values = [row["value"] for row in sorted(rows, key=lambda item: item["item_index"])]
+        assert values == ["new", "sale", "popular"]
+    finally:
+        pipeline.close()
+
+
+def test_repeated_scalar_group_normalized_into_child_table(tmp_path):
+    pipeline = _make_pipeline(tmp_path)
+    try:
+        assert pipeline.ingest_record(
+            {
+                "username": "scalar_group_user",
+                "phone1": "111-111",
+                "phone2": "222-222",
+                "phone3": "333-333",
+            }
+        )
+
+        child_tables = pipeline.sql_manager.list_child_tables()
+        assert "norm_phone" in child_tables
+
+        parent_key = pipeline.sql_manager.connection.execute(
+            "SELECT sys_ingested_at FROM ingested_records WHERE username = ?",
+            ("scalar_group_user",),
+        ).fetchone()[0]
+
+        rows = pipeline.sql_manager.fetch_records(
+            table_name="norm_phone",
+            fields=["value", "item_index"],
+            filters={"parent_sys_ingested_at": parent_key},
+            limit=20,
+        )
+        values = [row["value"] for row in sorted(rows, key=lambda item: item["item_index"])]
+        assert values == ["111-111", "222-222", "333-333"]
+
+        root_columns = [
+            row[1]
+            for row in pipeline.sql_manager.connection.execute("PRAGMA table_info(ingested_records)").fetchall()
+        ]
+        assert "phone1" not in root_columns
+        assert "phone2" not in root_columns
+        assert "phone3" not in root_columns
+    finally:
+        pipeline.close()
+
+
+def test_mongo_strategy_uses_schema_hints_for_reference(tmp_path):
+    pipeline = _make_pipeline(tmp_path)
+    try:
+        schema = {
+            "entities": {
+                "activity_log": {
+                    "type": "array_of_objects",
+                    "frequently_updated": True,
+                    "unbounded": True,
+                }
+            }
+        }
+        pipeline.register_schema(schema)
+
+        for index in range(12):
+            assert pipeline.ingest_record(
+                {
+                    "username": f"hint_user_{index}",
+                    "activity_log": [
+                        {"event": "login", "at": f"2026-03-22T10:00:{index:02d}"},
+                        {"event": "click", "at": f"2026-03-22T10:01:{index:02d}"},
+                    ],
+                }
+            )
+
+        mongo_entities = pipeline.metadata_store.metadata["mongo_strategy"]["entities"]
+        assert "activity_log" in mongo_entities
+        assert mongo_entities["activity_log"]["mode"] == "reference"
+        assert isinstance(mongo_entities["activity_log"].get("decision_score"), int)
+        assert "schema_hint_unbounded" in mongo_entities["activity_log"].get("decision_reasons", [])
+        assert mongo_entities["activity_log"].get("reference_threshold") == 2
+    finally:
+        pipeline.close()
+
+
+def test_nested_fields_skip_buffer_warmup_and_route_to_mongo(tmp_path):
+    pipeline = _make_pipeline(tmp_path)
+    try:
+        assert pipeline.ingest_record(
+            {
+                "username": "nested_warmup_user",
+                "orders": [
+                    {"order_id": "o-100", "item": "book", "quantity": 1, "price": 20.0},
+                    {"order_id": "o-101", "item": "bag", "quantity": 1, "price": 40.0},
+                ],
+                "devices": [
+                    {"device_id": "d-1", "model": "Pixel", "os": "Android", "battery": 80},
+                ],
+            }
+        )
+
+        buffer_docs = pipeline.mongo_manager.find_records(
+            filters={"username": "nested_warmup_user"},
+            fields=None,
+            collection_name="buffer_records",
+            limit=10,
+        )
+        assert len(buffer_docs) == 0
+
+        orders_decision = pipeline.metadata_store.get_placement_decision("orders")
+        devices_decision = pipeline.metadata_store.get_placement_decision("devices")
+        assert orders_decision is not None and orders_decision["backend"] == "MongoDB"
+        assert devices_decision is not None and devices_decision["backend"] == "MongoDB"
+    finally:
+        pipeline.close()

@@ -1,182 +1,275 @@
 # Autonomous Hybrid Ingestion Framework (Assignment 2)
 
-This project implements a metadata-driven hybrid database framework that automatically:
-- Registers JSON schemas
-- Classifies fields into SQL, MongoDB, Buffer, or Both
-- Normalizes repeating entities into relational child tables
-- Applies MongoDB embed/reference document strategies
-- Generates and executes CRUD operations from JSON requests
+This repository contains the Assignment 2 submission for a metadata-driven hybrid data platform that ingests JSON, decides storage placement automatically, and exposes metadata-driven CRUD operations.
 
-The system extends Assignment-1 and now includes the full Assignment-2 architecture requirements.
+## Assignment Objective
 
-## What Is New in Assignment 2
+The system extends Assignment 1 by implementing an intelligence layer that can:
 
-- Schema registration with version tracking
-- Explicit Buffer pipeline for undecided fields
-- SQL normalization engine for arrays of objects
-- Mongo strategy engine for embed vs reference placement
-- Metadata-driven CRUD query engine with merged JSON responses
-- Pytest suite for Assignment-2 functionality
+- register and version user schemas,
+- classify incoming fields into SQL, MongoDB, Buffer, or Both,
+- normalize repeating relational entities automatically,
+- decide embed vs reference strategy for MongoDB,
+- persist decision metadata for explainability,
+- generate CRUD plans dynamically from metadata and return merged JSON responses.
 
-## Core Components
+## Submission Highlights
+
+- schema registry with active version and history,
+- field-level placement decisions with reasons,
+- Buffer lifecycle with persistence and drain/reconciliation,
+- SQL normalization for arrays of objects,
+- SQL normalization for primitive arrays,
+- SQL normalization for repeated scalar groups (for example phone1, phone2, phone3),
+- score-based Mongo embed/reference strategy,
+- persisted Mongo decision telemetry (score, threshold, reasons, hints),
+- metadata-driven CRUD engine,
+- test suite covering core Assignment 2 behavior.
+
+## Repository Components
 
 - main.py
-  - FastAPI synthetic generator with nested/repeating entities
-  - Endpoints: /, /record/{count}, /schema, /health
 - data_consumer.py
-  - Fetches stream data and feeds Assignment-2 pipeline
-  - Optional schema registration support
 - ingestion_pipeline.py
-  - End-to-end orchestrator for schema, classification, normalization, routing, and CRUD execution
 - query_engine.py
-  - Metadata-driven CRUD planner and executor
 - metadata_store.py
-  - Persistent intelligence layer (schema versions, mappings, strategies, buffer state)
 - database_managers.py
-  - SQL manager (root + normalized child tables)
-  - Mongo manager (multi-collection + in-memory fallback)
 - placement_heuristics.py
-  - Decision engine: SQL / MongoDB / Buffer / Both
+- view_databases.py
+- tests/test_assignment2_pipeline.py
+- docs/ASSIGNMENT2_TECHNICAL_REPORT.md
+- docs/ARCHITECTURE_ASSIGNMENT2.md
+- docs/CRUD_JSON_INTERFACE.md
+- reports/Schemeless_A2.tex
 
-## Architecture Summary
+## End-to-End Architecture
 
-1. Schema Registration
-- User schema is versioned in metadata
+1. Schema Registration - User schema is registered and versioned in metadata.
 
-2. Metadata Interpretation
-- Recursive field-path tracking captures frequency/type stability
+2. Metadata Interpretation - Recursive path tracking stores frequency, type distribution, and sample values.
 
-3. Classification Engine
-- Fields routed to SQL, MongoDB, Buffer, or Both
+3. Classification - Fields are routed to SQL, MongoDB, Buffer, or Both using heuristics and structure checks.
 
-4. SQL Engine
-- Root scalars go to ingested_records
-- Arrays of objects become normalized child tables (norm_<entity>)
-- FK: parent_sys_ingested_at -> ingested_records(sys_ingested_at)
+4. SQL Strategy
+- Root scalar fields are stored in ingested_records.
+- Arrays of objects become child tables (norm_<entity_path>).
+- Primitive arrays become value child tables.
+- Repeated scalar groups become normalized child tables.
+- Child tables use parent_sys_ingested_at foreign keys with ON DELETE CASCADE.
 
-5. Mongo Engine
-- Nested fields are embedded or referenced based on size/shape heuristics
-- Referenced entities are stored in dedicated collections (for example ref_orders)
+5. Mongo Strategy
+- Nested entities are evaluated with a score-based rule.
+- Mode is selected as embed or reference.
+- Decision telemetry is persisted for debugging/reporting.
+- Reference mode writes to dedicated collections such as ref_orders.
 
-6. Query Engine
-- JSON CRUD requests are translated using metadata mappings
-- SQL and Mongo queries are combined into a single JSON response
+6. Buffer Pipeline
+- Low-evidence fields are staged in Buffer.
+- Buffered records are persisted in buffer_records.
+- When a field resolves, buffered values are drained to the final backend.
+- Startup reconciliation attempts to drain historical resolved buffer residues.
 
-## Installation
+7. Query Generation
+- CRUD requests are interpreted using metadata mappings.
+- SQL and Mongo queries are generated dynamically.
+- Results are merged into one JSON response.
 
-Prerequisites:
-- Python 3.8+
-- MongoDB optional (system runs with in-memory Mongo fallback if unavailable)
+## SQL Normalization Rules
 
-Install dependencies:
+- Arrays of objects: normalize into child tables.
+- Primitive arrays: normalize into value tables with value and item_index.
+- Repeated scalar groups: collapse into one normalized child entity.
+- Root table key: sys_ingested_at.
+- Child foreign key: parent_sys_ingested_at -> ingested_records(sys_ingested_at).
 
-```bash
-pip install -r requirements.txt
-```
+## MongoDB Strategy Rule
 
-## Running the System
+Reference score is computed from:
 
-### 1. Start generator API
+- array size,
+- array-of-objects presence,
+- object width,
+- nesting depth,
+- likely shared-entity signal,
+- schema hints (frequently_updated, shared, unbounded, expected_max_items).
 
-```bash
-uvicorn main:app --reload --port 8000
-```
+Decision:
 
-### 2. Run ingestion consumer
+- score >= threshold (current threshold: 2) -> reference,
+- score < threshold -> embed.
 
-```bash
-python data_consumer.py
-```
+Nested structural fields (dict/list) bypass warm-up buffering and route directly to MongoDB.
 
-Optional custom batch settings:
+## Metadata Model
 
-```bash
-python data_consumer.py 50 20
-```
+Core metadata keys include:
 
-Optional schema file:
+- schema_registry,
+- fields,
+- placement_decisions,
+- field_mappings,
+- buffer,
+- normalization,
+- mongo_strategy,
+- total_records and timeline keys.
 
-```bash
-python data_consumer.py 50 20 path/to/schema.json
-```
+Mongo strategy telemetry stored per entity includes:
 
-### 3. One-command guided flow
+- mode,
+- collection,
+- decision_score,
+- reference_threshold,
+- decision_reasons,
+- schema_hints.
 
-```bash
-python quickstart.py
-```
+## CRUD Interface
 
-## JSON CRUD Interface
+Operation types:
 
-Use pipeline directly:
+- insert,
+- read,
+- update,
+- delete.
+
+Update strategy currently uses delete_then_insert to preserve cross-backend consistency.
+
+Example usage:
 
 ```python
 from ingestion_pipeline import IngestionPipeline
 
 pipeline = IngestionPipeline()
 
-# Insert
-pipeline.execute_crud({
-    "operation": "insert",
-    "data": {
-        "username": "alice",
-        "email": "alice@example.com",
-        "orders": [{"order_id": "o1", "item": "book", "quantity": 1, "price": 12.5}]
+pipeline.execute_crud(
+    {
+        "operation": "insert",
+        "data": {
+            "username": "alice",
+            "email": "alice@example.com",
+            "orders": [
+                {"order_id": "o1", "item": "book", "quantity": 1, "price": 12.5}
+            ],
+        },
     }
-})
+)
 
-# Read
-result = pipeline.execute_crud({
-    "operation": "read",
-    "fields": ["username", "email", "orders"],
-    "filters": {"username": "alice"}
-})
-print(result)
-
-# Update (delete_then_insert)
-pipeline.execute_crud({
-    "operation": "update",
-    "filters": {"username": "alice"},
-    "data": {
-        "username": "alice",
-        "email": "alice+new@example.com",
-        "orders": [{"order_id": "o2", "item": "phone", "quantity": 1, "price": 300.0}]
+read_result = pipeline.execute_crud(
+    {
+        "operation": "read",
+        "fields": ["username", "email", "orders"],
+        "filters": {"username": "alice"},
     }
-})
+)
 
-# Delete
-pipeline.execute_crud({
-    "operation": "delete",
-    "filters": {"username": "alice"}
-})
-
+print(read_result)
 pipeline.close()
 ```
 
-## Tests
+## Quick Run Guide
 
-Run all tests:
+This section is intentionally kept aligned with README_SHORT.md.
+
+### 1) Create virtual environment and install dependencies
+
+```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`
+pip install -r requirements.txt
+```
+
+### 2) Start generator API (terminal 1)
+
+```bash
+uvicorn main:app --reload --port 8000
+```
+
+### 3) Run ingestion (terminal 2)
+
+```bash
+python data_consumer.py
+```
+
+Quickstart with detailed logs:
+
+```bash
+python quickstart.py --verbose
+```
+
+Optional:
+
+```bash
+python data_consumer.py 50 20
+python data_consumer.py 50 20 path/to/schema.json
+```
+
+### 4) Run tests
 
 ```bash
 pytest -q
 ```
 
-Current coverage includes:
-- schema registration
-- buffer transition logic
-- SQL normalization creation
-- metadata-driven CRUD cycle
-- generator endpoint and structure checks
+### 5) Clean generated files
 
-## Documentation
+```bash
+python quickstart.py clean --yes
+```
 
-See the docs folder:
+This cleans local artifacts and also drops project MongoDB databases:
+
+- ingestion_db
+- assignment2_test_db
+
+Keep MongoDB data (files/cache only):
+
+```bash
+python quickstart.py clean --no-mongo
+```
+
+### 6) View docs
+
 - docs/ASSIGNMENT2_TECHNICAL_REPORT.md
 - docs/ARCHITECTURE_ASSIGNMENT2.md
 - docs/CRUD_JSON_INTERFACE.md
 
-## Notes
+## Database Inspection and Debugging
+
+The repository includes a viewer tool:
+
+```bash
+python view_databases.py
+```
+
+Useful commands:
+
+```bash
+python view_databases.py placements
+python view_databases.py normalization
+python view_databases.py mongo_strategy
+python view_databases.py buffer
+python view_databases.py search orders
+```
+
+## Testing Status
+
+Run:
+
+```bash
+pytest -q
+```
+
+Current suite includes Assignment 2 checks for:
+
+- schema registration,
+- buffer transition and drain behavior,
+- SQL normalization behavior,
+- metadata-driven CRUD cycle,
+- Mongo decision telemetry persistence,
+- nested-field routing behavior,
+- generator endpoint and structure checks.
+
+
+## Notes and Constraints
 
 - sys_ingested_at is the cross-backend join key.
-- Update operation uses delete_then_insert for backend consistency.
-- Buffer fields are persisted and later resolved when evidence is sufficient.
+- Buffer data may include historical records from earlier runs unless cleaned.
+- Update currently favors consistency over minimal write cost.

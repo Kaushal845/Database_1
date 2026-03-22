@@ -6,7 +6,6 @@ import sqlite3
 import json
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
-from datetime import datetime
 
 
 class DatabaseViewer:
@@ -28,6 +27,19 @@ class DatabaseViewer:
         except FileNotFoundError:
             print(f"⚠️  Metadata file not found: {metadata_file}")
             self.metadata = {}
+
+    def _safe_frequency(self, appearances):
+        total = self.metadata.get('total_records', 0)
+        if total <= 0:
+            return 0.0
+        return (appearances / total) * 100.0
+
+    @staticmethod
+    def _short_text(value, limit=80):
+        text = str(value)
+        if len(text) <= limit:
+            return text
+        return text[: limit - 3] + "..."
     
     def show_field_placements(self):
         """Show which fields went to SQL vs MongoDB"""
@@ -68,7 +80,7 @@ class DatabaseViewer:
             for field in sorted(sql_fields)[:20]:
                 decision = self.metadata['placement_decisions'][field]
                 field_stats = self.metadata['fields'].get(field, {})
-                frequency = (field_stats.get('appearances', 0) / self.metadata.get('total_records', 1)) * 100
+                frequency = self._safe_frequency(field_stats.get('appearances', 0))
                 print(f"   - {field:25} (freq: {frequency:5.1f}%) | {decision['reason'][:60]}...")
             if len(sql_fields) > 20:
                 print(f"   ... and {len(sql_fields) - 20} more")
@@ -78,10 +90,166 @@ class DatabaseViewer:
             for field in sorted(mongo_fields)[:20]:
                 decision = self.metadata['placement_decisions'][field]
                 field_stats = self.metadata['fields'].get(field, {})
-                frequency = (field_stats.get('appearances', 0) / self.metadata.get('total_records', 1)) * 100
+                frequency = self._safe_frequency(field_stats.get('appearances', 0))
                 print(f"   - {field:25} (freq: {frequency:5.1f}%) | {decision['reason'][:60]}...")
             if len(mongo_fields) > 20:
                 print(f"   ... and {len(mongo_fields) - 20} more")
+
+    def show_normalization_summary(self, limit=15):
+        """Show SQL normalization metadata and table health."""
+        print("\n" + "=" * 80)
+        print("SQL NORMALIZATION SUMMARY")
+        print("=" * 80)
+
+        normalization = self.metadata.get('normalization', {})
+        root_table = normalization.get('root_table', 'ingested_records')
+        child_tables = normalization.get('child_tables', {})
+
+        print(f"\nRoot table: {root_table}")
+        print(f"Child tables registered: {len(child_tables)}")
+
+        if not child_tables:
+            print("No normalized child tables found in metadata.")
+            return
+
+        try:
+            conn = sqlite3.connect(self.sql_db)
+            cursor = conn.cursor()
+            print("\n📋 Child table details:")
+
+            shown = 0
+            for table_name in sorted(child_tables.keys()):
+                entry = child_tables[table_name]
+                entity_path = entry.get('entity_path', 'unknown')
+                columns = entry.get('columns', [])
+
+                try:
+                    cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+                    row_count = cursor.fetchone()[0]
+                except sqlite3.OperationalError:
+                    row_count = 'missing'
+
+                print(
+                    f"   - {table_name:30} rows={row_count:>8} "
+                    f"entity={self._short_text(entity_path, 24)} "
+                    f"columns={len(columns)}"
+                )
+                shown += 1
+                if shown >= limit:
+                    break
+
+            remaining = len(child_tables) - shown
+            if remaining > 0:
+                print(f"   ... and {remaining} more child tables")
+
+            conn.close()
+        except Exception as error:
+            print(f"❌ Could not query SQL normalization tables: {error}")
+
+    def show_mongo_strategy(self, limit=20):
+        """Show Mongo embed/reference decisions with telemetry."""
+        print("\n" + "=" * 80)
+        print("MONGODB STRATEGY SUMMARY")
+        print("=" * 80)
+
+        strategy = self.metadata.get('mongo_strategy', {})
+        root_collection = strategy.get('root_collection', 'ingested_records')
+        entities = strategy.get('entities', {})
+
+        print(f"\nRoot collection: {root_collection}")
+        print(f"Tracked entities: {len(entities)}")
+
+        if not entities:
+            print("No Mongo strategy entities found in metadata.")
+            return
+
+        embed_count = sum(1 for e in entities.values() if e.get('mode') == 'embed')
+        reference_count = sum(1 for e in entities.values() if e.get('mode') == 'reference')
+        print(f"Embed decisions: {embed_count}")
+        print(f"Reference decisions: {reference_count}")
+
+        print("\n📋 Entity decision details:")
+        shown = 0
+        for entity_path in sorted(entities.keys()):
+            entry = entities[entity_path]
+            mode = entry.get('mode', 'unknown')
+            collection = entry.get('collection', 'n/a')
+            score = entry.get('decision_score')
+            threshold = entry.get('reference_threshold')
+            reasons = entry.get('decision_reasons', [])
+
+            telemetry = ""
+            if score is not None and threshold is not None:
+                telemetry = f" score={score}/{threshold}"
+            if reasons:
+                telemetry += f" reasons={self._short_text(','.join(reasons), 48)}"
+
+            print(
+                f"   - {entity_path:25} mode={mode:9} "
+                f"collection={self._short_text(collection, 28)}{telemetry}"
+            )
+
+            shown += 1
+            if shown >= limit:
+                break
+
+        remaining = len(entities) - shown
+        if remaining > 0:
+            print(f"   ... and {remaining} more entities")
+
+    def show_buffer_status(self, limit=10):
+        """Show metadata buffer state and Mongo buffer_records collection health."""
+        print("\n" + "=" * 80)
+        print("BUFFER PIPELINE STATUS")
+        print("=" * 80)
+
+        buffer_meta = self.metadata.get('buffer', {}).get('fields', {})
+        print(f"\nTracked buffer fields in metadata: {len(buffer_meta)}")
+        if buffer_meta:
+            unresolved = [name for name, info in buffer_meta.items() if not info.get('resolved', False)]
+            resolved = [name for name, info in buffer_meta.items() if info.get('resolved', False)]
+            print(f"Resolved fields: {len(resolved)}")
+            print(f"Unresolved fields: {len(unresolved)}")
+
+            if unresolved:
+                print("\n🕒 Top unresolved fields:")
+                ranked = sorted(
+                    unresolved,
+                    key=lambda field: buffer_meta[field].get('observations', 0),
+                    reverse=True,
+                )
+                for field in ranked[:limit]:
+                    info = buffer_meta[field]
+                    print(
+                        f"   - {field:25} observations={info.get('observations', 0):5} "
+                        f"first_seen={self._short_text(info.get('first_seen', 'n/a'), 28)}"
+                    )
+
+        try:
+            client = MongoClient(self.mongo_uri, serverSelectionTimeoutMS=5000)
+            client.admin.command('ping')
+            db = client[self.mongo_db_name]
+            buffer_collection = db['buffer_records']
+            doc_count = buffer_collection.count_documents({})
+            print(f"\nMongoDB buffer_records documents: {doc_count:,}")
+
+            if doc_count > 0:
+                print("\n📝 Sample buffered documents:")
+                docs = buffer_collection.find().limit(limit)
+                for i, doc in enumerate(docs, 1):
+                    field_keys = sorted((doc.get('fields') or {}).keys())
+                    print(f"   {i:2}. user={doc.get('username', 'n/a'):20} fields={field_keys}")
+
+                print(
+                    "\nNote: historical rows may exist from earlier runs before field resolution. "
+                    "Use the clean command or run a fresh ingestion cycle to verify current behavior."
+                )
+
+            client.close()
+        except ConnectionFailure:
+            print("\n❌ Cannot connect to MongoDB to inspect buffer_records")
+        except Exception as error:
+            print(f"\n❌ Unexpected MongoDB error while reading buffer status: {error}")
     
     def show_sql_data(self, limit=10):
         """Show SQL database contents"""
@@ -156,6 +324,12 @@ class DatabaseViewer:
             
             db = client[self.mongo_db_name]
             collection = db['ingested_records']
+
+            print("\n📚 Collections in database:")
+            collection_names = sorted(db.list_collection_names())
+            for name in collection_names:
+                c = db[name].count_documents({})
+                print(f"   - {name:25} docs={c}")
             
             # Get count
             count = collection.count_documents({})
@@ -200,6 +374,16 @@ class DatabaseViewer:
                         print(f"    Nested/Array fields:")
                         for k, v in nested.items():
                             print(f"      {k:20} = {json.dumps(v, default=str)[:80]}...")
+
+            buffer_count = db['buffer_records'].count_documents({})
+            if buffer_count > 0:
+                print(f"\n⚠ buffer_records currently has {buffer_count} documents")
+                sample_buffer_docs = db['buffer_records'].find().limit(min(limit, 5))
+                for i, doc in enumerate(sample_buffer_docs, 1):
+                    print(
+                        f"   buffer_doc_{i}: user={doc.get('username', 'n/a')} "
+                        f"fields={sorted((doc.get('fields') or {}).keys())}"
+                    )
             
             client.close()
             
@@ -223,6 +407,9 @@ class DatabaseViewer:
         print(f"   Total records processed: {self.metadata.get('total_records', 0):,}")
         print(f"   Unique fields discovered: {len(self.metadata.get('fields', {}))}")
         print(f"   Placement decisions: {len(self.metadata.get('placement_decisions', {}))}")
+        print(f"   Buffer fields tracked: {len(self.metadata.get('buffer', {}).get('fields', {}))}")
+        print(f"   Normalized child tables: {len(self.metadata.get('normalization', {}).get('child_tables', {}))}")
+        print(f"   Mongo strategy entities: {len(self.metadata.get('mongo_strategy', {}).get('entities', {}))}")
         
         print(f"\n⏰ Timeline:")
         print(f"   Session started: {self.metadata.get('session_start', 'N/A')}")
@@ -243,13 +430,29 @@ class DatabaseViewer:
             return
         
         placement = self.metadata.get('placement_decisions', {}).get(field_name, {})
+        mapping = self.metadata.get('field_mappings', {}).get(field_name, {})
+        mongo_entity = self.metadata.get('mongo_strategy', {}).get('entities', {}).get(field_name, {})
         
         print(f"\n📍 Placement: {placement.get('backend', 'Unknown')}")
         print(f"   Reason: {placement.get('reason', 'N/A')}")
+        if mapping:
+            print(f"\n🧭 Field mapping:")
+            print(f"   backend: {mapping.get('backend')} | status: {mapping.get('status')}" )
+            print(f"   sql_table: {mapping.get('sql_table')} | mongo_collection: {mapping.get('mongo_collection')}")
+        if mongo_entity:
+            print("\n🍃 Mongo strategy telemetry:")
+            print(f"   mode: {mongo_entity.get('mode')} | collection: {mongo_entity.get('collection')}")
+            print(
+                f"   decision_score: {mongo_entity.get('decision_score')} / "
+                f"{mongo_entity.get('reference_threshold')}"
+            )
+            reasons = mongo_entity.get('decision_reasons', [])
+            if reasons:
+                print(f"   decision_reasons: {', '.join(reasons)}")
         
         print(f"\n📊 Statistics:")
         print(f"   Appearances: {field_data.get('appearances', 0)}")
-        frequency = (field_data.get('appearances', 0) / self.metadata.get('total_records', 1)) * 100
+        frequency = self._safe_frequency(field_data.get('appearances', 0))
         print(f"   Frequency: {frequency:.1f}%")
         
         print(f"\n🔤 Types observed:")
@@ -276,6 +479,15 @@ def main():
         
         if command == 'placements':
             viewer.show_field_placements()
+        elif command == 'normalization':
+            limit = int(sys.argv[2]) if len(sys.argv) > 2 else 15
+            viewer.show_normalization_summary(limit)
+        elif command == 'mongo_strategy':
+            limit = int(sys.argv[2]) if len(sys.argv) > 2 else 20
+            viewer.show_mongo_strategy(limit)
+        elif command == 'buffer':
+            limit = int(sys.argv[2]) if len(sys.argv) > 2 else 10
+            viewer.show_buffer_status(limit)
         elif command == 'sql':
             limit = int(sys.argv[2]) if len(sys.argv) > 2 else 10
             viewer.show_sql_data(limit)
@@ -292,6 +504,9 @@ def main():
         elif command == 'all':
             viewer.show_statistics()
             viewer.show_field_placements()
+            viewer.show_normalization_summary(10)
+            viewer.show_mongo_strategy(10)
+            viewer.show_buffer_status(5)
             viewer.show_sql_data(5)
             viewer.show_mongodb_data(5)
         else:
@@ -301,6 +516,9 @@ def main():
         # Default: show everything
         viewer.show_statistics()
         viewer.show_field_placements()
+        viewer.show_normalization_summary(10)
+        viewer.show_mongo_strategy(10)
+        viewer.show_buffer_status(5)
         viewer.show_sql_data(5)
         viewer.show_mongodb_data(5)
 
@@ -311,6 +529,9 @@ Usage: python view_databases.py [command] [args]
 
 Commands:
   placements          Show which fields went to SQL vs MongoDB
+    normalization [n]   Show normalized SQL child tables (default: 15)
+    mongo_strategy [n]  Show embed/reference decisions + telemetry (default: 20)
+    buffer [n]          Show buffer field and buffer_records status (default: 10)
   sql [limit]         Show SQL database contents (default: 10 records)
   mongodb [limit]     Show MongoDB database contents (default: 10 records)
   stats               Show system statistics
@@ -320,6 +541,9 @@ Commands:
 Examples:
   python view_databases.py
   python view_databases.py placements
+    python view_databases.py normalization
+    python view_databases.py mongo_strategy 25
+    python view_databases.py buffer 5
   python view_databases.py sql 20
   python view_databases.py mongodb 5
   python view_databases.py search email

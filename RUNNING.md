@@ -1,8 +1,10 @@
 # Assignment 2 Quick Run Guide
 
-## 1) Install dependencies
+## 1) Create virtual environment and install dependencies
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`
 pip install -r requirements.txt
 ```
 
@@ -24,11 +26,17 @@ Quickstart with detailed logs:
 python quickstart.py --verbose
 ```
 
-Optional:
+Optionally, specify batch settings:
 
 ```bash
 python data_consumer.py 50 20
 python data_consumer.py 50 20 path/to/schema.json
+```
+
+View ingested data with:
+
+```bash
+python view_databases.py
 ```
 
 ## 4) Run tests
@@ -40,18 +48,12 @@ pytest -q
 ## 5) Clean generated files
 
 ```bash
-python quickstart.py clean
+python quickstart.py clean --yes
 ```
 
 This cleans local artifacts and also drops project MongoDB databases:
 - ingestion_db
 - assignment2_test_db
-
-Skip confirmation:
-
-```bash
-python quickstart.py clean --yes
-```
 
 Keep MongoDB data (files/cache only):
 

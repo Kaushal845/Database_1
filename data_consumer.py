@@ -191,7 +191,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 2:
         total_batches = int(sys.argv[2])
     else:
-        total_batches = 10
+        total_batches = 5
     
     # Test API connection
     print(f"\n[Consumer] Testing connection to {API_URL}...")

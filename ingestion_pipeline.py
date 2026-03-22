@@ -4,6 +4,7 @@ Data Ingestion Pipeline - Assignment-2 hybrid framework orchestrator.
 from typing import Dict, Any, List, Tuple, Optional
 from datetime import datetime, timezone
 import json
+import re
 
 from metadata_store import MetadataStore
 from type_detector import TypeDetector
@@ -65,6 +66,7 @@ class IngestionPipeline:
             metadata_file,
         )
         logger.info("Loaded %s known fields from metadata", len(self.metadata_store.metadata['fields']))
+        self._reconcile_resolved_buffer_fields_on_startup()
 
     def register_schema(self, schema: Dict[str, Any]) -> Dict[str, Any]:
         """Register user-provided JSON schema for ingestion constraints."""
@@ -100,6 +102,14 @@ class IngestionPipeline:
     def _is_scalar(value: Any) -> bool:
         return not isinstance(value, (dict, list))
 
+    @staticmethod
+    def _sanitize_path(path: str) -> str:
+        return path.replace('.', '_').replace('[', '_').replace(']', '')
+
+    @staticmethod
+    def _array_is_scalar_only(value: Any) -> bool:
+        return isinstance(value, list) and value and all(not isinstance(item, (dict, list)) for item in value)
+
     def _extract_repeating_entities(self, record: Dict[str, Any], prefix: str = '') -> Dict[str, List[Dict[str, Any]]]:
         """Detect repeating groups represented as arrays of objects."""
         entities: Dict[str, List[Dict[str, Any]]] = {}
@@ -111,27 +121,207 @@ class IngestionPipeline:
                 entities.update(self._extract_repeating_entities(value, path))
         return entities
 
-    def _decide_mongo_mode(self, entity_path: str, value: Any) -> Tuple[str, str]:
-        """Decide whether nested data should be embedded or referenced."""
-        if isinstance(value, list):
-            if len(value) > 3 and any(isinstance(item, dict) for item in value):
-                collection = f"ref_{entity_path.replace('.', '_').replace('[', '_').replace(']', '')}"
-                self.metadata_store.register_mongo_entity(entity_path, 'reference', collection)
-                return ('reference', collection)
+    def _extract_primitive_arrays(self, value: Any, prefix: str = '') -> Dict[str, List[Any]]:
+        """Detect arrays of scalars so they can be normalized as value tables."""
+        entities: Dict[str, List[Any]] = {}
+        if isinstance(value, dict):
+            for key, child in value.items():
+                path = f"{prefix}.{key}" if prefix else key
+                if self._array_is_scalar_only(child):
+                    entities[path] = child
+                else:
+                    entities.update(self._extract_primitive_arrays(child, path))
+            return entities
 
-            self.metadata_store.register_mongo_entity(entity_path, 'embed', 'ingested_records')
-            return ('embed', 'ingested_records')
+        if isinstance(value, list):
+            for index, child in enumerate(value):
+                path = f"{prefix}[{index}]"
+                entities.update(self._extract_primitive_arrays(child, path))
+        return entities
+
+    def _extract_repeating_scalar_groups(self, record: Dict[str, Any]) -> Dict[str, List[Any]]:
+        """Collapse top-level groups like phone1, phone2, phone3 into a normalized entity."""
+        grouped: Dict[str, List[Tuple[int, Any]]] = {}
+        pattern = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*?)(\d+)$")
+        for field_name, value in record.items():
+            if field_name in {'username', 'sys_ingested_at', 't_stamp'}:
+                continue
+            if not self._is_scalar(value):
+                continue
+
+            match = pattern.match(field_name)
+            if not match:
+                continue
+
+            base_name = match.group(1)
+            index = int(match.group(2))
+            grouped.setdefault(base_name, []).append((index, value))
+
+        result: Dict[str, List[Any]] = {}
+        for base_name, pairs in grouped.items():
+            if len(pairs) < 2:
+                continue
+            ordered_values = [value for _, value in sorted(pairs, key=lambda item: item[0])]
+            result[base_name] = ordered_values
+        return result
+
+    def _get_schema_entity_hints(self, entity_path: str) -> Dict[str, Any]:
+        """Fetch optional entity-level hints from the active schema."""
+        schema = self.metadata_store.get_active_schema() or {}
+        entities = schema.get('entities') if isinstance(schema, dict) else None
+        if not isinstance(entities, dict):
+            return {}
+
+        candidates = [
+            entity_path,
+            entity_path.split('.')[-1],
+        ]
+        for candidate in candidates:
+            hints = entities.get(candidate)
+            if isinstance(hints, dict):
+                return hints
+        return {}
+
+    def _is_likely_shared_entity(self, entity_path: str) -> bool:
+        """Infer if an entity appears under multiple parents across tracked metadata paths."""
+        terminal = entity_path.split('.')[-1]
+        if not terminal:
+            return False
+
+        parent_contexts = set()
+        for path in self.metadata_store.get_all_fields():
+            clean_path = re.sub(r"\[\d+\]", "", path)
+            parts = clean_path.split('.')
+            for index, part in enumerate(parts[:-1]):
+                if part != terminal:
+                    continue
+                parent = '.'.join(parts[:index]) if index > 0 else '__root__'
+                parent_contexts.add(parent)
+                if len(parent_contexts) > 1:
+                    return True
+
+        return False
+
+    def _compute_mongo_reference_score(self, entity_path: str, value: Any) -> Tuple[int, List[str]]:
+        """Score nested entities to decide between embedding and referencing."""
+        score = 0
+        reasons: List[str] = []
+
+        hints = self._get_schema_entity_hints(entity_path)
+
+        if isinstance(value, list):
+            if len(value) > 10:
+                score += 2
+                reasons.append('array_size_gt_10')
+            elif len(value) > 3:
+                score += 1
+                reasons.append('array_size_gt_3')
+
+            if any(isinstance(item, dict) for item in value):
+                score += 1
+                reasons.append('array_of_objects')
 
         if isinstance(value, dict):
-            if len(value.keys()) > 6:
-                collection = f"ref_{entity_path.replace('.', '_')}"
-                self.metadata_store.register_mongo_entity(entity_path, 'reference', collection)
-                return ('reference', collection)
+            field_count = len(value.keys())
+            if field_count > 8:
+                score += 2
+                reasons.append('dict_field_count_gt_8')
+            elif field_count > 5:
+                score += 1
+                reasons.append('dict_field_count_gt_5')
 
-            self.metadata_store.register_mongo_entity(entity_path, 'embed', 'ingested_records')
-            return ('embed', 'ingested_records')
+        depth = entity_path.count('.') + 1
+        if depth >= 3:
+            score += 1
+            reasons.append('deep_nesting')
 
-        self.metadata_store.register_mongo_entity(entity_path, 'embed', 'ingested_records')
+        if self._is_likely_shared_entity(entity_path):
+            score += 1
+            reasons.append('likely_shared_entity')
+
+        if hints.get('frequently_updated') is True:
+            score += 1
+            reasons.append('schema_hint_frequently_updated')
+
+        if hints.get('shared') is True:
+            score += 1
+            reasons.append('schema_hint_shared')
+
+        if hints.get('unbounded') is True:
+            score += 2
+            reasons.append('schema_hint_unbounded')
+
+        if isinstance(hints.get('expected_max_items'), int) and hints['expected_max_items'] > 10:
+            score += 1
+            reasons.append('schema_hint_expected_max_items_gt_10')
+
+        return score, reasons
+
+    def _reconcile_resolved_buffer_fields_on_startup(self):
+        """Best-effort cleanup for historical buffer residues from earlier runs."""
+        resolved_fields = []
+        buffer_fields = self.metadata_store.metadata.get('buffer', {}).get('fields', {})
+        for field_name in buffer_fields.keys():
+            decision = self.metadata_store.get_placement_decision(field_name)
+            if not decision or decision.get('backend') == 'Buffer':
+                continue
+            resolved_fields.append((field_name, decision.get('backend')))
+
+        total_migrated = 0
+        for field_name, backend in resolved_fields:
+            strategy = self.metadata_store.metadata.get('mongo_strategy', {}).get('entities', {}).get(field_name, {})
+            mongo_mode = strategy.get('mode', 'embed')
+            mongo_collection = strategy.get('collection', 'ingested_records')
+            migrated = self._drain_buffered_field(
+                field_name=field_name,
+                final_backend=backend,
+                mongo_mode=mongo_mode,
+                mongo_collection=mongo_collection,
+            )
+            total_migrated += migrated
+
+        if total_migrated > 0:
+            logger.info("Startup reconciliation drained %s buffered values", total_migrated)
+
+    def _decide_mongo_mode(self, entity_path: str, value: Any) -> Tuple[str, str]:
+        """Decide whether nested data should be embedded or referenced."""
+        score, reasons = self._compute_mongo_reference_score(entity_path, value)
+        reference_threshold = 2
+        schema_hints = self._get_schema_entity_hints(entity_path)
+        if score >= reference_threshold:
+            collection = f"ref_{self._sanitize_path(entity_path)}"
+            self.metadata_store.register_mongo_entity_with_decision(
+                entity_path=entity_path,
+                mode='reference',
+                collection=collection,
+                decision_score=score,
+                decision_reasons=reasons,
+                reference_threshold=reference_threshold,
+                schema_hints=schema_hints,
+            )
+            logger.debug(
+                "Mongo mode decision: entity=%s mode=reference score=%s reasons=%s",
+                entity_path,
+                score,
+                reasons,
+            )
+            return ('reference', collection)
+
+        self.metadata_store.register_mongo_entity_with_decision(
+            entity_path=entity_path,
+            mode='embed',
+            collection='ingested_records',
+            decision_score=score,
+            decision_reasons=reasons,
+            reference_threshold=reference_threshold,
+            schema_hints=schema_hints,
+        )
+        logger.debug(
+            "Mongo mode decision: entity=%s mode=embed score=%s reasons=%s",
+            entity_path,
+            score,
+            reasons,
+        )
         return ('embed', 'ingested_records')
     
     def _track_stats(self, record: Dict[str, Any]):
@@ -283,29 +473,39 @@ class IngestionPipeline:
     def _normalize_entities(
         self,
         enriched_record: Dict[str, Any],
-        repeating_entities: Dict[str, List[Dict[str, Any]]],
+        repeating_entities: Dict[str, List[Any]],
     ):
         """Create SQL child tables for repeating entities and insert rows."""
         parent_key = enriched_record['sys_ingested_at']
 
         for entity_path, rows in repeating_entities.items():
-            table_name = f"norm_{entity_path.replace('.', '_').replace('[', '_').replace(']', '')}"
-
-            column_types: Dict[str, str] = {}
-            for row in rows:
-                for key, value in row.items():
-                    if not self._is_scalar(value):
-                        continue
-                    column_types[key] = self.type_detector.detect_type(value)
-
-            if not column_types:
+            if not rows:
                 continue
 
-            self.sql_manager.ensure_child_table(table_name, column_types)
+            table_name = f"norm_{self._sanitize_path(entity_path)}"
+            column_types: Dict[str, str] = {}
+            scalar_rows: List[Dict[str, Any]] = []
 
-            scalar_rows = []
-            for row in rows:
-                scalar_rows.append({k: v for k, v in row.items() if self._is_scalar(v)})
+            if all(isinstance(row, dict) for row in rows):
+                for row in rows:
+                    for key, value in row.items():
+                        if not self._is_scalar(value):
+                            continue
+                        column_types[key] = self.type_detector.detect_type(value)
+
+                if not column_types:
+                    continue
+
+                for row in rows:
+                    scalar_rows.append({k: v for k, v in row.items() if self._is_scalar(v)})
+            else:
+                scalar_rows = [{'value': row} for row in rows if self._is_scalar(row)]
+                if not scalar_rows:
+                    continue
+                dominant_type = self.type_detector.detect_type(scalar_rows[0]['value'])
+                column_types = {'value': dominant_type}
+
+            self.sql_manager.ensure_child_table(table_name, column_types)
             self.sql_manager.insert_child_rows(table_name, parent_key, scalar_rows)
 
             self.metadata_store.register_normalized_table(
@@ -319,11 +519,14 @@ class IngestionPipeline:
                 table_name,
                 len(scalar_rows),
             )
+
+            existing_mapping = self.metadata_store.get_field_mapping(entity_path) or {}
+            existing_mongo_collection = existing_mapping.get('mongo_collection')
             self.metadata_store.set_field_mapping(
                 entity_path,
                 backend='Both',
                 sql_table=table_name,
-                mongo_collection=f"ref_{entity_path.replace('.', '_')}",
+                mongo_collection=existing_mongo_collection,
                 status='final',
             )
 
@@ -439,15 +642,31 @@ class IngestionPipeline:
             }
             unresolved_fields: Dict[str, Any] = {}
 
+            repeating_scalar_groups = self._extract_repeating_scalar_groups(enriched_record)
+            grouped_field_names = set()
+            scalar_group_pattern = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*?)(\d+)$")
+            scalar_group_bases = set(repeating_scalar_groups.keys())
+            for field_name in enriched_record.keys():
+                match = scalar_group_pattern.match(field_name)
+                if not match:
+                    continue
+                if match.group(1) in scalar_group_bases:
+                    grouped_field_names.add(field_name)
+
             # Step 3: Scalar field routing
             for field_name, value in enriched_record.items():
                 if field_name in ('username', 'sys_ingested_at', 't_stamp'):
+                    continue
+                if field_name in grouped_field_names:
                     continue
                 if self._is_scalar(value):
                     self._route_scalar_field(field_name, value, sql_record, mongo_record, unresolved_fields)
 
             # Step 4: Detect repeating entities for SQL normalization
-            repeating_entities = self._extract_repeating_entities(enriched_record)
+            repeating_entities: Dict[str, List[Any]] = {}
+            repeating_entities.update(self._extract_repeating_entities(enriched_record))
+            repeating_entities.update(self._extract_primitive_arrays(enriched_record))
+            repeating_entities.update(repeating_scalar_groups)
 
             # Step 5: Mongo document strategy for nested content
             self._apply_mongo_document_strategy(

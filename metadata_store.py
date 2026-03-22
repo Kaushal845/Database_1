@@ -288,6 +288,31 @@ class MetadataStore:
         if self.auto_save:
             self.save()
 
+    def register_mongo_entity_with_decision(
+        self,
+        entity_path: str,
+        mode: str,
+        collection: str,
+        decision_score: int,
+        decision_reasons: List[str],
+        reference_threshold: int,
+        schema_hints: Optional[Dict[str, Any]] = None,
+    ):
+        """Register MongoDB strategy plus decision telemetry for reporting/debugging."""
+        with self.lock:
+            self.metadata.setdefault("mongo_strategy", {}).setdefault("entities", {})[entity_path] = {
+                "mode": mode,
+                "collection": collection,
+                "decision_score": decision_score,
+                "reference_threshold": reference_threshold,
+                "decision_reasons": decision_reasons,
+                "schema_hints": schema_hints or {},
+                "registered_at": datetime.now(timezone.utc).isoformat(),
+            }
+
+        if self.auto_save:
+            self.save()
+
     def get_placement_decision(self, normalized_key: str) -> Optional[Dict[str, str]]:
         """Get placement decision for a field."""
         return self.metadata.get("placement_decisions", {}).get(normalized_key)

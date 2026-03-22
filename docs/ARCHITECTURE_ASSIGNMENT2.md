@@ -18,21 +18,26 @@
   - MongoDB
   - Buffer
   - Both
+- Structural nested fields (dict/list) bypass warm-up buffering and route directly to MongoDB.
 
 5. SQL Engine
 - Root scalar fields routed to ingested_records.
 - Repeating entities (arrays of objects) normalized into child tables.
+- Primitive arrays (for example tags: ["a", "b"]) normalized into value child tables.
+- Repeated scalar groups (for example phone1, phone2, phone3) collapsed into normalized child tables.
 - PK/FK and indexes are created automatically.
 
 6. MongoDB Engine
-- Nested data passes through embed/reference strategy.
+- Nested data passes through score-based embed/reference strategy.
 - Embed data is stored in ingested_records documents.
 - Referenced payloads go into path-specific collections.
+- Decision telemetry (score, reasons, threshold, schema hints) is persisted in metadata for explainability.
 
 7. Buffer Pipeline
 - Undecided fields are stored as buffer observations.
 - Buffered values are also written into buffer_records for temporary persistence.
 - After enough observations, fields move from Buffer to final backend.
+- On startup, the pipeline reconciles previously resolved fields and drains stale buffered values when possible.
 
 8. Query Generation Engine
 - JSON CRUD request is interpreted using metadata mappings.

@@ -4,6 +4,8 @@
 The SQL normalization strategy is metadata-driven and automatic:
 - The ingestion pipeline recursively scans each JSON record for repeating entities.
 - A repeating entity is detected when a field is an array of objects, for example orders, comments, or devices.
+- Primitive arrays such as tags: ["new", "sale"] are normalized into value child tables.
+- Repeated scalar groups such as phone1, phone2, phone3 are collapsed into one normalized entity table.
 - For each repeating entity path, the pipeline creates a normalized child table named using the entity path, such as norm_orders.
 - Scalar keys inside each object become child-table columns.
 - Each child row is linked to the root row using parent_sys_ingested_at.
@@ -26,14 +28,23 @@ Child tables:
 Field-level SQL columns in root are still created dynamically with semantic type mapping.
 
 ## 3. MongoDB Design Strategy (Embed vs Reference)
-The Mongo strategy engine evaluates nested structures per field path:
+The Mongo strategy engine evaluates nested structures per field path using a score-based decision model:
 - Embed mode:
   - Small objects
   - Short arrays
   - Content with low expected rewrite cost
 - Reference mode:
-  - Larger arrays of objects (for example length greater than 3)
+  - Larger or unbounded arrays of objects
   - Broader objects likely to change independently
+  - Shared entities across multiple parent contexts
+
+Scoring inputs include:
+- array size and object width
+- deep nesting level
+- likely shared-entity patterns from observed metadata
+- schema hints such as frequently_updated, shared, unbounded, and expected_max_items
+
+Nested structural fields (dict/list) bypass Buffer warm-up and route directly to MongoDB.
 
 For reference mode, payloads are written to dedicated collections such as ref_orders and linked using parent_sys_ingested_at.
 
@@ -60,6 +71,7 @@ The metadata store persists all routing intelligence and structure mappings:
   - Child tables and entity-path mapping
 - mongo_strategy:
   - Embed/reference decision and collection mapping
+  - Decision telemetry: decision_score, reference_threshold, decision_reasons, schema_hints
 
 This metadata drives ingestion and query generation uniformly.
 
@@ -90,6 +102,7 @@ Design choices to reduce complexity and rewrite overhead:
 - Metadata-driven field selection avoids querying both backends for every field.
 - Mongo referencing limits large-document rewrites for expanding arrays.
 - Buffer staging delays costly schema/index churn on low-observation fields.
+- Structural nested fields skip Buffer warm-up, reducing temporary buffer writes for clearly document-shaped entities.
 
 ## 7. Sources of Information
 - SQLite documentation:

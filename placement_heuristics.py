@@ -95,6 +95,18 @@ class PlacementHeuristics:
             reason = f"Field '{normalized_key}' unseen before - routing to Buffer"
             self.metadata_store.set_placement_decision(normalized_key, 'Buffer', reason)
             return 'Buffer'
+
+        # Structural checks should not wait for warm-up windows.
+        type_counts = field_data.get('type_counts', {})
+        if type_counts:
+            dominant_type = max(type_counts, key=type_counts.get)
+            if dominant_type in ['dict', 'list']:
+                reason = (
+                    f"Field '{normalized_key}' contains nested structures "
+                    f"(type: {dominant_type}) - direct MongoDB routing"
+                )
+                self.metadata_store.set_placement_decision(normalized_key, 'MongoDB', reason)
+                return 'MongoDB'
         
         # Check if we have enough observations
         if field_data['appearances'] < self.MIN_OBSERVATIONS:
@@ -111,13 +123,6 @@ class PlacementHeuristics:
         stability = stats['type_stability']
         drift_score = stats['drift_score']
         dominant_type = stats['dominant_type']
-        
-        # Step 3: Structural checks - nested objects or arrays -> MongoDB
-        if dominant_type in ['dict', 'list']:
-            reason = (f"Field '{normalized_key}' contains nested structures "
-                     f"(type: {dominant_type}) - better suited for MongoDB")
-            self.metadata_store.set_placement_decision(normalized_key, 'MongoDB', reason)
-            return 'MongoDB'
         
         # Step 4: Zone classification
         freq_zone = self._get_zone(frequency, self.FREQUENCY_ZONES)
