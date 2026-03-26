@@ -2,6 +2,7 @@
 Database Managers - Handle SQL and MongoDB connections and operations
 """
 import sqlite3
+import threading
 from collections import defaultdict
 from typing import Dict, Any, List, Optional, Iterable
 from datetime import datetime, timezone
@@ -101,12 +102,60 @@ class SQLManager:
     
     def __init__(self, db_path='ingestion_data.db'):
         self.db_path = db_path
-        self.connection = sqlite3.connect(db_path, check_same_thread=False)
+        self.connection = sqlite3.connect(db_path, check_same_thread=False, isolation_level=None)
+        self._connection_lock = threading.RLock()  # Lock for thread-safe operations
+
+        # Create a separate read-only connection for isolation
+        # This ensures reads don't see uncommitted writes from active transactions
+        self._read_connection = sqlite3.connect(db_path, check_same_thread=False, isolation_level=None)
+        self._read_connection.row_factory = sqlite3.Row
+        self._read_lock = threading.RLock()
+
         self.connection.execute("PRAGMA foreign_keys = ON")
+        # Enable WAL mode for better concurrent access and isolation
+        self.connection.execute("PRAGMA journal_mode = WAL")
+        self.connection.execute("PRAGMA read_uncommitted = 0")  # Disable dirty reads
+        # Set synchronous to NORMAL for better performance with WAL
+        self.connection.execute("PRAGMA synchronous = NORMAL")
+
+        # Also set WAL mode on read connection
+        self._read_connection.execute("PRAGMA journal_mode = WAL")
+        self._read_connection.execute("PRAGMA read_uncommitted = 0")
+        self._read_connection.execute("PRAGMA synchronous = NORMAL")
+
         self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
         self.type_detector = TypeDetector()
+
+        # Use thread-local storage for per-thread transaction state
+        # This ensures each thread knows if IT is in a transaction
+        self._local = threading.local()
+
+        # Global flag to track if ANY transaction is active on the connection
+        # This is needed because only one transaction can be active at a time
+        self._connection_in_transaction = False
+
         self._initialize_schema()
+
+    @property
+    def in_transaction(self) -> bool:
+        """Get thread-local transaction state"""
+        return getattr(self._local, 'in_transaction', False)
+
+    @in_transaction.setter
+    def in_transaction(self, value: bool):
+        """Set thread-local transaction state"""
+        self._local.in_transaction = value
+
+    @property
+    def connection_in_transaction(self) -> bool:
+        """Get global connection transaction state"""
+        return self._connection_in_transaction
+
+    @connection_in_transaction.setter
+    def connection_in_transaction(self, value: bool):
+        """Set global connection transaction state"""
+        self._connection_in_transaction = value
     
     def _initialize_schema(self):
         """Initialize the base SQL table with mandatory fields"""
@@ -131,15 +180,51 @@ class SQLManager:
             sanitized = f"f_{sanitized}"
         return sanitized
     
+    def get_existing_columns(self, table_name: str = "ingested_records") -> List[str]:
+        """
+        Get list of all existing columns in a table.
+
+        Args:
+            table_name: Name of the table to check
+
+        Returns:
+            List of column names
+        """
+        try:
+            self.cursor.execute(f"PRAGMA table_info({table_name})")
+            return [row[1] for row in self.cursor.fetchall()]
+        except Exception as e:
+            sql_logger.error("Error getting columns for table %s: %s", table_name, e)
+            return []
+
+    def table_exists(self, table_name: str) -> bool:
+        """
+        Check if a table exists in the database.
+
+        Args:
+            table_name: Name of the table to check
+
+        Returns:
+            True if table exists, False otherwise
+        """
+        try:
+            self.cursor.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+                (table_name,)
+            )
+            return self.cursor.fetchone() is not None
+        except Exception as e:
+            sql_logger.error("Error checking table existence %s: %s", table_name, e)
+            return False
+
     def add_column_if_not_exists(self, column_name: str, data_type: str, unique: bool = False):
         """
         Dynamically add a column to the table if it doesn't exist.
         """
         try:
             # Check if column exists
-            self.cursor.execute("PRAGMA table_info(ingested_records)")
-            existing_columns = [row[1] for row in self.cursor.fetchall()]
-            
+            existing_columns = self.get_existing_columns("ingested_records")
+
             if column_name not in existing_columns:
                 sql_type = self.type_detector.get_sql_type(data_type)
                 safe_column = self._sanitize_identifier(column_name)
@@ -164,13 +249,52 @@ class SQLManager:
         except Exception as e:
             sql_logger.error("Error adding column %s: %s", column_name, e)
     
+    def _validate_type(self, column_name: str, value: Any) -> bool:
+        """
+        Validate that a value matches the expected SQL type for a column.
+
+        Args:
+            column_name: Name of the column
+            value: Value to validate
+
+        Returns:
+            True if type is valid, False otherwise
+        """
+        if value is None:
+            return True  # NULL is allowed for any type
+
+        # Get column type from schema
+        self.cursor.execute("PRAGMA table_info(ingested_records)")
+        columns = {row[1]: row[2].upper() for row in self.cursor.fetchall()}
+
+        expected_type = columns.get(column_name, "").upper()
+        if not expected_type:
+            return True  # Column doesn't exist yet, will be created
+
+        # Validate based on SQLite type
+        if "INT" in expected_type:
+            if not isinstance(value, (int, bool)):
+                sql_logger.error("Type mismatch for column %s: expected integer, got %s", column_name, type(value).__name__)
+                return False
+        elif "REAL" in expected_type or "FLOAT" in expected_type or "DOUBLE" in expected_type:
+            if not isinstance(value, (int, float, bool)):
+                sql_logger.error("Type mismatch for column %s: expected numeric, got %s", column_name, type(value).__name__)
+                return False
+        elif "TEXT" in expected_type or "CHAR" in expected_type or "CLOB" in expected_type:
+            if not isinstance(value, str):
+                sql_logger.error("Type mismatch for column %s: expected text, got %s", column_name, type(value).__name__)
+                return False
+        # BLOB and other types are more permissive
+
+        return True
+
     def insert_record(self, record: Dict[str, Any]) -> bool:
         """
         Insert a record into SQL database.
-        
+
         Args:
             record: Dictionary with field names and values (already filtered for SQL)
-        
+
         Returns:
             True if successful, False otherwise
         """
@@ -178,25 +302,33 @@ class SQLManager:
             # Ensure mandatory fields exist
             if 'sys_ingested_at' not in record:
                 record['sys_ingested_at'] = datetime.now(timezone.utc).isoformat()
-            
+
             # Build dynamic INSERT query
             normalized = {}
             for key, value in record.items():
-                normalized[self._sanitize_identifier(key)] = value
+                # Filter out MongoDB-specific fields that start with underscore
+                if not key.startswith('_'):
+                    safe_key = self._sanitize_identifier(key)
+                    # Validate type before adding to normalized dict
+                    if not self._validate_type(safe_key, value):
+                        sql_logger.error("Type validation failed for field %s", key)
+                        return False
+                    normalized[safe_key] = value
 
             columns = list(normalized.keys())
             placeholders = ['?' for _ in columns]
             values = [normalized[col] for col in columns]
-            
+
             query = f"""
             INSERT INTO ingested_records ({', '.join(columns)})
             VALUES ({', '.join(placeholders)})
             """
-            
+
             self.cursor.execute(query, values)
-            self.connection.commit()
+            if not self.in_transaction:
+                self.connection.commit()
             return True
-        
+
         except sqlite3.IntegrityError as e:
             sql_logger.warning("Integrity error inserting SQL record: %s", e)
             return False
@@ -258,7 +390,8 @@ class SQLManager:
             )
             self.cursor.execute(query, values)
 
-        self.connection.commit()
+        if not self.in_transaction:
+            self.connection.commit()
 
     def fetch_records(
         self,
@@ -286,8 +419,44 @@ class SQLManager:
         query += " LIMIT ?"
         values.append(limit)
 
-        cursor = self.connection.execute(query, values)
-        return [dict(row) for row in cursor.fetchall()]
+        # Use read-only connection when not in a transaction to ensure isolation
+        # This prevents seeing uncommitted writes from active transactions
+        if not self.in_transaction:
+            # Use separate read connection with explicit transaction for isolation
+            with self._read_lock:
+                try:
+                    # Start a DEFERRED read transaction to get a consistent snapshot
+                    try:
+                        self._read_connection.execute("BEGIN DEFERRED")
+                    except sqlite3.OperationalError as e:
+                        # Already in transaction, just proceed
+                        if "already" not in str(e).lower():
+                            raise
+
+                    cursor = self._read_connection.execute(query, values)
+                    results = [dict(row) for row in cursor.fetchall()]
+
+                    # Commit the read transaction
+                    try:
+                        self._read_connection.commit()
+                    except sqlite3.OperationalError:
+                        # No transaction to commit
+                        pass
+
+                    return results
+                except Exception as e:
+                    # Rollback on error
+                    try:
+                        self._read_connection.rollback()
+                    except:
+                        pass
+                    sql_logger.error("Read error: %s", e)
+                    # Return empty on error to be safe
+                    return []
+        else:
+            # Within a managed transaction, use the main connection
+            cursor = self.connection.execute(query, values)
+            return [dict(row) for row in cursor.fetchall()]
 
     def update_root_field(self, sys_ingested_at: str, field_name: str, value: Any) -> bool:
         """Update a single field in the root SQL table for one ingested record."""
@@ -295,7 +464,8 @@ class SQLManager:
         try:
             query = f"UPDATE ingested_records SET {safe_field} = ? WHERE sys_ingested_at = ?"
             self.cursor.execute(query, (value, sys_ingested_at))
-            self.connection.commit()
+            if not self.in_transaction:
+                self.connection.commit()
             return self.cursor.rowcount > 0
         except Exception as error:
             sql_logger.error("Update error for field '%s': %s", safe_field, error)
@@ -313,7 +483,8 @@ class SQLManager:
         where_clause = " AND ".join(clauses) if clauses else "1 = 1"
         self.cursor.execute(f"DELETE FROM {safe_table} WHERE {where_clause}", values)
         deleted_count = self.cursor.rowcount
-        self.connection.commit()
+        if not self.in_transaction:
+            self.connection.commit()
         return deleted_count
 
     def list_child_tables(self) -> List[str]:
@@ -332,6 +503,8 @@ class SQLManager:
     
     def close(self):
         """Close database connection"""
+        if hasattr(self, '_read_connection'):
+            self._read_connection.close()
         self.connection.close()
 
 
