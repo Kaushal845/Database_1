@@ -11,6 +11,7 @@ from type_detector import TypeDetector
 from placement_heuristics import PlacementHeuristics
 from database_managers import SQLManager, MongoDBManager
 from query_engine import MetadataDrivenQueryEngine
+from transaction_coordinator import TransactionCoordinator
 from logging_utils import get_logger
 
 
@@ -25,30 +26,46 @@ class IngestionPipeline:
     3. Routes fields through SQL / MongoDB / Buffer
     4. Normalizes repeating entities into SQL child tables
     5. Applies MongoDB embed/reference strategy
-    6. Exposes metadata-driven CRUD operations
+    6. Exposes metadata-driven CRUD operations with ACID guarantees
     """
-    
-    def __init__(self, 
+
+    def __init__(self,
                  metadata_file='metadata_store.json',
                  sql_db='ingestion_data.db',
                  mongo_uri='mongodb://localhost:27017/',
-                 mongo_db='ingestion_db'):
-        
+                 mongo_db='ingestion_db',
+                 use_transactions=True):
+
         # Initialize components
         self.metadata_store = MetadataStore(metadata_file)
         self.type_detector = TypeDetector()
         self.placement_heuristics = PlacementHeuristics(self.metadata_store)
-        
+
         # Initialize databases
         self.sql_manager = SQLManager(sql_db)
         self.mongo_manager = MongoDBManager(mongo_uri, mongo_db)
+
+        # Initialize transaction coordinator (for ACID guarantees)
+        self.use_transactions = use_transactions
+        if use_transactions:
+            self.transaction_coordinator = TransactionCoordinator(
+                sql_manager=self.sql_manager,
+                mongo_manager=self.mongo_manager
+            )
+            logger.info("Transaction coordinator initialized - ACID guarantees enabled")
+        else:
+            self.transaction_coordinator = None
+            logger.warning("Running without transaction coordinator - NO ACID guarantees")
+
+        # Initialize query engine with transaction support
         self.query_engine = MetadataDrivenQueryEngine(
             metadata_store=self.metadata_store,
             sql_manager=self.sql_manager,
             mongo_manager=self.mongo_manager,
             ingest_callback=self.ingest_record,
+            transaction_coordinator=self.transaction_coordinator,
         )
-        
+
         # Statistics
         self.stats = {
             'total_processed': 0,
@@ -58,12 +75,13 @@ class IngestionPipeline:
             'errors': 0,
             'fields_discovered': 0
         }
-        
+
         logger.info(
-            "Initialized pipeline (sql_db=%s, mongo_db=%s, metadata_file=%s)",
+            "Initialized pipeline (sql_db=%s, mongo_db=%s, metadata_file=%s, transactions=%s)",
             sql_db,
             mongo_db,
             metadata_file,
+            use_transactions,
         )
         logger.info("Loaded %s known fields from metadata", len(self.metadata_store.metadata['fields']))
         self._reconcile_resolved_buffer_fields_on_startup()
@@ -676,44 +694,103 @@ class IngestionPipeline:
                 unresolved_fields,
             )
 
-            # Step 6: Insert primary records
+            # Step 6: Insert primary records with transaction protection
             sql_success = False
             mongo_success = False
-            
-            if sql_record and len(sql_record) > 0:
-                sql_success = self.sql_manager.insert_record(sql_record)
-                if sql_success:
-                    self.stats['sql_inserts'] += 1
-                    # Normalize child entities only after parent row exists.
-                    self._normalize_entities(enriched_record, repeating_entities)
-            
-            if mongo_record and len(mongo_record) > 0:
-                mongo_success = self.mongo_manager.insert_record(mongo_record)
-                if mongo_success:
-                    self.stats['mongodb_inserts'] += 1
 
-            if unresolved_fields:
-                buffer_payload = {
-                    'username': enriched_record.get('username', 'unknown_user'),
-                    'sys_ingested_at': enriched_record['sys_ingested_at'],
-                    'fields': unresolved_fields,
-                }
-                buffer_success = self.mongo_manager.insert_record(buffer_payload, collection_name='buffer_records')
-                if buffer_success:
-                    self.stats['buffer_inserts'] += 1
-                    logger.debug(
-                        "Buffered unresolved fields for %s: %s",
-                        enriched_record['sys_ingested_at'],
-                        sorted(unresolved_fields.keys()),
-                    )
-            
+            # If transactions are enabled, wrap the entire ingestion in a transaction
+            if self.use_transactions and self.transaction_coordinator:
+                try:
+                    # Begin SQL transaction for atomic ingestion
+                    self.sql_manager.connection.execute("BEGIN IMMEDIATE")
+
+                    # Insert SQL record
+                    if sql_record and len(sql_record) > 0:
+                        sql_success = self.sql_manager.insert_record(sql_record)
+                        if sql_success:
+                            self.stats['sql_inserts'] += 1
+                            # Normalize child entities only after parent row exists
+                            self._normalize_entities(enriched_record, repeating_entities)
+                        else:
+                            raise Exception("SQL insert failed")
+
+                    # Insert MongoDB record
+                    if mongo_record and len(mongo_record) > 0:
+                        mongo_success = self.mongo_manager.insert_record(mongo_record)
+                        if mongo_success:
+                            self.stats['mongodb_inserts'] += 1
+                        else:
+                            # MongoDB failed - rollback SQL
+                            raise Exception("MongoDB insert failed")
+
+                    # Insert buffer records if needed
+                    if unresolved_fields:
+                        buffer_payload = {
+                            'username': enriched_record.get('username', 'unknown_user'),
+                            'sys_ingested_at': enriched_record['sys_ingested_at'],
+                            'fields': unresolved_fields,
+                        }
+                        buffer_success = self.mongo_manager.insert_record(buffer_payload, collection_name='buffer_records')
+                        if buffer_success:
+                            self.stats['buffer_inserts'] += 1
+                            logger.debug(
+                                "Buffered unresolved fields for %s: %s",
+                                enriched_record['sys_ingested_at'],
+                                sorted(unresolved_fields.keys()),
+                            )
+                        else:
+                            raise Exception("Buffer insert failed")
+
+                    # All operations succeeded - commit SQL transaction
+                    self.sql_manager.connection.commit()
+                    logger.debug("Transactional ingestion succeeded for %s", enriched_record.get('sys_ingested_at'))
+
+                except Exception as e:
+                    # Any failure - rollback SQL transaction
+                    logger.error("Transactional ingestion failed: %s - Rolling back", e)
+                    try:
+                        self.sql_manager.connection.rollback()
+                    except:
+                        pass
+                    self.stats['errors'] += 1
+                    return False
+
+            else:
+                # Legacy mode - no transaction protection
+                if sql_record and len(sql_record) > 0:
+                    sql_success = self.sql_manager.insert_record(sql_record)
+                    if sql_success:
+                        self.stats['sql_inserts'] += 1
+                        # Normalize child entities only after parent row exists.
+                        self._normalize_entities(enriched_record, repeating_entities)
+
+                if mongo_record and len(mongo_record) > 0:
+                    mongo_success = self.mongo_manager.insert_record(mongo_record)
+                    if mongo_success:
+                        self.stats['mongodb_inserts'] += 1
+
+                if unresolved_fields:
+                    buffer_payload = {
+                        'username': enriched_record.get('username', 'unknown_user'),
+                        'sys_ingested_at': enriched_record['sys_ingested_at'],
+                        'fields': unresolved_fields,
+                    }
+                    buffer_success = self.mongo_manager.insert_record(buffer_payload, collection_name='buffer_records')
+                    if buffer_success:
+                        self.stats['buffer_inserts'] += 1
+                        logger.debug(
+                            "Buffered unresolved fields for %s: %s",
+                            enriched_record['sys_ingested_at'],
+                            sorted(unresolved_fields.keys()),
+                        )
+
             # Update statistics
             self.stats['total_processed'] += 1
-            
+
             # Periodic metadata save (every 10 records)
             if self.stats['total_processed'] % 10 == 0:
                 self.metadata_store.save()
-            
+
             # Log progress every 50 records
             if self.stats['total_processed'] % 50 == 0:
                 logger.info(
@@ -724,7 +801,7 @@ class IngestionPipeline:
                     self.stats['buffer_inserts'],
                     self.stats['errors'],
                 )
-            
+
             return sql_success or mongo_success
         
         except Exception as e:
