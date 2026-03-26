@@ -1,0 +1,320 @@
+{
+  "generated_at": "2026-03-26T18:14:06.483029+00:00",
+  "summary": {
+    "total_tests": 12,
+    "passed": 12,
+    "failed": 0
+  },
+  "tests": [
+    {
+      "test_name": "A1: Single Insert Failure Rollback",
+      "test_type": "Atomicity",
+      "passed": true,
+      "objective": "Verify that SQL insert rolls back when MongoDB insert fails",
+      "setup": "Test record: test_user_a1",
+      "execution_log": [
+        "Transaction tx_1774548845487_1 begun",
+        "SQL insert operation added",
+        "Prepare phase: success=True",
+        "Simulating MongoDB failure - forcing abort",
+        "Transaction aborted"
+      ],
+      "validation_log": [
+        "SQL records found: 0",
+        "\u2713 PASS: SQL record successfully rolled back"
+      ],
+      "timing": {
+        "total_time": 0.007035255432128906
+      },
+      "error": "",
+      "evidence": {
+        "sql_records_after_rollback": 0
+      }
+    },
+    {
+      "test_name": "A2: Batch Insert Partial Failure",
+      "test_type": "Atomicity",
+      "passed": true,
+      "objective": "Verify that partial batch failure causes complete rollback",
+      "setup": "Batch of 5 records",
+      "execution_log": [
+        "Transaction tx_1774548845497_2 begun",
+        "Added record 1/5",
+        "Added record 2/5",
+        "Added record 3/5",
+        "First batch prepared: success=True",
+        "Simulating failure on 3rd record",
+        "Transaction aborted - all changes rolled back"
+      ],
+      "validation_log": [
+        "SQL records found: 0/5",
+        "MongoDB records found: 0/5",
+        "\u2713 PASS: All batch records rolled back"
+      ],
+      "timing": {
+        "total_time": 0.009033441543579102
+      },
+      "error": "",
+      "evidence": {
+        "sql_records_found": 0,
+        "mongo_records_found": 0
+      }
+    },
+    {
+      "test_name": "A3: Update with Nested Data Failure",
+      "test_type": "Atomicity",
+      "passed": true,
+      "objective": "Verify atomicity when updating root record and adding nested data",
+      "setup": "Initial record: nested_user",
+      "execution_log": [
+        "Transaction tx_1774548845517_3 begun",
+        "Update operation added",
+        "Prepare: success=True",
+        "Simulating failure - forcing abort"
+      ],
+      "validation_log": [
+        "SQL records: 1",
+        "MongoDB records: 1",
+        "SQL email: initial@test.com",
+        "SQL age: 25",
+        "\u2713 PASS: Update rolled back, original data intact"
+      ],
+      "timing": {
+        "total_time": 0.0060253143310546875
+      },
+      "error": "",
+      "evidence": {
+        "sql_email": "initial@test.com",
+        "sql_age": 25
+      }
+    },
+    {
+      "test_name": "C1: Unique Constraint Enforcement",
+      "test_type": "Consistency",
+      "passed": true,
+      "objective": "Verify unique constraints prevent duplicate inserts across backends",
+      "setup": "Initial record with sys_ingested_at: 2026-03-26T18:14:05.528738+00:00.001",
+      "execution_log": [
+        "First record inserted successfully",
+        "Transaction tx_1774548845530_4 begun for duplicate insert",
+        "Duplicate insert operation added",
+        "Prepare result: success=False, error=SQL prepare failed: SQL insert failed",
+        "Transaction aborted due to constraint violation"
+      ],
+      "validation_log": [
+        "SQL records with timestamp: 1",
+        "\u2713 PASS: Unique constraint enforced"
+      ],
+      "timing": {
+        "total_time": 0.0050106048583984375
+      },
+      "error": "",
+      "evidence": {
+        "sql_count": 1
+      }
+    },
+    {
+      "test_name": "C2: Foreign Key Integrity",
+      "test_type": "Consistency",
+      "passed": true,
+      "objective": "Verify foreign key constraints maintain referential integrity",
+      "setup": "Parent record: 2026-03-26T18:14:05.539284+00:00.001",
+      "execution_log": [
+        "Parent record inserted",
+        "Child records inserted",
+        "Delete parent operation added",
+        "Prepare: success=True",
+        "Delete committed"
+      ],
+      "validation_log": [
+        "Parent record exists: False",
+        "Child records remaining: 0",
+        "\u2713 PASS: Foreign key cascade delete worked"
+      ],
+      "timing": {
+        "total_time": 0.005267620086669922
+      },
+      "error": "",
+      "evidence": {
+        "parent_exists": false,
+        "children_count": 0
+      }
+    },
+    {
+      "test_name": "C3: Type Constraint Enforcement",
+      "test_type": "Consistency",
+      "passed": true,
+      "objective": "Verify type constraints are enforced across backends",
+      "setup": "",
+      "execution_log": [
+        "Transaction tx_1774548845549_6 begun",
+        "Insert with invalid type added",
+        "Prepare: success=False, error=SQL prepare failed: SQL insert failed"
+      ],
+      "validation_log": [
+        "\u2713 Type constraint enforced - transaction rejected",
+        "\u2713 PASS: Type constraint handled appropriately"
+      ],
+      "timing": {
+        "total_time": 0.00402379035949707
+      },
+      "error": "",
+      "evidence": {}
+    },
+    {
+      "test_name": "I1: No Dirty Reads",
+      "test_type": "Isolation",
+      "passed": true,
+      "objective": "Verify concurrent reads don't see uncommitted writes",
+      "setup": "Initial balance: 100",
+      "execution_log": [
+        "[T2] Writer transaction started",
+        "[T2] Write prepared, sleeping before commit...",
+        "[T1] Reader starting...",
+        "[T1] Read balance: 100",
+        "[T2] Write committed"
+      ],
+      "validation_log": [
+        "Values read by T1: [100]",
+        "\u2713 PASS: No dirty reads detected"
+      ],
+      "timing": {
+        "total_time": 0.506523609161377
+      },
+      "error": "",
+      "evidence": {
+        "values_read": [
+          100
+        ]
+      }
+    },
+    {
+      "test_name": "I2: Concurrent Inserts",
+      "test_type": "Isolation",
+      "passed": true,
+      "objective": "Verify concurrent inserts of different records both succeed",
+      "setup": "",
+      "execution_log": [
+        "[T1] Transaction started",
+        "[T2] Transaction started",
+        "[T3] Transaction started",
+        "[T2] Committed successfully",
+        "[T1] Committed successfully",
+        "[T3] Committed successfully"
+      ],
+      "validation_log": [
+        "Successful commits: 3/3",
+        "SQL records: 3",
+        "\u2713 PASS: All concurrent inserts succeeded"
+      ],
+      "timing": {
+        "total_time": 0.013031244277954102
+      },
+      "error": "",
+      "evidence": {
+        "successful_commits": 3,
+        "sql_records": 3
+      }
+    },
+    {
+      "test_name": "I3: Serializable Isolation",
+      "test_type": "Isolation",
+      "passed": true,
+      "objective": "Verify reads are isolated from concurrent updates",
+      "setup": "Initial counter: 0",
+      "execution_log": [
+        "[Updater] Transaction started",
+        "[Reader] Read counter: 0",
+        "[Updater] Committed: counter=10"
+      ],
+      "validation_log": [
+        "Values read: [0]",
+        "\u2713 PASS: Serializable isolation maintained"
+      ],
+      "timing": {
+        "total_time": 0.303391695022583
+      },
+      "error": "",
+      "evidence": {
+        "read_values": [
+          0
+        ]
+      }
+    },
+    {
+      "test_name": "D1: Crash Recovery",
+      "test_type": "Durability",
+      "passed": true,
+      "objective": "Verify committed data survives connection restart",
+      "setup": "",
+      "execution_log": [
+        "Data committed",
+        "Connections closed (simulating crash)",
+        "Connections reopened"
+      ],
+      "validation_log": [
+        "SQL records after restart: 1",
+        "MongoDB records after restart: 1",
+        "\u2713 PASS: Data survived crash and recovery"
+      ],
+      "timing": {
+        "total_time": 0.06046867370605469
+      },
+      "error": "",
+      "evidence": {
+        "sql_recovered": true,
+        "mongo_recovered": true
+      }
+    },
+    {
+      "test_name": "D2: Committed Data Persists",
+      "test_type": "Durability",
+      "passed": true,
+      "objective": "Verify committed data is durable despite subsequent failures",
+      "setup": "",
+      "execution_log": [
+        "First transaction committed successfully",
+        "Second transaction aborted"
+      ],
+      "validation_log": [
+        "First record exists: True",
+        "Second record exists: False",
+        "\u2713 PASS: Committed data persists despite later failure"
+      ],
+      "timing": {
+        "total_time": 0.008089065551757812
+      },
+      "error": "",
+      "evidence": {
+        "first_persisted": true,
+        "second_absent": true
+      }
+    },
+    {
+      "test_name": "D3: Durability After Rollback",
+      "test_type": "Durability",
+      "passed": true,
+      "objective": "Verify previous commits are not affected by later rollbacks",
+      "setup": "",
+      "execution_log": [
+        "Committed record 1/3",
+        "Committed record 2/3",
+        "Committed record 3/3",
+        "Final transaction aborted"
+      ],
+      "validation_log": [
+        "Committed records found: 3/3",
+        "Aborted record found: False",
+        "\u2713 PASS: Prior commits unaffected by rollback"
+      ],
+      "timing": {
+        "total_time": 0.01963496208190918
+      },
+      "error": "",
+      "evidence": {
+        "committed_count": 3,
+        "aborted_found": false
+      }
+    }
+  ]
+}

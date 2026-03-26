@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACID Validation Report</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+        .test-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-case {
+            border-left: 4px solid #ddd;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .test-case.passed {
+            border-left-color: #4caf50;
+            background: #f1f8f4;
+        }
+        .test-case.failed {
+            border-left-color: #f44336;
+            background: #fff1f0;
+        }
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .badge.pass {
+            background: #4caf50;
+            color: white;
+        }
+        .badge.fail {
+            background: #f44336;
+            color: white;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ACID Validation Report</h1>
+        <p>Comprehensive testing of ACID properties in hybrid SQL+MongoDB system</p>
+        <p>Generated: 2026-03-26 18:14:06 UTC</p>
+    </div>
+
+    <div class="summary">
+        <div class="stat-card">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Total Tests</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" style="color: #4caf50">12</div>
+            <div class="stat-label">Passed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value" style="color: #f44336">0</div>
+            <div class="stat-label">Failed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">100%</div>
+            <div class="stat-label">Success Rate</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Summary by ACID Property</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Passed</th>
+                    <th>Failed</th>
+                    <th>Total</th>
+                    <th>Success Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td><strong>Atomicity</strong></td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>100%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Consistency</strong></td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>100%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Isolation</strong></td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>100%</td>
+                </tr>
+
+                <tr>
+                    <td><strong>Durability</strong></td>
+                    <td>3</td>
+                    <td>0</td>
+                    <td>3</td>
+                    <td>100%</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="test-section">
+        <h2>Atomicity Tests</h2>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                A1: Single Insert Failure Rollback
+            </div>
+            <p><strong>Objective:</strong> Verify that SQL insert rolls back when MongoDB insert fails</p>
+<p><strong>Setup:</strong> Test record: test_user_a1</p><p><strong>Execution Log:</strong></p><pre>Transaction tx_1774548845487_1 begun
+SQL insert operation added
+Prepare phase: success=True
+Simulating MongoDB failure - forcing abort
+Transaction aborted</pre><p><strong>Validation:</strong></p><ul><li>SQL records found: 0</li><li>✓ PASS: SQL record successfully rolled back</li></ul>
+        </div>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                A2: Batch Insert Partial Failure
+            </div>
+            <p><strong>Objective:</strong> Verify that partial batch failure causes complete rollback</p>
+<p><strong>Setup:</strong> Batch of 5 records</p><p><strong>Execution Log:</strong></p><pre>Transaction tx_1774548845497_2 begun
+Added record 1/5
+Added record 2/5
+Added record 3/5
+First batch prepared: success=True
+Simulating failure on 3rd record
+Transaction aborted - all changes rolled back</pre><p><strong>Validation:</strong></p><ul><li>SQL records found: 0/5</li><li>MongoDB records found: 0/5</li><li>✓ PASS: All batch records rolled back</li></ul>
+        </div>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                A3: Update with Nested Data Failure
+            </div>
+            <p><strong>Objective:</strong> Verify atomicity when updating root record and adding nested data</p>
+<p><strong>Setup:</strong> Initial record: nested_user</p><p><strong>Execution Log:</strong></p><pre>Transaction tx_1774548845517_3 begun
+Update operation added
+Prepare: success=True
+Simulating failure - forcing abort</pre><p><strong>Validation:</strong></p><ul><li>SQL records: 1</li><li>MongoDB records: 1</li><li>SQL email: initial@test.com</li><li>SQL age: 25</li><li>✓ PASS: Update rolled back, original data intact</li></ul>
+        </div>
+
+    </div>
+
+    <div class="test-section">
+        <h2>Consistency Tests</h2>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                C1: Unique Constraint Enforcement
+            </div>
+            <p><strong>Objective:</strong> Verify unique constraints prevent duplicate inserts across backends</p>
+<p><strong>Setup:</strong> Initial record with sys_ingested_at: 2026-03-26T18:14:05.528738+00:00.001</p><p><strong>Execution Log:</strong></p><pre>First record inserted successfully
+Transaction tx_1774548845530_4 begun for duplicate insert
+Duplicate insert operation added
+Prepare result: success=False, error=SQL prepare failed: SQL insert failed
+Transaction aborted due to constraint violation</pre><p><strong>Validation:</strong></p><ul><li>SQL records with timestamp: 1</li><li>✓ PASS: Unique constraint enforced</li></ul>
+        </div>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                C2: Foreign Key Integrity
+            </div>
+            <p><strong>Objective:</strong> Verify foreign key constraints maintain referential integrity</p>
+<p><strong>Setup:</strong> Parent record: 2026-03-26T18:14:05.539284+00:00.001</p><p><strong>Execution Log:</strong></p><pre>Parent record inserted
+Child records inserted
+Delete parent operation added
+Prepare: success=True
+Delete committed</pre><p><strong>Validation:</strong></p><ul><li>Parent record exists: False</li><li>Child records remaining: 0</li><li>✓ PASS: Foreign key cascade delete worked</li></ul>
+        </div>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                C3: Type Constraint Enforcement
+            </div>
+            <p><strong>Objective:</strong> Verify type constraints are enforced across backends</p>
+<p><strong>Execution Log:</strong></p><pre>Transaction tx_1774548845549_6 begun
+Insert with invalid type added
+Prepare: success=False, error=SQL prepare failed: SQL insert failed</pre><p><strong>Validation:</strong></p><ul><li>✓ Type constraint enforced - transaction rejected</li><li>✓ PASS: Type constraint handled appropriately</li></ul>
+        </div>
+
+    </div>
+
+    <div class="test-section">
+        <h2>Isolation Tests</h2>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                I1: No Dirty Reads
+            </div>
+            <p><strong>Objective:</strong> Verify concurrent reads don't see uncommitted writes</p>
+<p><strong>Setup:</strong> Initial balance: 100</p><p><strong>Execution Log:</strong></p><pre>[T2] Writer transaction started
+[T2] Write prepared, sleeping before commit...
+[T1] Reader starting...
+[T1] Read balance: 100
+[T2] Write committed</pre><p><strong>Validation:</strong></p><ul><li>Values read by T1: [100]</li><li>✓ PASS: No dirty reads detected</li></ul>
+        </div>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                I2: Concurrent Inserts
+            </div>
+            <p><strong>Objective:</strong> Verify concurrent inserts of different records both succeed</p>
+<p><strong>Execution Log:</strong></p><pre>[T1] Transaction started
+[T2] Transaction started
+[T3] Transaction started
+[T2] Committed successfully
+[T1] Committed successfully
+[T3] Committed successfully</pre><p><strong>Validation:</strong></p><ul><li>Successful commits: 3/3</li><li>SQL records: 3</li><li>✓ PASS: All concurrent inserts succeeded</li></ul>
+        </div>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                I3: Serializable Isolation
+            </div>
+            <p><strong>Objective:</strong> Verify reads are isolated from concurrent updates</p>
+<p><strong>Setup:</strong> Initial counter: 0</p><p><strong>Execution Log:</strong></p><pre>[Updater] Transaction started
+[Reader] Read counter: 0
+[Updater] Committed: counter=10</pre><p><strong>Validation:</strong></p><ul><li>Values read: [0]</li><li>✓ PASS: Serializable isolation maintained</li></ul>
+        </div>
+
+    </div>
+
+    <div class="test-section">
+        <h2>Durability Tests</h2>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                D1: Crash Recovery
+            </div>
+            <p><strong>Objective:</strong> Verify committed data survives connection restart</p>
+<p><strong>Execution Log:</strong></p><pre>Data committed
+Connections closed (simulating crash)
+Connections reopened</pre><p><strong>Validation:</strong></p><ul><li>SQL records after restart: 1</li><li>MongoDB records after restart: 1</li><li>✓ PASS: Data survived crash and recovery</li></ul>
+        </div>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                D2: Committed Data Persists
+            </div>
+            <p><strong>Objective:</strong> Verify committed data is durable despite subsequent failures</p>
+<p><strong>Execution Log:</strong></p><pre>First transaction committed successfully
+Second transaction aborted</pre><p><strong>Validation:</strong></p><ul><li>First record exists: True</li><li>Second record exists: False</li><li>✓ PASS: Committed data persists despite later failure</li></ul>
+        </div>
+
+        <div class="test-case passed">
+            <div class="test-title">
+                <span class="badge pass">PASS</span>
+                D3: Durability After Rollback
+            </div>
+            <p><strong>Objective:</strong> Verify previous commits are not affected by later rollbacks</p>
+<p><strong>Execution Log:</strong></p><pre>Committed record 1/3
+Committed record 2/3
+Committed record 3/3
+Final transaction aborted</pre><p><strong>Validation:</strong></p><ul><li>Committed records found: 3/3</li><li>Aborted record found: False</li><li>✓ PASS: Prior commits unaffected by rollback</li></ul>
+        </div>
+
+    </div>
+
+</body>
+</html>
