@@ -317,14 +317,3 @@ sqlite3 ingestion_data.db
 mongosh ingestion_db
 ```
 
-## License
-
-See LICENSE file for details.
-
-## Contributing
-
-See CONTRIBUTING.md for guidelines.
-
----
-
-**Generated with Claude Code - Anthropic's AI coding assistant**
