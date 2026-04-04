@@ -2,12 +2,12 @@
   "version": 2,
   "fields": {
     "username": {
-      "appearances": 2242,
+      "appearances": 23242,
       "type_counts": {
-        "string": 2242
+        "string": 23242
       },
       "first_seen": "2026-03-22T08:16:47.633363+00:00",
-      "last_seen": "2026-03-26T18:07:14.304188+00:00",
+      "last_seen": "2026-04-04T08:37:27.661467+00:00",
       "sample_values": [
         "colleen54",
         "melanie76",
@@ -20,12 +20,12 @@
       ]
     },
     "name": {
-      "appearances": 1388,
+      "appearances": 14414,
       "type_counts": {
-        "string": 1388
+        "string": 14414
       },
       "first_seen": "2026-03-22T08:16:47.634489+00:00",
-      "last_seen": "2026-03-26T17:18:07.544737+00:00",
+      "last_seen": "2026-04-04T08:37:27.421199+00:00",
       "sample_values": [
         "Ashley Collins",
         "Amy Douglas",
@@ -38,12 +38,12 @@
       ]
     },
     "ip_address": {
-      "appearances": 1558,
+      "appearances": 16612,
       "type_counts": {
-        "ip_address": 1558
+        "ip_address": 16612
       },
       "first_seen": "2026-03-22T08:16:47.635130+00:00",
-      "last_seen": "2026-03-26T17:18:07.969174+00:00",
+      "last_seen": "2026-04-04T08:37:27.666571+00:00",
       "sample_values": [
         "67.138.68.161",
         "82.219.44.119",
@@ -56,12 +56,12 @@
       ]
     },
     "country": {
-      "appearances": 1938,
+      "appearances": 19886,
       "type_counts": {
-        "string": 1938
+        "string": 19886
       },
       "first_seen": "2026-03-22T08:16:47.635860+00:00",
-      "last_seen": "2026-03-26T17:18:07.973288+00:00",
+      "last_seen": "2026-04-04T08:37:27.678467+00:00",
       "sample_values": [
         "Aruba",
         "Cameroon",
@@ -74,12 +74,12 @@
       ]
     },
     "session_id": {
-      "appearances": 904,
+      "appearances": 9976,
       "type_counts": {
-        "uuid": 904
+        "uuid": 9976
       },
       "first_seen": "2026-03-22T08:16:47.636583+00:00",
-      "last_seen": "2026-03-26T17:18:07.057955+00:00",
+      "last_seen": "2026-04-04T08:37:27.683572+00:00",
       "sample_values": [
         "6a267277-ef36-4c9e-81c6-a7c254cec990",
         "939a8dc3-7dd6-4361-a653-9f57d092c312",
@@ -92,24 +92,24 @@
       ]
     },
     "is_active": {
-      "appearances": 526,
+      "appearances": 5240,
       "type_counts": {
-        "boolean": 526
+        "boolean": 5240
       },
       "first_seen": "2026-03-22T08:16:47.637305+00:00",
-      "last_seen": "2026-03-26T17:18:07.987545+00:00",
+      "last_seen": "2026-04-04T08:37:26.474651+00:00",
       "sample_values": [
         "False",
         "True"
       ]
     },
     "timestamp": {
-      "appearances": 1162,
+      "appearances": 12638,
       "type_counts": {
-        "timestamp": 1162
+        "timestamp": 12638
       },
       "first_seen": "2026-03-22T08:16:47.637997+00:00",
-      "last_seen": "2026-03-26T17:18:07.996545+00:00",
+      "last_seen": "2026-04-04T08:37:27.444857+00:00",
       "sample_values": [
         "2026-03-22T08:16:47.632793+00:00",
         "2026-03-22T08:16:47.648551+00:00",
@@ -122,12 +122,12 @@
       ]
     },
     "profile": {
-      "appearances": 937,
+      "appearances": 9545,
       "type_counts": {
-        "dict": 937
+        "dict": 9545
       },
       "first_seen": "2026-03-22T08:16:47.638680+00:00",
-      "last_seen": "2026-03-26T17:18:07.999389+00:00",
+      "last_seen": "2026-04-04T08:37:27.697468+00:00",
       "sample_values": [
         "{'language': 'German', 'timezone': 'Africa/Dar_es_Salaam', 'preferences': {'notifications': True, 'theme': 'system', 'cu",
         "{'language': 'Akan', 'timezone': 'Asia/Hebron', 'preferences': {'notifications': True, 'theme': 'system', 'currency': 'E",
@@ -140,12 +140,12 @@
       ]
     },
     "profile.language": {
-      "appearances": 1874,
+      "appearances": 19090,
       "type_counts": {
-        "string": 1874
+        "string": 19090
       },
       "first_seen": "2026-03-22T08:16:47.639391+00:00",
-      "last_seen": "2026-03-26T17:18:08.004387+00:00",
+      "last_seen": "2026-04-04T08:37:27.703468+00:00",
       "sample_values": [
         "German",
         "Akan",
@@ -158,12 +158,12 @@
       ]
     },
     "profile.timezone": {
-      "appearances": 1874,
+      "appearances": 19090,
       "type_counts": {
-        "string": 1874
+        "string": 19090
       },
       "first_seen": "2026-03-22T08:16:47.640146+00:00",
-      "last_seen": "2026-03-26T17:18:08.009246+00:00",
+      "last_seen": "2026-04-04T08:37:27.708467+00:00",
       "sample_values": [
         "Africa/Dar_es_Salaam",
         "Asia/Hebron",
@@ -176,12 +176,12 @@
       ]
     },
     "profile.preferences": {
-      "appearances": 937,
+      "appearances": 9545,
       "type_counts": {
-        "dict": 937
+        "dict": 9545
       },
       "first_seen": "2026-03-22T08:16:47.640825+00:00",
-      "last_seen": "2026-03-26T17:18:08.012408+00:00",
+      "last_seen": "2026-04-04T08:37:27.711467+00:00",
       "sample_values": [
         "{'notifications': True, 'theme': 'system', 'currency': 'GBP'}",
         "{'notifications': True, 'theme': 'system', 'currency': 'EUR'}",
@@ -194,24 +194,24 @@
       ]
     },
     "profile.preferences.notifications": {
-      "appearances": 1873,
+      "appearances": 19089,
       "type_counts": {
-        "boolean": 1873
+        "boolean": 19089
       },
       "first_seen": "2026-03-22T08:16:47.641215+00:00",
-      "last_seen": "2026-03-26T17:18:08.017482+00:00",
+      "last_seen": "2026-04-04T08:37:27.717469+00:00",
       "sample_values": [
         "True",
         "False"
       ]
     },
     "profile.preferences.theme": {
-      "appearances": 1872,
+      "appearances": 19088,
       "type_counts": {
-        "string": 1872
+        "string": 19088
       },
       "first_seen": "2026-03-22T08:16:47.642047+00:00",
-      "last_seen": "2026-03-26T17:18:08.021484+00:00",
+      "last_seen": "2026-04-04T08:37:27.723468+00:00",
       "sample_values": [
         "system",
         "light",
@@ -219,12 +219,12 @@
       ]
     },
     "profile.preferences.currency": {
-      "appearances": 1872,
+      "appearances": 19088,
       "type_counts": {
-        "string": 1872
+        "string": 19088
       },
       "first_seen": "2026-03-22T08:16:47.642909+00:00",
-      "last_seen": "2026-03-26T17:18:08.026487+00:00",
+      "last_seen": "2026-04-04T08:37:27.729467+00:00",
       "sample_values": [
         "GBP",
         "EUR",
@@ -233,12 +233,12 @@
       ]
     },
     "profile.security": {
-      "appearances": 936,
+      "appearances": 9544,
       "type_counts": {
-        "dict": 936
+        "dict": 9544
       },
       "first_seen": "2026-03-22T08:16:47.643738+00:00",
-      "last_seen": "2026-03-26T17:18:08.028484+00:00",
+      "last_seen": "2026-04-04T08:37:27.732468+00:00",
       "sample_values": [
         "{'mfa_enabled': True, 'last_password_change': '2026-03-03T11:55:50'}",
         "{'mfa_enabled': False, 'last_password_change': '2026-02-24T11:57:35'}",
@@ -251,24 +251,24 @@
       ]
     },
     "profile.security.mfa_enabled": {
-      "appearances": 1872,
+      "appearances": 19088,
       "type_counts": {
-        "boolean": 1872
+        "boolean": 19088
       },
       "first_seen": "2026-03-22T08:16:47.644158+00:00",
-      "last_seen": "2026-03-26T17:18:08.032494+00:00",
+      "last_seen": "2026-04-04T08:37:27.738965+00:00",
       "sample_values": [
         "True",
         "False"
       ]
     },
     "profile.security.last_password_change": {
-      "appearances": 1872,
+      "appearances": 19088,
       "type_counts": {
-        "timestamp": 1872
+        "timestamp": 19088
       },
       "first_seen": "2026-03-22T08:16:47.644996+00:00",
-      "last_seen": "2026-03-26T17:18:08.036490+00:00",
+      "last_seen": "2026-04-04T08:37:27.744961+00:00",
       "sample_values": [
         "2026-03-03T11:55:50",
         "2026-02-24T11:57:35",
@@ -281,12 +281,12 @@
       ]
     },
     "orders": {
-      "appearances": 1700,
+      "appearances": 18056,
       "type_counts": {
-        "list": 1700
+        "list": 18056
       },
       "first_seen": "2026-03-22T08:16:47.645866+00:00",
-      "last_seen": "2026-03-26T17:18:08.040484+00:00",
+      "last_seen": "2026-04-04T08:37:27.751862+00:00",
       "sample_values": [
         "[{'order_id': '4cf8f0c4-0b9f-45da-9d7b-9a5955bff25b', 'item': 'phone', 'quantity': 2, 'price': 476.91, 'status': 'delive",
         "[{'order_id': '9e5f18a7-5df3-438b-826d-94a8b289df39', 'item': 'shoes', 'quantity': 4, 'price': 540.57, 'status': 'delive",
@@ -299,12 +299,12 @@
       ]
     },
     "orders[0].order_id": {
-      "appearances": 1700,
+      "appearances": 18056,
       "type_counts": {
-        "uuid": 1700
+        "uuid": 18056
       },
       "first_seen": "2026-03-22T08:16:47.646648+00:00",
-      "last_seen": "2026-03-26T17:18:08.045495+00:00",
+      "last_seen": "2026-04-04T08:37:27.757412+00:00",
       "sample_values": [
         "4cf8f0c4-0b9f-45da-9d7b-9a5955bff25b",
         "9e5f18a7-5df3-438b-826d-94a8b289df39",
@@ -317,12 +317,12 @@
       ]
     },
     "orders[0].item": {
-      "appearances": 1700,
+      "appearances": 18056,
       "type_counts": {
-        "string": 1700
+        "string": 18056
       },
       "first_seen": "2026-03-22T08:16:47.647611+00:00",
-      "last_seen": "2026-03-26T17:18:08.049482+00:00",
+      "last_seen": "2026-04-04T08:37:27.764417+00:00",
       "sample_values": [
         "phone",
         "shoes",
@@ -332,12 +332,12 @@
       ]
     },
     "orders[0].quantity": {
-      "appearances": 1700,
+      "appearances": 18056,
       "type_counts": {
-        "integer": 1700
+        "integer": 18056
       },
       "first_seen": "2026-03-22T08:16:47.648629+00:00",
-      "last_seen": "2026-03-26T17:18:08.053487+00:00",
+      "last_seen": "2026-04-04T08:37:27.770398+00:00",
       "sample_values": [
         "2",
         "4",
@@ -346,12 +346,12 @@
       ]
     },
     "orders[0].price": {
-      "appearances": 1700,
+      "appearances": 18056,
       "type_counts": {
-        "float": 1700
+        "float": 18056
       },
       "first_seen": "2026-03-22T08:16:47.649622+00:00",
-      "last_seen": "2026-03-26T17:18:08.060381+00:00",
+      "last_seen": "2026-04-04T08:37:27.776414+00:00",
       "sample_values": [
         "476.91",
         "540.57",
@@ -364,12 +364,12 @@
       ]
     },
     "orders[0].status": {
-      "appearances": 1700,
+      "appearances": 18056,
       "type_counts": {
-        "string": 1700
+        "string": 18056
       },
       "first_seen": "2026-03-22T08:16:47.650663+00:00",
-      "last_seen": "2026-03-26T17:18:08.065383+00:00",
+      "last_seen": "2026-04-04T08:37:27.782398+00:00",
       "sample_values": [
         "delivered",
         "created",
@@ -378,12 +378,12 @@
       ]
     },
     "orders[0].ordered_at": {
-      "appearances": 1700,
+      "appearances": 18056,
       "type_counts": {
-        "timestamp": 1700
+        "timestamp": 18056
       },
       "first_seen": "2026-03-22T08:16:47.651711+00:00",
-      "last_seen": "2026-03-26T17:18:08.070380+00:00",
+      "last_seen": "2026-04-04T08:37:27.788398+00:00",
       "sample_values": [
         "2026-01-09T20:18:39",
         "2026-02-27T19:21:44",
@@ -396,12 +396,12 @@
       ]
     },
     "comments": {
-      "appearances": 1276,
+      "appearances": 12838,
       "type_counts": {
-        "list": 1276
+        "list": 12838
       },
       "first_seen": "2026-03-22T08:16:47.652812+00:00",
-      "last_seen": "2026-03-26T17:18:07.788965+00:00",
+      "last_seen": "2026-04-04T08:37:27.976997+00:00",
       "sample_values": [
         "[{'comment_id': '87d7e99f-8264-44fe-afb2-ff18bf4d91be', 'text': 'Matter ground rule word skill nature.', 'sentiment': 'n",
         "[{'comment_id': 'ab991c9b-5679-4948-893f-8e4466d189df', 'text': 'Check guy possible age perhaps apply street know.', 'se",
@@ -414,12 +414,12 @@
       ]
     },
     "comments[0].comment_id": {
-      "appearances": 1276,
+      "appearances": 12838,
       "type_counts": {
-        "uuid": 1276
+        "uuid": 12838
       },
       "first_seen": "2026-03-22T08:16:47.653824+00:00",
-      "last_seen": "2026-03-26T17:18:07.792966+00:00",
+      "last_seen": "2026-04-04T08:37:27.982756+00:00",
       "sample_values": [
         "87d7e99f-8264-44fe-afb2-ff18bf4d91be",
         "ab991c9b-5679-4948-893f-8e4466d189df",
@@ -432,12 +432,12 @@
       ]
     },
     "comments[0].text": {
-      "appearances": 1276,
+      "appearances": 12838,
       "type_counts": {
-        "string": 1276
+        "string": 12838
       },
       "first_seen": "2026-03-22T08:16:47.654832+00:00",
-      "last_seen": "2026-03-26T17:18:07.798069+00:00",
+      "last_seen": "2026-04-04T08:37:27.989858+00:00",
       "sample_values": [
         "Matter ground rule word skill nature.",
         "Check guy possible age perhaps apply street know.",
@@ -450,12 +450,12 @@
       ]
     },
     "comments[0].sentiment": {
-      "appearances": 1276,
+      "appearances": 12838,
       "type_counts": {
-        "string": 1276
+        "string": 12838
       },
       "first_seen": "2026-03-22T08:16:47.655865+00:00",
-      "last_seen": "2026-03-26T17:18:07.801967+00:00",
+      "last_seen": "2026-04-04T08:37:27.995756+00:00",
       "sample_values": [
         "neutral",
         "negative",
@@ -463,12 +463,12 @@
       ]
     },
     "comments[0].created_at": {
-      "appearances": 1276,
+      "appearances": 12838,
       "type_counts": {
-        "timestamp": 1276
+        "timestamp": 12838
       },
       "first_seen": "2026-03-22T08:16:47.656865+00:00",
-      "last_seen": "2026-03-26T17:18:07.806967+00:00",
+      "last_seen": "2026-04-04T08:37:28.001757+00:00",
       "sample_values": [
         "2026-01-18T06:48:47",
         "2026-01-02T05:04:43",
@@ -481,12 +481,12 @@
       ]
     },
     "comments[1].comment_id": {
-      "appearances": 994,
+      "appearances": 9692,
       "type_counts": {
-        "uuid": 994
+        "uuid": 9692
       },
       "first_seen": "2026-03-22T08:16:47.657941+00:00",
-      "last_seen": "2026-03-26T17:18:07.311640+00:00",
+      "last_seen": "2026-04-04T08:37:26.955724+00:00",
       "sample_values": [
         "19a1e7f0-9e54-4cfa-8986-41bb6004dfae",
         "1fadafef-2e07-42f0-b671-f4e4ba0881d6",
@@ -499,12 +499,12 @@
       ]
     },
     "comments[1].text": {
-      "appearances": 994,
+      "appearances": 9692,
       "type_counts": {
-        "string": 994
+        "string": 9692
       },
       "first_seen": "2026-03-22T08:16:47.659115+00:00",
-      "last_seen": "2026-03-26T17:18:07.315874+00:00",
+      "last_seen": "2026-04-04T08:37:26.962736+00:00",
       "sample_values": [
         "Day maintain clearly term financial minute pull.",
         "She five day character result performance know.",
@@ -517,12 +517,12 @@
       ]
     },
     "comments[1].sentiment": {
-      "appearances": 994,
+      "appearances": 9692,
       "type_counts": {
-        "string": 994
+        "string": 9692
       },
       "first_seen": "2026-03-22T08:16:47.660273+00:00",
-      "last_seen": "2026-03-26T17:18:07.321875+00:00",
+      "last_seen": "2026-04-04T08:37:26.968737+00:00",
       "sample_values": [
         "negative",
         "positive",
@@ -530,12 +530,12 @@
       ]
     },
     "comments[1].created_at": {
-      "appearances": 994,
+      "appearances": 9692,
       "type_counts": {
-        "timestamp": 994
+        "timestamp": 9692
       },
       "first_seen": "2026-03-22T08:16:47.661561+00:00",
-      "last_seen": "2026-03-26T17:18:07.327047+00:00",
+      "last_seen": "2026-04-04T08:37:26.974381+00:00",
       "sample_values": [
         "2026-01-31T08:16:47",
         "2026-01-06T19:25:34",
@@ -548,12 +548,12 @@
       ]
     },
     "comments[2].comment_id": {
-      "appearances": 616,
+      "appearances": 6336,
       "type_counts": {
-        "uuid": 616
+        "uuid": 6336
       },
       "first_seen": "2026-03-22T08:16:47.662741+00:00",
-      "last_seen": "2026-03-26T17:18:06.077670+00:00",
+      "last_seen": "2026-04-04T08:37:23.223978+00:00",
       "sample_values": [
         "abe21373-0d44-4ff2-810a-8fc80953606f",
         "556abb87-5251-4fca-b0f5-8fda5b7f5fc3",
@@ -566,12 +566,12 @@
       ]
     },
     "comments[2].text": {
-      "appearances": 616,
+      "appearances": 6336,
       "type_counts": {
-        "string": 616
+        "string": 6336
       },
       "first_seen": "2026-03-22T08:16:47.663972+00:00",
-      "last_seen": "2026-03-26T17:18:06.082017+00:00",
+      "last_seen": "2026-04-04T08:37:23.228980+00:00",
       "sample_values": [
         "Enjoy across structure before eye.",
         "Eat reason sister image impact shoulder.",
@@ -584,12 +584,12 @@
       ]
     },
     "comments[2].sentiment": {
-      "appearances": 616,
+      "appearances": 6336,
       "type_counts": {
-        "string": 616
+        "string": 6336
       },
       "first_seen": "2026-03-22T08:16:47.665119+00:00",
-      "last_seen": "2026-03-26T17:18:06.087673+00:00",
+      "last_seen": "2026-04-04T08:37:23.234982+00:00",
       "sample_values": [
         "neutral",
         "positive",
@@ -597,12 +597,12 @@
       ]
     },
     "comments[2].created_at": {
-      "appearances": 616,
+      "appearances": 6336,
       "type_counts": {
-        "timestamp": 616
+        "timestamp": 6336
       },
       "first_seen": "2026-03-22T08:16:47.666458+00:00",
-      "last_seen": "2026-03-26T17:18:06.093365+00:00",
+      "last_seen": "2026-04-04T08:37:23.240982+00:00",
       "sample_values": [
         "2026-02-06T11:31:36",
         "2026-02-18T08:05:39",
@@ -615,12 +615,12 @@
       ]
     },
     "devices": {
-      "appearances": 1362,
+      "appearances": 14308,
       "type_counts": {
-        "list": 1362
+        "list": 14308
       },
       "first_seen": "2026-03-22T08:16:47.667780+00:00",
-      "last_seen": "2026-03-26T17:18:08.215604+00:00",
+      "last_seen": "2026-04-04T08:37:28.007408+00:00",
       "sample_values": [
         "[{'device_id': '892e594c-3edb-42b3-a080-b49be89d4f9f', 'model': 'iPhone 14', 'os': 'Android', 'battery': 88, 'is_primary",
         "[{'device_id': 'a9fa7eae-d0e5-45c0-aac5-b6add3b69b57', 'model': 'Samsung S23', 'os': 'Linux', 'battery': 53, 'is_primary",
@@ -633,12 +633,12 @@
       ]
     },
     "devices[0].device_id": {
-      "appearances": 1362,
+      "appearances": 14308,
       "type_counts": {
-        "uuid": 1362
+        "uuid": 14308
       },
       "first_seen": "2026-03-22T08:16:47.669082+00:00",
-      "last_seen": "2026-03-26T17:18:08.220601+00:00",
+      "last_seen": "2026-04-04T08:37:28.013417+00:00",
       "sample_values": [
         "892e594c-3edb-42b3-a080-b49be89d4f9f",
         "a9fa7eae-d0e5-45c0-aac5-b6add3b69b57",
@@ -651,12 +651,12 @@
       ]
     },
     "devices[0].model": {
-      "appearances": 1362,
+      "appearances": 14308,
       "type_counts": {
-        "string": 1362
+        "string": 14308
       },
       "first_seen": "2026-03-22T08:16:47.670431+00:00",
-      "last_seen": "2026-03-26T17:18:08.226960+00:00",
+      "last_seen": "2026-04-04T08:37:28.019417+00:00",
       "sample_values": [
         "iPhone 14",
         "Samsung S23",
@@ -665,12 +665,12 @@
       ]
     },
     "devices[0].os": {
-      "appearances": 1362,
+      "appearances": 14308,
       "type_counts": {
-        "string": 1362
+        "string": 14308
       },
       "first_seen": "2026-03-22T08:16:47.671818+00:00",
-      "last_seen": "2026-03-26T17:18:08.232963+00:00",
+      "last_seen": "2026-04-04T08:37:28.025402+00:00",
       "sample_values": [
         "Android",
         "Linux",
@@ -680,12 +680,12 @@
       ]
     },
     "devices[0].battery": {
-      "appearances": 1362,
+      "appearances": 14308,
       "type_counts": {
-        "integer": 1362
+        "integer": 14308
       },
       "first_seen": "2026-03-22T08:16:47.673032+00:00",
-      "last_seen": "2026-03-26T17:18:08.236959+00:00",
+      "last_seen": "2026-04-04T08:37:28.031255+00:00",
       "sample_values": [
         "88",
         "53",
@@ -698,24 +698,24 @@
       ]
     },
     "devices[0].is_primary": {
-      "appearances": 1362,
+      "appearances": 14308,
       "type_counts": {
-        "boolean": 1362
+        "boolean": 14308
       },
       "first_seen": "2026-03-22T08:16:47.674529+00:00",
-      "last_seen": "2026-03-26T17:18:08.241565+00:00",
+      "last_seen": "2026-04-04T08:37:28.037412+00:00",
       "sample_values": [
         "False",
         "True"
       ]
     },
     "devices[1].device_id": {
-      "appearances": 1080,
+      "appearances": 11442,
       "type_counts": {
-        "uuid": 1080
+        "uuid": 11442
       },
       "first_seen": "2026-03-22T08:16:47.675864+00:00",
-      "last_seen": "2026-03-26T17:18:08.247408+00:00",
+      "last_seen": "2026-04-04T08:37:28.043522+00:00",
       "sample_values": [
         "43268426-52a5-4c37-8b08-5364ecb68d10",
         "7de97989-96d3-4bca-be7e-fce034815f25",
@@ -728,12 +728,12 @@
       ]
     },
     "devices[1].model": {
-      "appearances": 1080,
+      "appearances": 11442,
       "type_counts": {
-        "string": 1080
+        "string": 11442
       },
       "first_seen": "2026-03-22T08:16:47.677211+00:00",
-      "last_seen": "2026-03-26T17:18:08.252415+00:00",
+      "last_seen": "2026-04-04T08:37:28.049505+00:00",
       "sample_values": [
         "Samsung S23",
         "iPhone 14",
@@ -742,12 +742,12 @@
       ]
     },
     "devices[1].os": {
-      "appearances": 1080,
+      "appearances": 11442,
       "type_counts": {
-        "string": 1080
+        "string": 11442
       },
       "first_seen": "2026-03-22T08:16:47.678509+00:00",
-      "last_seen": "2026-03-26T17:18:08.257586+00:00",
+      "last_seen": "2026-04-04T08:37:28.055490+00:00",
       "sample_values": [
         "Android",
         "Linux",
@@ -757,12 +757,12 @@
       ]
     },
     "devices[1].battery": {
-      "appearances": 1080,
+      "appearances": 11442,
       "type_counts": {
-        "integer": 1080
+        "integer": 11442
       },
       "first_seen": "2026-03-22T08:16:47.680033+00:00",
-      "last_seen": "2026-03-26T17:18:08.262586+00:00",
+      "last_seen": "2026-04-04T08:37:28.061488+00:00",
       "sample_values": [
         "38",
         "8",
@@ -775,24 +775,24 @@
       ]
     },
     "devices[1].is_primary": {
-      "appearances": 1078,
+      "appearances": 11440,
       "type_counts": {
-        "boolean": 1078
+        "boolean": 11440
       },
       "first_seen": "2026-03-22T08:16:47.681542+00:00",
-      "last_seen": "2026-03-26T17:18:07.855344+00:00",
+      "last_seen": "2026-04-04T08:37:28.066489+00:00",
       "sample_values": [
         "False",
         "True"
       ]
     },
     "devices[2].device_id": {
-      "appearances": 850,
+      "appearances": 8718,
       "type_counts": {
-        "uuid": 850
+        "uuid": 8718
       },
       "first_seen": "2026-03-22T08:16:47.683253+00:00",
-      "last_seen": "2026-03-26T17:18:07.860348+00:00",
+      "last_seen": "2026-04-04T08:37:28.072496+00:00",
       "sample_values": [
         "def2383c-25d4-4811-aa60-2de1552827e6",
         "d42990b7-2150-41aa-83e5-926f7dde6978",
@@ -805,12 +805,12 @@
       ]
     },
     "devices[2].model": {
-      "appearances": 850,
+      "appearances": 8718,
       "type_counts": {
-        "string": 850
+        "string": 8718
       },
       "first_seen": "2026-03-22T08:16:47.685212+00:00",
-      "last_seen": "2026-03-26T17:18:07.864455+00:00",
+      "last_seen": "2026-04-04T08:37:28.077489+00:00",
       "sample_values": [
         "Pixel 8",
         "Samsung S23",
@@ -819,12 +819,12 @@
       ]
     },
     "devices[2].os": {
-      "appearances": 850,
+      "appearances": 8718,
       "type_counts": {
-        "string": 850
+        "string": 8718
       },
       "first_seen": "2026-03-22T08:16:47.686684+00:00",
-      "last_seen": "2026-03-26T17:18:07.868395+00:00",
+      "last_seen": "2026-04-04T08:37:28.083489+00:00",
       "sample_values": [
         "Linux",
         "Android",
@@ -834,12 +834,12 @@
       ]
     },
     "devices[2].battery": {
-      "appearances": 850,
+      "appearances": 8718,
       "type_counts": {
-        "integer": 850
+        "integer": 8718
       },
       "first_seen": "2026-03-22T08:16:47.688078+00:00",
-      "last_seen": "2026-03-26T17:18:07.872451+00:00",
+      "last_seen": "2026-04-04T08:37:28.090278+00:00",
       "sample_values": [
         "1",
         "32",
@@ -852,24 +852,24 @@
       ]
     },
     "devices[2].is_primary": {
-      "appearances": 850,
+      "appearances": 8718,
       "type_counts": {
-        "boolean": 850
+        "boolean": 8718
       },
       "first_seen": "2026-03-22T08:16:47.689450+00:00",
-      "last_seen": "2026-03-26T17:18:07.877459+00:00",
+      "last_seen": "2026-04-04T08:37:28.096279+00:00",
       "sample_values": [
         "False",
         "True"
       ]
     },
     "devices[3].device_id": {
-      "appearances": 574,
+      "appearances": 5780,
       "type_counts": {
-        "uuid": 574
+        "uuid": 5780
       },
       "first_seen": "2026-03-22T08:16:47.691153+00:00",
-      "last_seen": "2026-03-26T17:18:07.881696+00:00",
+      "last_seen": "2026-04-04T08:37:28.102294+00:00",
       "sample_values": [
         "a24ed061-f024-4cc6-93c1-1452e811b5d4",
         "950de46e-44e7-4297-be2f-3a942153a83e",
@@ -882,12 +882,12 @@
       ]
     },
     "devices[3].model": {
-      "appearances": 574,
+      "appearances": 5780,
       "type_counts": {
-        "string": 574
+        "string": 5780
       },
       "first_seen": "2026-03-22T08:16:47.693040+00:00",
-      "last_seen": "2026-03-26T17:18:07.885695+00:00",
+      "last_seen": "2026-04-04T08:37:28.108294+00:00",
       "sample_values": [
         "Pixel 8",
         "Samsung S23",
@@ -896,12 +896,12 @@
       ]
     },
     "devices[3].os": {
-      "appearances": 574,
+      "appearances": 5780,
       "type_counts": {
-        "string": 574
+        "string": 5780
       },
       "first_seen": "2026-03-22T08:16:47.694941+00:00",
-      "last_seen": "2026-03-26T17:18:07.890691+00:00",
+      "last_seen": "2026-04-04T08:37:28.115380+00:00",
       "sample_values": [
         "MacOS",
         "Linux",
@@ -911,12 +911,12 @@
       ]
     },
     "devices[3].battery": {
-      "appearances": 574,
+      "appearances": 5780,
       "type_counts": {
-        "integer": 574
+        "integer": 5780
       },
       "first_seen": "2026-03-22T08:16:47.696674+00:00",
-      "last_seen": "2026-03-26T17:18:07.895693+00:00",
+      "last_seen": "2026-04-04T08:37:28.121380+00:00",
       "sample_values": [
         "14",
         "58",
@@ -929,24 +929,24 @@
       ]
     },
     "devices[3].is_primary": {
-      "appearances": 574,
+      "appearances": 5780,
       "type_counts": {
-        "boolean": 574
+        "boolean": 5780
       },
       "first_seen": "2026-03-22T08:16:47.698297+00:00",
-      "last_seen": "2026-03-26T17:18:07.899693+00:00",
+      "last_seen": "2026-04-04T08:37:28.127380+00:00",
       "sample_values": [
         "False",
         "True"
       ]
     },
     "devices[4].device_id": {
-      "appearances": 318,
+      "appearances": 2896,
       "type_counts": {
-        "uuid": 318
+        "uuid": 2896
       },
       "first_seen": "2026-03-22T08:16:47.699953+00:00",
-      "last_seen": "2026-03-26T17:18:07.437926+00:00",
+      "last_seen": "2026-04-04T08:37:22.575576+00:00",
       "sample_values": [
         "0099fe4b-f4d1-43d2-8b7b-320badb1b5ab",
         "2cd467ea-e779-45c4-a38f-d8af85889538",
@@ -959,12 +959,12 @@
       ]
     },
     "devices[4].model": {
-      "appearances": 318,
+      "appearances": 2896,
       "type_counts": {
-        "string": 318
+        "string": 2896
       },
       "first_seen": "2026-03-22T08:16:47.701677+00:00",
-      "last_seen": "2026-03-26T17:18:07.443066+00:00",
+      "last_seen": "2026-04-04T08:37:22.581817+00:00",
       "sample_values": [
         "Pixel 8",
         "OnePlus 12",
@@ -973,12 +973,12 @@
       ]
     },
     "devices[4].os": {
-      "appearances": 318,
+      "appearances": 2896,
       "type_counts": {
-        "string": 318
+        "string": 2896
       },
       "first_seen": "2026-03-22T08:16:47.703254+00:00",
-      "last_seen": "2026-03-26T17:18:07.447581+00:00",
+      "last_seen": "2026-04-04T08:37:22.587819+00:00",
       "sample_values": [
         "iOS",
         "Windows",
@@ -988,12 +988,12 @@
       ]
     },
     "devices[4].battery": {
-      "appearances": 318,
+      "appearances": 2896,
       "type_counts": {
-        "integer": 318
+        "integer": 2896
       },
       "first_seen": "2026-03-22T08:16:47.704879+00:00",
-      "last_seen": "2026-03-26T17:18:07.452770+00:00",
+      "last_seen": "2026-04-04T08:37:22.593814+00:00",
       "sample_values": [
         "48",
         "6",
@@ -1006,24 +1006,24 @@
       ]
     },
     "devices[4].is_primary": {
-      "appearances": 318,
+      "appearances": 2896,
       "type_counts": {
-        "boolean": 318
+        "boolean": 2896
       },
       "first_seen": "2026-03-22T08:16:47.706551+00:00",
-      "last_seen": "2026-03-26T17:18:07.456883+00:00",
+      "last_seen": "2026-04-04T08:37:22.598798+00:00",
       "sample_values": [
         "True",
         "False"
       ]
     },
     "city": {
-      "appearances": 1532,
+      "appearances": 15718,
       "type_counts": {
-        "string": 1532
+        "string": 15718
       },
       "first_seen": "2026-03-22T08:16:47.958372+00:00",
-      "last_seen": "2026-03-26T18:07:14.116784+00:00",
+      "last_seen": "2026-04-04T08:37:27.672575+00:00",
       "sample_values": [
         "Randybury",
         "Mccoyhaven",
@@ -1036,12 +1036,12 @@
       ]
     },
     "app_version": {
-      "appearances": 1104,
+      "appearances": 11712,
       "type_counts": {
-        "string": 1104
+        "string": 11712
       },
       "first_seen": "2026-03-22T08:16:47.962752+00:00",
-      "last_seen": "2026-03-26T17:18:07.656350+00:00",
+      "last_seen": "2026-04-04T08:37:27.689467+00:00",
       "sample_values": [
         "v4.1.8",
         "v4.7.7",
@@ -1054,12 +1054,12 @@
       ]
     },
     "orders[1].order_id": {
-      "appearances": 1396,
+      "appearances": 14982,
       "type_counts": {
-        "uuid": 1396
+        "uuid": 14982
       },
       "first_seen": "2026-03-22T08:16:48.005232+00:00",
-      "last_seen": "2026-03-26T17:18:08.074385+00:00",
+      "last_seen": "2026-04-04T08:37:27.793415+00:00",
       "sample_values": [
         "aae059aa-62e2-40af-b588-10bf95e0c3cd",
         "34eaa2a0-2052-4dd2-b4f9-5e21371e3958",
@@ -1072,12 +1072,12 @@
       ]
     },
     "orders[1].item": {
-      "appearances": 1396,
+      "appearances": 14982,
       "type_counts": {
-        "string": 1396
+        "string": 14982
       },
       "first_seen": "2026-03-22T08:16:48.007296+00:00",
-      "last_seen": "2026-03-26T17:18:08.080380+00:00",
+      "last_seen": "2026-04-04T08:37:27.799401+00:00",
       "sample_values": [
         "book",
         "bag",
@@ -1087,12 +1087,12 @@
       ]
     },
     "orders[1].quantity": {
-      "appearances": 1396,
+      "appearances": 14982,
       "type_counts": {
-        "integer": 1396
+        "integer": 14982
       },
       "first_seen": "2026-03-22T08:16:48.009753+00:00",
-      "last_seen": "2026-03-26T17:18:08.086386+00:00",
+      "last_seen": "2026-04-04T08:37:27.805414+00:00",
       "sample_values": [
         "2",
         "4",
@@ -1101,12 +1101,12 @@
       ]
     },
     "orders[1].price": {
-      "appearances": 1396,
+      "appearances": 14982,
       "type_counts": {
-        "float": 1396
+        "float": 14982
       },
       "first_seen": "2026-03-22T08:16:48.012000+00:00",
-      "last_seen": "2026-03-26T17:18:08.091385+00:00",
+      "last_seen": "2026-04-04T08:37:27.813591+00:00",
       "sample_values": [
         "141.02",
         "32.76",
@@ -1119,12 +1119,12 @@
       ]
     },
     "orders[1].status": {
-      "appearances": 1396,
+      "appearances": 14982,
       "type_counts": {
-        "string": 1396
+        "string": 14982
       },
       "first_seen": "2026-03-22T08:16:48.014516+00:00",
-      "last_seen": "2026-03-26T17:18:08.095382+00:00",
+      "last_seen": "2026-04-04T08:37:27.819655+00:00",
       "sample_values": [
         "shipped",
         "delivered",
@@ -1133,12 +1133,12 @@
       ]
     },
     "orders[1].ordered_at": {
-      "appearances": 1396,
+      "appearances": 14982,
       "type_counts": {
-        "timestamp": 1396
+        "timestamp": 14982
       },
       "first_seen": "2026-03-22T08:16:48.016713+00:00",
-      "last_seen": "2026-03-26T17:18:08.100381+00:00",
+      "last_seen": "2026-04-04T08:37:27.825654+00:00",
       "sample_values": [
         "2026-01-19T03:44:23",
         "2026-03-18T14:21:11",
@@ -1151,12 +1151,12 @@
       ]
     },
     "orders[2].order_id": {
-      "appearances": 1134,
+      "appearances": 12084,
       "type_counts": {
-        "uuid": 1134
+        "uuid": 12084
       },
       "first_seen": "2026-03-22T08:16:48.018936+00:00",
-      "last_seen": "2026-03-26T17:18:08.104381+00:00",
+      "last_seen": "2026-04-04T08:37:27.835653+00:00",
       "sample_values": [
         "46c057bc-2a57-4262-9752-191cdb9f08a7",
         "b5f7d3c2-b326-478b-b9b5-4214f5807988",
@@ -1169,12 +1169,12 @@
       ]
     },
     "orders[2].item": {
-      "appearances": 1134,
+      "appearances": 12084,
       "type_counts": {
-        "string": 1134
+        "string": 12084
       },
       "first_seen": "2026-03-22T08:16:48.021183+00:00",
-      "last_seen": "2026-03-26T17:18:08.109381+00:00",
+      "last_seen": "2026-04-04T08:37:27.842637+00:00",
       "sample_values": [
         "book",
         "bag",
@@ -1184,12 +1184,12 @@
       ]
     },
     "orders[2].quantity": {
-      "appearances": 1134,
+      "appearances": 12084,
       "type_counts": {
-        "integer": 1134
+        "integer": 12084
       },
       "first_seen": "2026-03-22T08:16:48.023450+00:00",
-      "last_seen": "2026-03-26T17:18:08.113488+00:00",
+      "last_seen": "2026-04-04T08:37:27.848467+00:00",
       "sample_values": [
         "2",
         "3",
@@ -1198,12 +1198,12 @@
       ]
     },
     "orders[2].price": {
-      "appearances": 1134,
+      "appearances": 12084,
       "type_counts": {
-        "float": 1134
+        "float": 12084
       },
       "first_seen": "2026-03-22T08:16:48.025715+00:00",
-      "last_seen": "2026-03-26T17:18:08.118381+00:00",
+      "last_seen": "2026-04-04T08:37:27.854483+00:00",
       "sample_values": [
         "356.36",
         "132.37",
@@ -1216,12 +1216,12 @@
       ]
     },
     "orders[2].status": {
-      "appearances": 1134,
+      "appearances": 12084,
       "type_counts": {
-        "string": 1134
+        "string": 12084
       },
       "first_seen": "2026-03-22T08:16:48.027934+00:00",
-      "last_seen": "2026-03-26T17:18:08.123381+00:00",
+      "last_seen": "2026-04-04T08:37:27.859468+00:00",
       "sample_values": [
         "created",
         "paid",
@@ -1230,12 +1230,12 @@
       ]
     },
     "orders[2].ordered_at": {
-      "appearances": 1134,
+      "appearances": 12084,
       "type_counts": {
-        "timestamp": 1134
+        "timestamp": 12084
       },
       "first_seen": "2026-03-22T08:16:48.030185+00:00",
-      "last_seen": "2026-03-26T17:18:08.128380+00:00",
+      "last_seen": "2026-04-04T08:37:27.865621+00:00",
       "sample_values": [
         "2026-01-05T12:42:25",
         "2026-01-09T21:46:24",
@@ -1248,12 +1248,12 @@
       ]
     },
     "orders[3].order_id": {
-      "appearances": 838,
+      "appearances": 9034,
       "type_counts": {
-        "uuid": 838
+        "uuid": 9034
       },
       "first_seen": "2026-03-22T08:16:48.032386+00:00",
-      "last_seen": "2026-03-26T17:18:08.131977+00:00",
+      "last_seen": "2026-04-04T08:37:27.871622+00:00",
       "sample_values": [
         "aed55dc2-02d4-488d-921e-00b193625122",
         "60f2ba92-87cc-49ef-8004-2acc623c0a35",
@@ -1266,12 +1266,12 @@
       ]
     },
     "orders[3].item": {
-      "appearances": 838,
+      "appearances": 9034,
       "type_counts": {
-        "string": 838
+        "string": 9034
       },
       "first_seen": "2026-03-22T08:16:48.034819+00:00",
-      "last_seen": "2026-03-26T17:18:08.137011+00:00",
+      "last_seen": "2026-04-04T08:37:27.876621+00:00",
       "sample_values": [
         "book",
         "shoes",
@@ -1281,12 +1281,12 @@
       ]
     },
     "orders[3].quantity": {
-      "appearances": 838,
+      "appearances": 9034,
       "type_counts": {
-        "integer": 838
+        "integer": 9034
       },
       "first_seen": "2026-03-22T08:16:48.037339+00:00",
-      "last_seen": "2026-03-26T17:18:08.140975+00:00",
+      "last_seen": "2026-04-04T08:37:27.881621+00:00",
       "sample_values": [
         "1",
         "3",
@@ -1295,12 +1295,12 @@
       ]
     },
     "orders[3].price": {
-      "appearances": 838,
+      "appearances": 9034,
       "type_counts": {
-        "float": 838
+        "float": 9034
       },
       "first_seen": "2026-03-22T08:16:48.039850+00:00",
-      "last_seen": "2026-03-26T17:18:08.146164+00:00",
+      "last_seen": "2026-04-04T08:37:27.887622+00:00",
       "sample_values": [
         "143.53",
         "469.83",
@@ -1313,12 +1313,12 @@
       ]
     },
     "orders[3].status": {
-      "appearances": 838,
+      "appearances": 9034,
       "type_counts": {
-        "string": 838
+        "string": 9034
       },
       "first_seen": "2026-03-22T08:16:48.042391+00:00",
-      "last_seen": "2026-03-26T17:18:08.151558+00:00",
+      "last_seen": "2026-04-04T08:37:27.893621+00:00",
       "sample_values": [
         "created",
         "delivered",
@@ -1327,12 +1327,12 @@
       ]
     },
     "orders[3].ordered_at": {
-      "appearances": 838,
+      "appearances": 9034,
       "type_counts": {
-        "timestamp": 838
+        "timestamp": 9034
       },
       "first_seen": "2026-03-22T08:16:48.044938+00:00",
-      "last_seen": "2026-03-26T17:18:08.156550+00:00",
+      "last_seen": "2026-04-04T08:37:27.899570+00:00",
       "sample_values": [
         "2026-01-22T01:01:52",
         "2026-01-14T12:07:10",
@@ -1345,12 +1345,12 @@
       ]
     },
     "orders[4].order_id": {
-      "appearances": 548,
+      "appearances": 5926,
       "type_counts": {
-        "uuid": 548
+        "uuid": 5926
       },
       "first_seen": "2026-03-22T08:16:48.047478+00:00",
-      "last_seen": "2026-03-26T17:18:08.160548+00:00",
+      "last_seen": "2026-04-04T08:37:27.906727+00:00",
       "sample_values": [
         "64b32747-429d-4c64-af5d-8dee3701b944",
         "17b11e0e-9834-479a-8e36-bc0c93f5f377",
@@ -1363,12 +1363,12 @@
       ]
     },
     "orders[4].item": {
-      "appearances": 548,
+      "appearances": 5926,
       "type_counts": {
-        "string": 548
+        "string": 5926
       },
       "first_seen": "2026-03-22T08:16:48.050134+00:00",
-      "last_seen": "2026-03-26T17:18:08.165625+00:00",
+      "last_seen": "2026-04-04T08:37:27.911741+00:00",
       "sample_values": [
         "shoes",
         "laptop",
@@ -1378,12 +1378,12 @@
       ]
     },
     "orders[4].quantity": {
-      "appearances": 548,
+      "appearances": 5926,
       "type_counts": {
-        "integer": 548
+        "integer": 5926
       },
       "first_seen": "2026-03-22T08:16:48.052721+00:00",
-      "last_seen": "2026-03-26T17:18:08.169514+00:00",
+      "last_seen": "2026-04-04T08:37:27.917742+00:00",
       "sample_values": [
         "1",
         "2",
@@ -1392,12 +1392,12 @@
       ]
     },
     "orders[4].price": {
-      "appearances": 548,
+      "appearances": 5926,
       "type_counts": {
-        "float": 548
+        "float": 5926
       },
       "first_seen": "2026-03-22T08:16:48.055818+00:00",
-      "last_seen": "2026-03-26T17:18:08.174514+00:00",
+      "last_seen": "2026-04-04T08:37:27.923296+00:00",
       "sample_values": [
         "312.38",
         "556.05",
@@ -1410,12 +1410,12 @@
       ]
     },
     "orders[4].status": {
-      "appearances": 548,
+      "appearances": 5926,
       "type_counts": {
-        "string": 548
+        "string": 5926
       },
       "first_seen": "2026-03-22T08:16:48.058761+00:00",
-      "last_seen": "2026-03-26T17:18:08.178514+00:00",
+      "last_seen": "2026-04-04T08:37:27.929384+00:00",
       "sample_values": [
         "shipped",
         "paid",
@@ -1424,12 +1424,12 @@
       ]
     },
     "orders[4].ordered_at": {
-      "appearances": 548,
+      "appearances": 5926,
       "type_counts": {
-        "timestamp": 548
+        "timestamp": 5926
       },
       "first_seen": "2026-03-22T08:16:48.061495+00:00",
-      "last_seen": "2026-03-26T17:18:08.183522+00:00",
+      "last_seen": "2026-04-04T08:37:27.935451+00:00",
       "sample_values": [
         "2026-01-15T03:51:03",
         "2026-02-01T20:43:57",
@@ -1442,12 +1442,12 @@
       ]
     },
     "orders[5].order_id": {
-      "appearances": 316,
+      "appearances": 3042,
       "type_counts": {
-        "uuid": 316
+        "uuid": 3042
       },
       "first_seen": "2026-03-22T08:16:48.064230+00:00",
-      "last_seen": "2026-03-26T17:18:08.188624+00:00",
+      "last_seen": "2026-04-04T08:37:27.941367+00:00",
       "sample_values": [
         "8bceecfd-84d1-406f-8253-8d10c9e12df2",
         "f4cfe137-0f07-486f-bccf-ce1e0e930c61",
@@ -1460,12 +1460,12 @@
       ]
     },
     "orders[5].item": {
-      "appearances": 316,
+      "appearances": 3042,
       "type_counts": {
-        "string": 316
+        "string": 3042
       },
       "first_seen": "2026-03-22T08:16:48.066893+00:00",
-      "last_seen": "2026-03-26T17:18:08.193559+00:00",
+      "last_seen": "2026-04-04T08:37:27.947923+00:00",
       "sample_values": [
         "bag",
         "phone",
@@ -1475,12 +1475,12 @@
       ]
     },
     "orders[5].quantity": {
-      "appearances": 316,
+      "appearances": 3042,
       "type_counts": {
-        "integer": 316
+        "integer": 3042
       },
       "first_seen": "2026-03-22T08:16:48.069415+00:00",
-      "last_seen": "2026-03-26T17:18:08.197452+00:00",
+      "last_seen": "2026-04-04T08:37:27.953907+00:00",
       "sample_values": [
         "2",
         "4",
@@ -1489,12 +1489,12 @@
       ]
     },
     "orders[5].price": {
-      "appearances": 316,
+      "appearances": 3042,
       "type_counts": {
-        "float": 316
+        "float": 3042
       },
       "first_seen": "2026-03-22T08:16:48.072059+00:00",
-      "last_seen": "2026-03-26T17:18:08.201708+00:00",
+      "last_seen": "2026-04-04T08:37:27.959907+00:00",
       "sample_values": [
         "327.23",
         "529.8",
@@ -1507,12 +1507,12 @@
       ]
     },
     "orders[5].status": {
-      "appearances": 316,
+      "appearances": 3042,
       "type_counts": {
-        "string": 316
+        "string": 3042
       },
       "first_seen": "2026-03-22T08:16:48.074794+00:00",
-      "last_seen": "2026-03-26T17:18:08.206709+00:00",
+      "last_seen": "2026-04-04T08:37:27.964910+00:00",
       "sample_values": [
         "delivered",
         "created",
@@ -1521,12 +1521,12 @@
       ]
     },
     "orders[5].ordered_at": {
-      "appearances": 316,
+      "appearances": 3042,
       "type_counts": {
-        "timestamp": 316
+        "timestamp": 3042
       },
       "first_seen": "2026-03-22T08:16:48.077502+00:00",
-      "last_seen": "2026-03-26T17:18:08.211695+00:00",
+      "last_seen": "2026-04-04T08:37:27.971048+00:00",
       "sample_values": [
         "2026-03-08T19:00:44",
         "2026-01-28T06:29:16",
@@ -1539,12 +1539,12 @@
       ]
     },
     "email": {
-      "appearances": 700,
+      "appearances": 7016,
       "type_counts": {
-        "email": 700
+        "email": 7016
       },
       "first_seen": "2026-03-22T08:16:48.284915+00:00",
-      "last_seen": "2026-03-26T18:07:14.108221+00:00",
+      "last_seen": "2026-04-04T08:37:27.427915+00:00",
       "sample_values": [
         "dylan56@example.net",
         "lindseygarcia@example.org",
@@ -1557,12 +1557,12 @@
       ]
     },
     "retry_count": {
-      "appearances": 1444,
+      "appearances": 14710,
       "type_counts": {
-        "integer": 1444
+        "integer": 14710
       },
       "first_seen": "2026-03-22T08:16:48.300382+00:00",
-      "last_seen": "2026-03-26T17:18:07.991545+00:00",
+      "last_seen": "2026-04-04T08:37:27.695468+00:00",
       "sample_values": [
         "3",
         "2",
@@ -1573,12 +1573,12 @@
       ]
     },
     "comments[3].comment_id": {
-      "appearances": 294,
+      "appearances": 3144,
       "type_counts": {
-        "uuid": 294
+        "uuid": 3144
       },
       "first_seen": "2026-03-22T08:16:48.347788+00:00",
-      "last_seen": "2026-03-26T17:18:02.434318+00:00",
+      "last_seen": "2026-04-04T08:37:19.388076+00:00",
       "sample_values": [
         "9631480f-4e6a-4a64-9ccf-965707cd37e2",
         "7592ccda-007b-452f-bbcd-3d46f5181778",
@@ -1591,12 +1591,12 @@
       ]
     },
     "comments[3].text": {
-      "appearances": 294,
+      "appearances": 3144,
       "type_counts": {
-        "string": 294
+        "string": 3144
       },
       "first_seen": "2026-03-22T08:16:48.350731+00:00",
-      "last_seen": "2026-03-26T17:18:02.439419+00:00",
+      "last_seen": "2026-04-04T08:37:19.394074+00:00",
       "sample_values": [
         "Responsibility most citizen technology these recognize change almost.",
         "Yard receive with information.",
@@ -1609,12 +1609,12 @@
       ]
     },
     "comments[3].sentiment": {
-      "appearances": 294,
+      "appearances": 3144,
       "type_counts": {
-        "string": 294
+        "string": 3144
       },
       "first_seen": "2026-03-22T08:16:48.353583+00:00",
-      "last_seen": "2026-03-26T17:18:02.444418+00:00",
+      "last_seen": "2026-04-04T08:37:19.399946+00:00",
       "sample_values": [
         "positive",
         "neutral",
@@ -1622,12 +1622,12 @@
       ]
     },
     "comments[3].created_at": {
-      "appearances": 294,
+      "appearances": 3144,
       "type_counts": {
-        "timestamp": 294
+        "timestamp": 3144
       },
       "first_seen": "2026-03-22T08:16:48.356470+00:00",
-      "last_seen": "2026-03-26T17:18:02.448418+00:00",
+      "last_seen": "2026-04-04T08:37:19.404947+00:00",
       "sample_values": [
         "2026-03-14T10:35:36",
         "2026-01-30T02:11:56",
@@ -1640,12 +1640,12 @@
       ]
     },
     "age": {
-      "appearances": 178,
+      "appearances": 1694,
       "type_counts": {
-        "integer": 178
+        "integer": 1694
       },
       "first_seen": "2026-03-22T08:16:48.495285+00:00",
-      "last_seen": "2026-03-26T18:07:14.309204+00:00",
+      "last_seen": "2026-04-04T08:37:24.822274+00:00",
       "sample_values": [
         "50",
         "43",
@@ -1658,12 +1658,12 @@
       ]
     },
     "phone": {
-      "appearances": 638,
+      "appearances": 6022,
       "type_counts": {
-        "string": 638
+        "string": 6022
       },
       "first_seen": "2026-03-22T08:16:48.501879+00:00",
-      "last_seen": "2026-03-26T17:18:07.964399+00:00",
+      "last_seen": "2026-04-04T08:37:27.044484+00:00",
       "sample_values": [
         "939-562-2132x07426",
         "(762)996-4424",
@@ -1676,12 +1676,12 @@
       ]
     },
     "postal_code": {
-      "appearances": 298,
+      "appearances": 2978,
       "type_counts": {
-        "string": 298
+        "string": 2978
       },
       "first_seen": "2026-03-22T08:16:48.511684+00:00",
-      "last_seen": "2026-03-26T17:18:01.825013+00:00",
+      "last_seen": "2026-04-04T08:37:24.379375+00:00",
       "sample_values": [
         "12048",
         "13133",
@@ -1694,12 +1694,12 @@
       ]
     },
     "subscription": {
-      "appearances": 162,
+      "appearances": 1726,
       "type_counts": {
-        "string": 162
+        "string": 1726
       },
       "first_seen": "2026-03-22T08:16:48.760038+00:00",
-      "last_seen": "2026-03-26T17:18:02.162967+00:00",
+      "last_seen": "2026-04-04T08:37:17.574516+00:00",
       "sample_values": [
         "premium",
         "free",
@@ -1708,12 +1708,12 @@
       ]
     },
     "device_model": {
-      "appearances": 644,
+      "appearances": 5958,
       "type_counts": {
-        "string": 644
+        "string": 5958
       },
       "first_seen": "2026-03-22T08:16:49.048416+00:00",
-      "last_seen": "2026-03-26T17:18:07.982546+00:00",
+      "last_seen": "2026-04-04T08:37:27.073861+00:00",
       "sample_values": [
         "Pixel 8",
         "iPhone 14",
@@ -1722,12 +1722,12 @@
       ]
     },
     "last_seen": {
-      "appearances": 582,
+      "appearances": 5906,
       "type_counts": {
-        "timestamp": 582
+        "timestamp": 5906
       },
       "first_seen": "2026-03-22T08:16:49.348434+00:00",
-      "last_seen": "2026-03-26T17:18:07.660656+00:00",
+      "last_seen": "2026-04-04T08:37:26.486044+00:00",
       "sample_values": [
         "2026-03-22T06:34:47.728343+00:00",
         "2026-03-22T08:06:47.760431+00:00",
@@ -1740,12 +1740,12 @@
       ]
     },
     "audit": {
-      "appearances": 362,
+      "appearances": 4045,
       "type_counts": {
-        "dict": 362
+        "dict": 4045
       },
       "first_seen": "2026-03-22T08:16:49.898390+00:00",
-      "last_seen": "2026-03-26T17:18:07.459990+00:00",
+      "last_seen": "2026-04-04T08:37:25.910079+00:00",
       "sample_values": [
         "{'source': 'mobile_app', 'risk_score': 80, 'flags': ['center']}",
         "{'source': 'mobile_app', 'risk_score': 78, 'flags': ['him', 'their', 'act']}",
@@ -1758,12 +1758,12 @@
       ]
     },
     "audit.source": {
-      "appearances": 724,
+      "appearances": 8090,
       "type_counts": {
-        "string": 724
+        "string": 8090
       },
       "first_seen": "2026-03-22T08:16:49.900028+00:00",
-      "last_seen": "2026-03-26T17:18:07.464811+00:00",
+      "last_seen": "2026-04-04T08:37:25.916078+00:00",
       "sample_values": [
         "mobile_app",
         "internal",
@@ -1772,12 +1772,12 @@
       ]
     },
     "audit.risk_score": {
-      "appearances": 724,
+      "appearances": 8090,
       "type_counts": {
-        "integer": 724
+        "integer": 8090
       },
       "first_seen": "2026-03-22T08:16:49.903607+00:00",
-      "last_seen": "2026-03-26T17:18:07.469945+00:00",
+      "last_seen": "2026-04-04T08:37:25.922079+00:00",
       "sample_values": [
         "80",
         "78",
@@ -1790,12 +1790,12 @@
       ]
     },
     "audit.flags": {
-      "appearances": 724,
+      "appearances": 8090,
       "type_counts": {
-        "list": 724
+        "list": 8090
       },
       "first_seen": "2026-03-22T08:16:49.907150+00:00",
-      "last_seen": "2026-03-26T17:18:07.474945+00:00",
+      "last_seen": "2026-04-04T08:37:25.928200+00:00",
       "sample_values": [
         "['center']",
         "['him', 'their', 'act']",
@@ -1808,12 +1808,12 @@
       ]
     },
     "audit.flags[0]": {
-      "appearances": 362,
+      "appearances": 4045,
       "type_counts": {
-        "string": 362
+        "string": 4045
       },
       "first_seen": "2026-03-22T08:16:49.910570+00:00",
-      "last_seen": "2026-03-26T17:18:07.477047+00:00",
+      "last_seen": "2026-04-04T08:37:25.932089+00:00",
       "sample_values": [
         "center",
         "him",
@@ -1826,12 +1826,12 @@
       ]
     },
     "audit.flags[1]": {
-      "appearances": 238,
+      "appearances": 2659,
       "type_counts": {
-        "string": 238
+        "string": 2659
       },
       "first_seen": "2026-03-22T08:16:53.400875+00:00",
-      "last_seen": "2026-03-26T17:18:07.479050+00:00",
+      "last_seen": "2026-04-04T08:37:24.734106+00:00",
       "sample_values": [
         "their",
         "mention",
@@ -1844,12 +1844,12 @@
       ]
     },
     "audit.flags[2]": {
-      "appearances": 115,
+      "appearances": 1357,
       "type_counts": {
-        "string": 115
+        "string": 1357
       },
       "first_seen": "2026-03-22T08:16:53.402778+00:00",
-      "last_seen": "2026-03-26T17:18:03.066426+00:00",
+      "last_seen": "2026-04-04T08:37:24.737123+00:00",
       "sample_values": [
         "act",
         "important",
@@ -1862,12 +1862,12 @@
       ]
     },
     "event_type": {
-      "appearances": 182,
+      "appearances": 1760,
       "type_counts": {
-        "string": 182
+        "string": 1760
       },
       "first_seen": "2026-03-22T08:16:56.090657+00:00",
-      "last_seen": "2026-03-26T17:18:07.977190+00:00",
+      "last_seen": "2026-04-04T08:37:19.543662+00:00",
       "sample_values": [
         "logout",
         "purchase",
@@ -2001,9 +2001,474 @@
       "decided_at": "2026-03-22T08:17:12.746692+00:00"
     },
     "status": {
-      "backend": "Buffer",
-      "reason": "Field 'status' has only 8 observations (< 10) - keeping in Buffer",
-      "decided_at": "2026-03-26T18:07:14.262989+00:00"
+      "backend": "MongoDB",
+      "reason": "Field 'status' has only 8 observations (< 10) - routing to MongoDB (default for unmapped fields)",
+      "decided_at": "2026-03-31T00:00:00.000000+00:00"
+    },
+    "comments[0].created_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].device_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[2].sentiment": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].price": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].is_primary": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.security.mfa_enabled": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].ordered_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].model": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].os": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].model": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].price": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[2].text": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].battery": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].model": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].order_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].status": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].order_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].price": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].status": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[0].sentiment": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.preferences.currency": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].model": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.security.last_password_change": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.preferences.theme": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "username": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].os": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].quantity": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.flags": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[3].comment_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.flags[1]": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].item": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[1].text": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].os": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.source": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].order_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].os": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].quantity": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].ordered_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].item": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].order_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.preferences.notifications": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].item": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.security": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].battery": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].is_primary": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].quantity": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[2].comment_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].is_primary": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.language": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].quantity": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.risk_score": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].model": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].status": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].price": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].item": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].battery": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.timezone": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[1].created_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].status": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[1].comment_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].item": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].price": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].is_primary": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].device_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[3].text": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[0].text": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.flags[2]": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].ordered_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[3].created_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].price": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].device_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].order_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].is_primary": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].battery": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].os": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].quantity": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].item": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[1].sentiment": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].quantity": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].ordered_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].order_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].status": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].battery": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].ordered_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].device_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[0].comment_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[2].created_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.preferences": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].device_id": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[3].sentiment": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].ordered_at": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.flags[0]": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].status": {
+      "backend": "MongoDB",
+      "reason": "Nested/complex field - schema-less storage optimal",
+      "decided_at": "2026-04-03T17:29:47.905369+00:00"
     }
   },
   "current_placement": {
@@ -2029,7 +2494,100 @@
     "last_seen": "SQL",
     "audit": "MongoDB",
     "event_type": "MongoDB",
-    "status": "Buffer"
+    "status": "MongoDB",
+    "comments[0].created_at": "MongoDB",
+    "devices[2].device_id": "MongoDB",
+    "comments[2].sentiment": "MongoDB",
+    "orders[0].price": "MongoDB",
+    "devices[0].is_primary": "MongoDB",
+    "profile.security.mfa_enabled": "MongoDB",
+    "orders[1].ordered_at": "MongoDB",
+    "devices[4].model": "MongoDB",
+    "devices[0].os": "MongoDB",
+    "devices[3].model": "MongoDB",
+    "orders[1].price": "MongoDB",
+    "comments[2].text": "MongoDB",
+    "devices[4].battery": "MongoDB",
+    "devices[1].model": "MongoDB",
+    "orders[1].order_id": "MongoDB",
+    "orders[3].status": "MongoDB",
+    "orders[5].order_id": "MongoDB",
+    "orders[5].price": "MongoDB",
+    "orders[5].status": "MongoDB",
+    "comments[0].sentiment": "MongoDB",
+    "profile.preferences.currency": "MongoDB",
+    "devices[2].model": "MongoDB",
+    "profile.security.last_password_change": "MongoDB",
+    "profile.preferences.theme": "MongoDB",
+    "username": "MongoDB",
+    "devices[3].os": "MongoDB",
+    "orders[0].quantity": "MongoDB",
+    "audit.flags": "MongoDB",
+    "comments[3].comment_id": "MongoDB",
+    "audit.flags[1]": "MongoDB",
+    "orders[2].item": "MongoDB",
+    "comments[1].text": "MongoDB",
+    "devices[2].os": "MongoDB",
+    "audit.source": "MongoDB",
+    "orders[3].order_id": "MongoDB",
+    "devices[1].os": "MongoDB",
+    "orders[5].quantity": "MongoDB",
+    "orders[0].ordered_at": "MongoDB",
+    "orders[3].item": "MongoDB",
+    "orders[2].order_id": "MongoDB",
+    "profile.preferences.notifications": "MongoDB",
+    "orders[5].item": "MongoDB",
+    "profile.security": "MongoDB",
+    "devices[1].battery": "MongoDB",
+    "devices[3].is_primary": "MongoDB",
+    "orders[2].quantity": "MongoDB",
+    "comments[2].comment_id": "MongoDB",
+    "devices[2].is_primary": "MongoDB",
+    "profile.language": "MongoDB",
+    "orders[3].quantity": "MongoDB",
+    "audit.risk_score": "MongoDB",
+    "devices[0].model": "MongoDB",
+    "orders[2].status": "MongoDB",
+    "orders[2].price": "MongoDB",
+    "orders[4].item": "MongoDB",
+    "devices[2].battery": "MongoDB",
+    "profile.timezone": "MongoDB",
+    "comments[1].created_at": "MongoDB",
+    "orders[4].status": "MongoDB",
+    "comments[1].comment_id": "MongoDB",
+    "orders[0].item": "MongoDB",
+    "orders[4].price": "MongoDB",
+    "devices[1].is_primary": "MongoDB",
+    "devices[4].device_id": "MongoDB",
+    "comments[3].text": "MongoDB",
+    "comments[0].text": "MongoDB",
+    "audit.flags[2]": "MongoDB",
+    "orders[2].ordered_at": "MongoDB",
+    "comments[3].created_at": "MongoDB",
+    "orders[3].price": "MongoDB",
+    "devices[1].device_id": "MongoDB",
+    "orders[4].order_id": "MongoDB",
+    "devices[4].is_primary": "MongoDB",
+    "devices[3].battery": "MongoDB",
+    "devices[4].os": "MongoDB",
+    "orders[4].quantity": "MongoDB",
+    "orders[1].item": "MongoDB",
+    "comments[1].sentiment": "MongoDB",
+    "orders[1].quantity": "MongoDB",
+    "orders[5].ordered_at": "MongoDB",
+    "orders[0].order_id": "MongoDB",
+    "orders[1].status": "MongoDB",
+    "devices[0].battery": "MongoDB",
+    "orders[3].ordered_at": "MongoDB",
+    "devices[3].device_id": "MongoDB",
+    "comments[0].comment_id": "MongoDB",
+    "comments[2].created_at": "MongoDB",
+    "profile.preferences": "MongoDB",
+    "devices[0].device_id": "MongoDB",
+    "comments[3].sentiment": "MongoDB",
+    "orders[4].ordered_at": "MongoDB",
+    "audit.flags[0]": "MongoDB",
+    "orders[0].status": "MongoDB"
   },
   "field_mappings": {
     "name": {
@@ -2037,168 +2595,818 @@
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.612267+00:00"
+      "updated_at": "2026-04-04T08:37:27.622133+00:00"
     },
     "ip_address": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.913025+00:00"
+      "updated_at": "2026-04-04T08:37:28.134387+00:00"
     },
     "country": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.918018+00:00"
+      "updated_at": "2026-04-04T08:37:28.140381+00:00"
     },
     "session_id": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.485365+00:00"
+      "updated_at": "2026-04-04T08:37:28.144387+00:00"
     },
     "is_active": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.023663+00:00"
+      "updated_at": "2026-04-04T08:37:26.666963+00:00"
     },
     "timestamp": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:06.240679+00:00"
+      "updated_at": "2026-04-04T08:37:27.634576+00:00"
     },
     "profile": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.927123+00:00"
+      "updated_at": "2026-04-04T08:37:28.157587+00:00"
     },
     "orders": {
       "backend": "Both",
       "sql_table": "norm_orders",
-      "mongo_collection": "ingested_records",
+      "mongo_collection": "ref_orders",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.946499+00:00"
+      "updated_at": "2026-04-04T08:37:28.190403+00:00"
     },
     "comments": {
       "backend": "Both",
       "sql_table": "norm_comments",
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.950502+00:00"
+      "updated_at": "2026-04-04T08:37:28.197398+00:00"
     },
     "devices": {
       "backend": "Both",
       "sql_table": "norm_devices",
       "mongo_collection": "ref_devices",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.954498+00:00"
+      "updated_at": "2026-04-04T08:37:28.203398+00:00"
     },
     "city": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T18:07:14.125525+00:00"
+      "updated_at": "2026-04-04T08:37:28.137381+00:00"
     },
     "app_version": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.920127+00:00"
+      "updated_at": "2026-04-04T08:37:28.147365+00:00"
     },
     "email": {
       "backend": "SQL",
       "sql_table": "ingested_records",
       "mongo_collection": null,
       "status": "final",
-      "updated_at": "2026-03-26T18:07:14.121509+00:00"
+      "updated_at": "2026-04-04T08:37:27.626118+00:00",
+      "detected_type": "email",
+      "type_recorded_at": "2026-04-04T08:37:27.626118+00:00"
     },
     "retry_count": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.624376+00:00"
+      "updated_at": "2026-04-04T08:37:28.150341+00:00"
     },
     "age": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T18:07:14.313285+00:00"
+      "updated_at": "2026-04-04T08:37:25.070101+00:00"
     },
     "phone": {
       "backend": "SQL",
       "sql_table": "ingested_records",
       "mongo_collection": null,
       "status": "final",
-      "updated_at": "2026-03-26T17:18:06.808049+00:00"
+      "updated_at": "2026-04-04T08:37:27.368724+00:00",
+      "detected_type": "string",
+      "type_recorded_at": "2026-04-04T08:37:27.368724+00:00"
     },
     "postal_code": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:02.099512+00:00"
+      "updated_at": "2026-04-04T08:37:24.749215+00:00"
     },
     "subscription": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:02.580533+00:00"
+      "updated_at": "2026-04-04T08:37:17.849447+00:00"
     },
     "device_model": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.487326+00:00"
+      "updated_at": "2026-04-04T08:37:27.382725+00:00"
     },
     "last_seen": {
       "backend": "SQL",
       "sql_table": "ingested_records",
       "mongo_collection": null,
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.922127+00:00"
+      "updated_at": "2026-04-04T08:37:26.673400+00:00",
+      "detected_type": "timestamp",
+      "type_recorded_at": "2026-04-04T08:37:26.673400+00:00"
     },
     "audit": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.517774+00:00"
+      "updated_at": "2026-04-04T08:37:25.976903+00:00"
     },
     "audit.flags": {
       "backend": "Both",
       "sql_table": "norm_audit_flags",
       "mongo_collection": null,
       "status": "final",
-      "updated_at": "2026-03-26T17:18:07.535738+00:00"
+      "updated_at": "2026-04-04T08:37:25.993995+00:00"
     },
     "event_type": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-03-26T17:18:05.357249+00:00"
+      "updated_at": "2026-04-04T08:37:19.853795+00:00"
     },
     "status": {
-      "backend": "Buffer",
+      "backend": "MongoDB",
       "sql_table": null,
-      "mongo_collection": null,
-      "status": "buffer",
-      "updated_at": "2026-03-26T18:07:14.266989+00:00"
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-03-31T00:00:00.000000+00:00"
+    },
+    "comments[0].created_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].device_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[2].sentiment": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].price": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].is_primary": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.security.mfa_enabled": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].ordered_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].model": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].os": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].model": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].price": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[2].text": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].battery": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].model": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].order_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].status": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].order_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].price": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].status": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[0].sentiment": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.preferences.currency": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].model": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.security.last_password_change": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.preferences.theme": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "username": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].os": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].quantity": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[3].comment_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.flags[1]": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].item": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[1].text": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].os": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.source": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].order_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].os": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].quantity": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].ordered_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].item": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].order_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.preferences.notifications": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].item": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.security": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].battery": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].is_primary": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].quantity": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[2].comment_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].is_primary": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.language": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].quantity": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.risk_score": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].model": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].status": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].price": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].item": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[2].battery": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.timezone": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[1].created_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].status": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[1].comment_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].item": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].price": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].is_primary": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].device_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[3].text": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[0].text": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.flags[2]": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[2].ordered_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[3].created_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].price": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[1].device_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].order_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].is_primary": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].battery": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[4].os": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].quantity": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].item": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[1].sentiment": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].quantity": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[5].ordered_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].order_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[1].status": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].battery": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[3].ordered_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[3].device_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[0].comment_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[2].created_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "profile.preferences": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "devices[0].device_id": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "comments[3].sentiment": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[4].ordered_at": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "audit.flags[0]": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
+    },
+    "orders[0].status": {
+      "backend": "MongoDB",
+      "sql_table": null,
+      "mongo_collection": "ingested_records",
+      "status": "final",
+      "updated_at": "2026-04-03T17:29:47.905369+00:00"
     }
   },
   "schema_registry": {
@@ -2446,7 +3654,9 @@
         ],
         "first_seen": "2026-03-26T18:06:39.426124+00:00",
         "last_seen": "2026-03-26T18:07:14.264989+00:00",
-        "resolved": false
+        "resolved": true,
+        "resolved_backend": "MongoDB",
+        "resolved_at": "2026-03-31T00:00:00.000000+00:00"
       }
     }
   },
@@ -2464,7 +3674,7 @@
           "ordered_at"
         ],
         "foreign_key": "parent_sys_ingested_at",
-        "registered_at": "2026-03-26T17:18:07.944398+00:00"
+        "registered_at": "2026-04-04T08:37:28.188403+00:00"
       },
       "norm_comments": {
         "entity_path": "comments",
@@ -2475,7 +3685,7 @@
           "created_at"
         ],
         "foreign_key": "parent_sys_ingested_at",
-        "registered_at": "2026-03-26T17:18:07.948499+00:00"
+        "registered_at": "2026-04-04T08:37:28.194418+00:00"
       },
       "norm_devices": {
         "entity_path": "devices",
@@ -2487,7 +3697,7 @@
           "is_primary"
         ],
         "foreign_key": "parent_sys_ingested_at",
-        "registered_at": "2026-03-26T17:18:07.952394+00:00"
+        "registered_at": "2026-04-04T08:37:28.200392+00:00"
       },
       "norm_audit_flags": {
         "entity_path": "audit.flags",
@@ -2495,7 +3705,7 @@
           "value"
         ],
         "foreign_key": "parent_sys_ingested_at",
-        "registered_at": "2026-03-26T17:18:07.533737+00:00"
+        "registered_at": "2026-04-04T08:37:25.990996+00:00"
       }
     }
   },
@@ -2509,18 +3719,19 @@
         "reference_threshold": 2,
         "decision_reasons": [],
         "schema_hints": {},
-        "registered_at": "2026-03-26T17:18:07.925129+00:00"
+        "registered_at": "2026-04-04T08:37:28.154653+00:00"
       },
       "orders": {
-        "mode": "embed",
-        "collection": "ingested_records",
-        "decision_score": 1,
+        "mode": "reference",
+        "collection": "ref_orders",
+        "decision_score": 2,
         "reference_threshold": 2,
         "decision_reasons": [
+          "array_size_gt_3",
           "array_of_objects"
         ],
         "schema_hints": {},
-        "registered_at": "2026-03-26T17:18:07.929127+00:00"
+        "registered_at": "2026-04-04T08:37:28.160686+00:00"
       },
       "comments": {
         "mode": "embed",
@@ -2531,7 +3742,7 @@
           "array_of_objects"
         ],
         "schema_hints": {},
-        "registered_at": "2026-03-26T17:18:07.933018+00:00"
+        "registered_at": "2026-04-04T08:37:28.168639+00:00"
       },
       "devices": {
         "mode": "reference",
@@ -2543,7 +3754,7 @@
           "array_of_objects"
         ],
         "schema_hints": {},
-        "registered_at": "2026-03-26T17:18:07.937131+00:00"
+        "registered_at": "2026-04-04T08:37:28.174747+00:00"
       },
       "audit": {
         "mode": "embed",
@@ -2552,12 +3763,12 @@
         "reference_threshold": 2,
         "decision_reasons": [],
         "schema_hints": {},
-        "registered_at": "2026-03-26T17:18:07.515376+00:00"
+        "registered_at": "2026-04-04T08:37:25.973821+00:00"
       }
     }
   },
   "quarantined_fields": {},
-  "total_records": 1118,
-  "last_updated": "2026-03-26T18:07:14.313285+00:00",
-  "session_start": "2026-03-22T08:16:47.467055+00:00"
+  "total_records": 11618,
+  "last_updated": "2026-04-04T08:37:28.222390+00:00",
+  "session_start": "2026-04-03T17:40:15.298216+00:00"
 }

@@ -92,9 +92,9 @@ class PlacementHeuristics:
         # Get field statistics
         field_data = self.metadata_store.metadata['fields'].get(normalized_key)
         if not field_data:
-            reason = f"Field '{normalized_key}' unseen before - routing to Buffer"
-            self.metadata_store.set_placement_decision(normalized_key, 'Buffer', reason)
-            return 'Buffer'
+            reason = f"Field '{normalized_key}' unseen before - routing to MongoDB (default for unmapped fields)"
+            self.metadata_store.set_placement_decision(normalized_key, 'MongoDB', reason)
+            return 'MongoDB'
 
         # Structural checks should not wait for warm-up windows.
         type_counts = field_data.get('type_counts', {})
@@ -107,15 +107,15 @@ class PlacementHeuristics:
                 )
                 self.metadata_store.set_placement_decision(normalized_key, 'MongoDB', reason)
                 return 'MongoDB'
-        
-        # Check if we have enough observations
+
+        # Check if we have enough observations - map to MongoDB by default if insufficient data
         if field_data['appearances'] < self.MIN_OBSERVATIONS:
             reason = (
                 f"Field '{normalized_key}' has only {field_data['appearances']} observations "
-                f"(< {self.MIN_OBSERVATIONS}) - keeping in Buffer"
+                f"(< {self.MIN_OBSERVATIONS}) - routing to MongoDB (default for unmapped fields)"
             )
-            self.metadata_store.set_placement_decision(normalized_key, 'Buffer', reason)
-            return 'Buffer'
+            self.metadata_store.set_placement_decision(normalized_key, 'MongoDB', reason)
+            return 'MongoDB'
         
         # Step 2: Get comprehensive field statistics
         stats = self.metadata_store.get_field_stats(normalized_key)

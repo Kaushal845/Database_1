@@ -438,3 +438,90 @@ class MetadataStore:
             "buffer_fields": buffer_fields,
         }
 
+    def get_unmapped_fields(self) -> List[str]:
+        """
+        Return list of fields that have been discovered but have NO placement decision.
+        These are fields in metadata['fields'] but NOT in metadata['current_placement'].
+        """
+        all_fields = set(self.metadata.get("fields", {}).keys())
+        mapped_fields = set(self.metadata.get("current_placement", {}).keys())
+        unmapped = list(all_fields - mapped_fields)
+        logger.info(
+            "Unmapped fields report: %d total fields, %d mapped, %d unmapped",
+            len(all_fields),
+            len(mapped_fields),
+            len(unmapped),
+        )
+        return sorted(unmapped)
+
+    def finalize_unmapped_to_mongodb(self) -> Dict[str, Any]:
+        """
+        Automatically route all unmapped fields to MongoDB.
+        Called at program finalization to ensure NO field is left without a backend assignment.
+        
+        Returns: Dictionary with finalization statistics
+        """
+        unmapped_fields = self.get_unmapped_fields()
+        finalization_stats = {
+            "unmapped_count": len(unmapped_fields),
+            "fields_finalized_to_mongodb": 0,
+            "finalized_fields": [],
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+        if not unmapped_fields:
+            logger.info("No unmapped fields to finalize - all fields have placement decisions")
+            return finalization_stats
+
+        logger.info(
+            "Finalizing %d unmapped fields to MongoDB automatically",
+            len(unmapped_fields),
+        )
+
+        with self.lock:
+            for field_name in unmapped_fields:
+                try:
+                    # Set placement decision
+                    self.metadata["placement_decisions"][field_name] = {
+                        "backend": "MongoDB",
+                        "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
+                        "decided_at": datetime.now(timezone.utc).isoformat(),
+                    }
+
+                    # Set current placement
+                    self.metadata["current_placement"][field_name] = "MongoDB"
+
+                    # Set field mapping with 'auto_finalized' status
+                    self.metadata["field_mappings"][field_name] = {
+                        "backend": "MongoDB",
+                        "sql_table": None,
+                        "mongo_collection": "ingested_records",  # Root collection by default
+                        "status": "auto_finalized",
+                        "finalized_at": datetime.now(timezone.utc).isoformat(),
+                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                    }
+
+                    # Remove from Buffer if present
+                    buffer_fields = self.metadata.get("buffer", {}).get("fields", {})
+                    if field_name in buffer_fields:
+                        buffer_fields[field_name]["resolved"] = True
+                        buffer_fields[field_name]["resolved_backend"] = "MongoDB"
+                        buffer_fields[field_name]["resolved_at"] = datetime.now(timezone.utc).isoformat()
+
+                    finalization_stats["fields_finalized_to_mongodb"] += 1
+                    finalization_stats["finalized_fields"].append(field_name)
+                    logger.debug("Auto-finalized field '%s' to MongoDB", field_name)
+
+                except Exception as e:
+                    logger.error("Error finalizing field '%s': %s", field_name, e)
+
+        if self.auto_save:
+            self.save()
+
+        logger.info(
+            "Finalization complete: %d fields moved to MongoDB",
+            finalization_stats["fields_finalized_to_mongodb"],
+        )
+
+        return finalization_stats
+

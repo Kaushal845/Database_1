@@ -846,9 +846,21 @@ class IngestionPipeline:
     
     def close(self):
         """
-        Cleanup: Save metadata and close database connections.
+        Cleanup: Finalize unmapped fields to MongoDB, save metadata, and close database connections.
         """
         logger.info("Shutting down pipeline")
+        
+        # Automatically route all unmapped fields to MongoDB before finalization
+        finalization_report = self.metadata_store.finalize_unmapped_to_mongodb()
+        
+        if finalization_report.get("fields_finalized_to_mongodb", 0) > 0:
+            logger.info(
+                "✓ Auto-finalized %d unmapped fields to MongoDB: %s",
+                finalization_report["fields_finalized_to_mongodb"],
+                finalization_report["finalized_fields"],
+            )
+        
+        # Save metadata and close connections
         self.metadata_store.save()
         self.sql_manager.close()
         self.mongo_manager.close()
