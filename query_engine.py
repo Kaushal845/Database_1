@@ -250,6 +250,58 @@ class MetadataDrivenQueryEngine:
             "inserted": 1 if success else 0,
         }
 
+    def _filter_conflicting_mongo_paths(self, fields: List[str]) -> List[str]:
+        """
+        Remove fields that would cause MongoDB path collisions.
+        Rules:
+        1. If both parent path 'audit' and children 'audit.flags[0]' are present, keep only parent
+        2. If multiple indexed paths like 'audit.flags[0]', 'audit.flags[1]' are present, keep only one
+        3. Simplified rule: when there's ambiguity, prefer less specific paths
+        """
+        filtered = []
+        
+        for field in fields:
+            has_conflict = False
+            
+            # Check if this field conflicts with any other field
+            for other_field in fields:
+                if field == other_field:
+                    continue
+                    
+                # Case 1: field is a child of other_field (e.g., 'audit.flags[0]' child of 'audit')
+                # If parent exists, skip the child
+                if field.startswith(other_field + '.') or field.startswith(other_field + '['):
+                    has_conflict = True
+                    break
+                
+                # Case 2: field is parent of other_field (e.g., 'audit' parent of 'audit.flags[0]')
+                # If parent and child exist, skip the child (other_field)
+                # This will be handled in the first case when we process other_field
+                
+                # Case 3: both are indexed versions of the same parent (e.g., 'audit.flags[0]' and 'audit.flags[1]')
+                # Extract parent path
+                if '[' in field and ']' in field:
+                    field_parent = field[:field.index('[')]
+                    if '[' in other_field and ']' in other_field:
+                        other_parent = other_field[:other_field.index('[')]
+                        if field_parent == other_parent:
+                            # Same parent, keep only the lexicographically first one
+                            if field > other_field:
+                                has_conflict = True
+                                break
+            
+            if not has_conflict:
+                filtered.append(field)
+        
+        # Remove duplicates while preserving order
+        seen = set()
+        result = []
+        for field in filtered:
+            if field not in seen:
+                seen.add(field)
+                result.append(field)
+        return result
+
     def _build_field_plan(self, fields: List[str]) -> Dict[str, Any]:
         sql_root_fields: List[str] = []
         sql_child_entities: Dict[str, str] = {}
@@ -286,6 +338,9 @@ class MetadataDrivenQueryEngine:
                 sql_root_fields.append(required)
             if required not in mongo_root_fields:
                 mongo_root_fields.append(required)
+
+        # Filter out conflicting MongoDB paths (e.g., keep 'audit.flags', remove 'audit.flags[0]')
+        mongo_root_fields = self._filter_conflicting_mongo_paths(mongo_root_fields)
 
         return {
             "sql_root_fields": sorted(set(sql_root_fields)),
@@ -362,47 +417,97 @@ class MetadataDrivenQueryEngine:
                     continue
                 results_by_key[key] = dict(row)
 
-        for key in list(results_by_key.keys()):
-            mongo_rows = self.mongo_manager.find_records(
-                filters={"sys_ingested_at": key},
+        # OPTIMIZATION: Batch fetch MongoDB root records instead of N+1 queries
+        if results_by_key and plan["mongo_root_fields"]:
+            keys_list = list(results_by_key.keys())
+            mongo_records = self.mongo_manager.find_records(
+                filters={"sys_ingested_at": {"$in": keys_list}},  # Fetch all in one query
                 fields=plan["mongo_root_fields"],
                 collection_name="ingested_records",
-                limit=1,
+                limit=len(keys_list) * 2,  # Allow some buffer
             )
-            if mongo_rows:
-                results_by_key[key].update(mongo_rows[0])
+            # Create a map for O(1) lookup
+            mongo_by_key = {rec.get("sys_ingested_at"): rec for rec in mongo_records}
+            
+            # Merge MongoDB data into results
+            for key in results_by_key.keys():
+                if key in mongo_by_key:
+                    results_by_key[key].update(mongo_by_key[key])
 
+        # OPTIMIZATION: Batch fetch child entities per table instead of per-record queries
         for field_name, table_name in plan["sql_child_entities"].items():
-            for key in list(results_by_key.keys()):
-                child_rows = self.sql_manager.fetch_records(
-                    table_name=table_name,
-                    fields=None,
-                    filters={"parent_sys_ingested_at": key},
-                    limit=1000,
-                )
-                cleaned_rows = []
-                for row in child_rows:
+            if not results_by_key:
+                continue
+            
+            keys_list = list(results_by_key.keys())
+            
+            # Build query for all keys at once (using multiple queries if needed for SQL)
+            # For now, fetch all children for this table, then filter locally
+            all_child_rows = self.sql_manager.fetch_records(
+                table_name=table_name,
+                fields=None,
+                filters={},  # No filter to get all
+                limit=len(keys_list) * 1000,
+            )
+            
+            # Group by parent key locally (O(n) for n records)
+            children_by_parent = {}
+            for row in all_child_rows:
+                parent_key = row.get("parent_sys_ingested_at")
+                if parent_key in results_by_key:
+                    if parent_key not in children_by_parent:
+                        children_by_parent[parent_key] = []
+                    
                     item = dict(row)
                     item.pop("id", None)
                     item.pop("parent_sys_ingested_at", None)
-                    cleaned_rows.append(item)
-                results_by_key[key][field_name] = cleaned_rows
+                    children_by_parent[parent_key].append(item)
+            
+            # Assign children to records
+            for key in results_by_key.keys():
+                results_by_key[key][field_name] = children_by_parent.get(key, [])
 
+        # OPTIMIZATION: Batch fetch reference entities per collection instead of per-record queries
         for field_name, collection_name in plan["mongo_reference_entities"].items():
-            for key in list(results_by_key.keys()):
-                docs = self.mongo_manager.find_records(
-                    filters={"parent_sys_ingested_at": key, "entity_path": field_name},
-                    fields=["payload", "item_index"],
-                    collection_name=collection_name,
-                    limit=1000,
-                )
-
-                if docs:
-                    payloads = [doc.get("payload") for doc in sorted(docs, key=lambda x: x.get("item_index", 0))]
+            if not results_by_key:
+                continue
+            
+            keys_list = list(results_by_key.keys())
+            
+            # Fetch all reference docs for this field across all parent records
+            all_reference_docs = self.mongo_manager.find_records(
+                filters={
+                    "parent_sys_ingested_at": {"$in": keys_list},
+                    "entity_path": field_name
+                },
+                fields=["payload", "item_index", "parent_sys_ingested_at"],
+                collection_name=collection_name,
+                limit=len(keys_list) * 1000,
+            )
+            
+            # Group by parent key locally (O(n) for n documents)
+            refs_by_parent = {}
+            for doc in all_reference_docs:
+                parent_key = doc.get("parent_sys_ingested_at")
+                if parent_key in results_by_key:
+                    if parent_key not in refs_by_parent:
+                        refs_by_parent[parent_key] = []
+                    refs_by_parent[parent_key].append(doc)
+            
+            # Sort by item_index and extract payloads
+            for key in results_by_key.keys():
+                if key in refs_by_parent:
+                    sorted_docs = sorted(
+                        refs_by_parent[key],
+                        key=lambda x: x.get("item_index", 0)
+                    )
+                    payloads = [doc.get("payload") for doc in sorted_docs]
                     results_by_key[key][field_name] = payloads
+                else:
+                    results_by_key[key][field_name] = []
 
         records = list(results_by_key.values())
-        logger.info("Read completed: records=%s limit=%s", len(records), limit)
+        logger.info("Read completed: records=%s limit=%s (optimized batch queries)", len(records), limit)
         return {
             "success": True,
             "operation": "read",
