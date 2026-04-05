@@ -111,7 +111,7 @@
     <div class="header">
         <h1>ACID Validation Report</h1>
         <p>Comprehensive testing of ACID properties in hybrid SQL+MongoDB system</p>
-        <p>Generated: 2026-03-26 18:14:06 UTC</p>
+        <p>Generated: 2026-03-31 16:19:52 UTC</p>
     </div>
 
     <div class="summary">
@@ -192,7 +192,7 @@
                 A1: Single Insert Failure Rollback
             </div>
             <p><strong>Objective:</strong> Verify that SQL insert rolls back when MongoDB insert fails</p>
-<p><strong>Setup:</strong> Test record: test_user_a1</p><p><strong>Execution Log:</strong></p><pre>Transaction tx_1774548845487_1 begun
+<p><strong>Setup:</strong> Test record: test_user_a1</p><p><strong>Execution Log:</strong></p><pre>Transaction tx_1774973990998_1 begun
 SQL insert operation added
 Prepare phase: success=True
 Simulating MongoDB failure - forcing abort
@@ -205,7 +205,7 @@ Transaction aborted</pre><p><strong>Validation:</strong></p><ul><li>SQL records 
                 A2: Batch Insert Partial Failure
             </div>
             <p><strong>Objective:</strong> Verify that partial batch failure causes complete rollback</p>
-<p><strong>Setup:</strong> Batch of 5 records</p><p><strong>Execution Log:</strong></p><pre>Transaction tx_1774548845497_2 begun
+<p><strong>Setup:</strong> Batch of 5 records</p><p><strong>Execution Log:</strong></p><pre>Transaction tx_1774973991015_2 begun
 Added record 1/5
 Added record 2/5
 Added record 3/5
@@ -220,7 +220,7 @@ Transaction aborted - all changes rolled back</pre><p><strong>Validation:</stron
                 A3: Update with Nested Data Failure
             </div>
             <p><strong>Objective:</strong> Verify atomicity when updating root record and adding nested data</p>
-<p><strong>Setup:</strong> Initial record: nested_user</p><p><strong>Execution Log:</strong></p><pre>Transaction tx_1774548845517_3 begun
+<p><strong>Setup:</strong> Initial record: nested_user</p><p><strong>Execution Log:</strong></p><pre>Transaction tx_1774973991035_3 begun
 Update operation added
 Prepare: success=True
 Simulating failure - forcing abort</pre><p><strong>Validation:</strong></p><ul><li>SQL records: 1</li><li>MongoDB records: 1</li><li>SQL email: initial@test.com</li><li>SQL age: 25</li><li>✓ PASS: Update rolled back, original data intact</li></ul>
@@ -237,8 +237,8 @@ Simulating failure - forcing abort</pre><p><strong>Validation:</strong></p><ul><
                 C1: Unique Constraint Enforcement
             </div>
             <p><strong>Objective:</strong> Verify unique constraints prevent duplicate inserts across backends</p>
-<p><strong>Setup:</strong> Initial record with sys_ingested_at: 2026-03-26T18:14:05.528738+00:00.001</p><p><strong>Execution Log:</strong></p><pre>First record inserted successfully
-Transaction tx_1774548845530_4 begun for duplicate insert
+<p><strong>Setup:</strong> Initial record with sys_ingested_at: 2026-03-31T16:19:51.046032+00:00.001</p><p><strong>Execution Log:</strong></p><pre>First record inserted successfully
+Transaction tx_1774973991046_4 begun for duplicate insert
 Duplicate insert operation added
 Prepare result: success=False, error=SQL prepare failed: SQL insert failed
 Transaction aborted due to constraint violation</pre><p><strong>Validation:</strong></p><ul><li>SQL records with timestamp: 1</li><li>✓ PASS: Unique constraint enforced</li></ul>
@@ -250,7 +250,7 @@ Transaction aborted due to constraint violation</pre><p><strong>Validation:</str
                 C2: Foreign Key Integrity
             </div>
             <p><strong>Objective:</strong> Verify foreign key constraints maintain referential integrity</p>
-<p><strong>Setup:</strong> Parent record: 2026-03-26T18:14:05.539284+00:00.001</p><p><strong>Execution Log:</strong></p><pre>Parent record inserted
+<p><strong>Setup:</strong> Parent record: 2026-03-31T16:19:51.053543+00:00.001</p><p><strong>Execution Log:</strong></p><pre>Parent record inserted
 Child records inserted
 Delete parent operation added
 Prepare: success=True
@@ -263,7 +263,7 @@ Delete committed</pre><p><strong>Validation:</strong></p><ul><li>Parent record e
                 C3: Type Constraint Enforcement
             </div>
             <p><strong>Objective:</strong> Verify type constraints are enforced across backends</p>
-<p><strong>Execution Log:</strong></p><pre>Transaction tx_1774548845549_6 begun
+<p><strong>Execution Log:</strong></p><pre>Transaction tx_1774973991062_6 begun
 Insert with invalid type added
 Prepare: success=False, error=SQL prepare failed: SQL insert failed</pre><p><strong>Validation:</strong></p><ul><li>✓ Type constraint enforced - transaction rejected</li><li>✓ PASS: Type constraint handled appropriately</li></ul>
         </div>
@@ -293,11 +293,11 @@ Prepare: success=False, error=SQL prepare failed: SQL insert failed</pre><p><str
             </div>
             <p><strong>Objective:</strong> Verify concurrent inserts of different records both succeed</p>
 <p><strong>Execution Log:</strong></p><pre>[T1] Transaction started
-[T2] Transaction started
-[T3] Transaction started
-[T2] Committed successfully
 [T1] Committed successfully
-[T3] Committed successfully</pre><p><strong>Validation:</strong></p><ul><li>Successful commits: 3/3</li><li>SQL records: 3</li><li>✓ PASS: All concurrent inserts succeeded</li></ul>
+[T3] Transaction started
+[T3] Committed successfully
+[T2] Transaction started
+[T2] Committed successfully</pre><p><strong>Validation:</strong></p><ul><li>Successful commits: 3/3</li><li>SQL records: 3</li><li>✓ PASS: All concurrent inserts succeeded</li></ul>
         </div>
 
         <div class="test-case passed">

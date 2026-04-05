@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-26T18:14:06.483029+00:00",
+  "generated_at": "2026-03-31T16:19:52.069826+00:00",
   "summary": {
     "total_tests": 12,
     "passed": 12,
@@ -13,7 +13,7 @@
       "objective": "Verify that SQL insert rolls back when MongoDB insert fails",
       "setup": "Test record: test_user_a1",
       "execution_log": [
-        "Transaction tx_1774548845487_1 begun",
+        "Transaction tx_1774973990998_1 begun",
         "SQL insert operation added",
         "Prepare phase: success=True",
         "Simulating MongoDB failure - forcing abort",
@@ -24,7 +24,7 @@
         "\u2713 PASS: SQL record successfully rolled back"
       ],
       "timing": {
-        "total_time": 0.007035255432128906
+        "total_time": 0.01201486587524414
       },
       "error": "",
       "evidence": {
@@ -38,7 +38,7 @@
       "objective": "Verify that partial batch failure causes complete rollback",
       "setup": "Batch of 5 records",
       "execution_log": [
-        "Transaction tx_1774548845497_2 begun",
+        "Transaction tx_1774973991015_2 begun",
         "Added record 1/5",
         "Added record 2/5",
         "Added record 3/5",
@@ -52,7 +52,7 @@
         "\u2713 PASS: All batch records rolled back"
       ],
       "timing": {
-        "total_time": 0.009033441543579102
+        "total_time": 0.008993387222290039
       },
       "error": "",
       "evidence": {
@@ -67,7 +67,7 @@
       "objective": "Verify atomicity when updating root record and adding nested data",
       "setup": "Initial record: nested_user",
       "execution_log": [
-        "Transaction tx_1774548845517_3 begun",
+        "Transaction tx_1774973991035_3 begun",
         "Update operation added",
         "Prepare: success=True",
         "Simulating failure - forcing abort"
@@ -80,7 +80,7 @@
         "\u2713 PASS: Update rolled back, original data intact"
       ],
       "timing": {
-        "total_time": 0.0060253143310546875
+        "total_time": 0.006001472473144531
       },
       "error": "",
       "evidence": {
@@ -93,10 +93,10 @@
       "test_type": "Consistency",
       "passed": true,
       "objective": "Verify unique constraints prevent duplicate inserts across backends",
-      "setup": "Initial record with sys_ingested_at: 2026-03-26T18:14:05.528738+00:00.001",
+      "setup": "Initial record with sys_ingested_at: 2026-03-31T16:19:51.046032+00:00.001",
       "execution_log": [
         "First record inserted successfully",
-        "Transaction tx_1774548845530_4 begun for duplicate insert",
+        "Transaction tx_1774973991046_4 begun for duplicate insert",
         "Duplicate insert operation added",
         "Prepare result: success=False, error=SQL prepare failed: SQL insert failed",
         "Transaction aborted due to constraint violation"
@@ -106,7 +106,7 @@
         "\u2713 PASS: Unique constraint enforced"
       ],
       "timing": {
-        "total_time": 0.0050106048583984375
+        "total_time": 0.004391670227050781
       },
       "error": "",
       "evidence": {
@@ -118,7 +118,7 @@
       "test_type": "Consistency",
       "passed": true,
       "objective": "Verify foreign key constraints maintain referential integrity",
-      "setup": "Parent record: 2026-03-26T18:14:05.539284+00:00.001",
+      "setup": "Parent record: 2026-03-31T16:19:51.053543+00:00.001",
       "execution_log": [
         "Parent record inserted",
         "Child records inserted",
@@ -132,7 +132,7 @@
         "\u2713 PASS: Foreign key cascade delete worked"
       ],
       "timing": {
-        "total_time": 0.005267620086669922
+        "total_time": 0.0050029754638671875
       },
       "error": "",
       "evidence": {
@@ -147,7 +147,7 @@
       "objective": "Verify type constraints are enforced across backends",
       "setup": "",
       "execution_log": [
-        "Transaction tx_1774548845549_6 begun",
+        "Transaction tx_1774973991062_6 begun",
         "Insert with invalid type added",
         "Prepare: success=False, error=SQL prepare failed: SQL insert failed"
       ],
@@ -156,7 +156,7 @@
         "\u2713 PASS: Type constraint handled appropriately"
       ],
       "timing": {
-        "total_time": 0.00402379035949707
+        "total_time": 0.003117799758911133
       },
       "error": "",
       "evidence": {}
@@ -179,7 +179,7 @@
         "\u2713 PASS: No dirty reads detected"
       ],
       "timing": {
-        "total_time": 0.506523609161377
+        "total_time": 0.5305221080780029
       },
       "error": "",
       "evidence": {
@@ -196,11 +196,11 @@
       "setup": "",
       "execution_log": [
         "[T1] Transaction started",
-        "[T2] Transaction started",
-        "[T3] Transaction started",
-        "[T2] Committed successfully",
         "[T1] Committed successfully",
-        "[T3] Committed successfully"
+        "[T3] Transaction started",
+        "[T3] Committed successfully",
+        "[T2] Transaction started",
+        "[T2] Committed successfully"
       ],
       "validation_log": [
         "Successful commits: 3/3",
@@ -208,7 +208,7 @@
         "\u2713 PASS: All concurrent inserts succeeded"
       ],
       "timing": {
-        "total_time": 0.013031244277954102
+        "total_time": 0.04734039306640625
       },
       "error": "",
       "evidence": {
@@ -232,7 +232,7 @@
         "\u2713 PASS: Serializable isolation maintained"
       ],
       "timing": {
-        "total_time": 0.303391695022583
+        "total_time": 0.3333580493927002
       },
       "error": "",
       "evidence": {
@@ -258,7 +258,7 @@
         "\u2713 PASS: Data survived crash and recovery"
       ],
       "timing": {
-        "total_time": 0.06046867370605469
+        "total_time": 0.03401470184326172
       },
       "error": "",
       "evidence": {
@@ -282,7 +282,7 @@
         "\u2713 PASS: Committed data persists despite later failure"
       ],
       "timing": {
-        "total_time": 0.008089065551757812
+        "total_time": 0.010045051574707031
       },
       "error": "",
       "evidence": {
@@ -308,7 +308,7 @@
         "\u2713 PASS: Prior commits unaffected by rollback"
       ],
       "timing": {
-        "total_time": 0.01963496208190918
+        "total_time": 0.02267599105834961
       },
       "error": "",
       "evidence": {

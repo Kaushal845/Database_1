@@ -1,6 +1,6 @@
 # ACID Validation Report
 
-**Generated:** 2026-03-26T18:14:06.482028+00:00
+**Generated:** 2026-03-31T16:19:52.068822+00:00
 
 ---
 
@@ -35,7 +35,7 @@ This report documents comprehensive ACID property validation for the hybrid SQL+
 
 **Execution Log:**
 ```
-Transaction tx_1774548845487_1 begun
+Transaction tx_1774973990998_1 begun
 SQL insert operation added
 Prepare phase: success=True
 Simulating MongoDB failure - forcing abort
@@ -54,7 +54,7 @@ Transaction aborted
 }
 ```
 
-**Timing:** 0.007 seconds
+**Timing:** 0.012 seconds
 
 ---
 
@@ -66,7 +66,7 @@ Transaction aborted
 
 **Execution Log:**
 ```
-Transaction tx_1774548845497_2 begun
+Transaction tx_1774973991015_2 begun
 Added record 1/5
 Added record 2/5
 Added record 3/5
@@ -101,7 +101,7 @@ Transaction aborted - all changes rolled back
 
 **Execution Log:**
 ```
-Transaction tx_1774548845517_3 begun
+Transaction tx_1774973991035_3 begun
 Update operation added
 Prepare: success=True
 Simulating failure - forcing abort
@@ -135,12 +135,12 @@ Simulating failure - forcing abort
 
 **Objective:** Verify unique constraints prevent duplicate inserts across backends
 
-**Setup:** Initial record with sys_ingested_at: 2026-03-26T18:14:05.528738+00:00.001
+**Setup:** Initial record with sys_ingested_at: 2026-03-31T16:19:51.046032+00:00.001
 
 **Execution Log:**
 ```
 First record inserted successfully
-Transaction tx_1774548845530_4 begun for duplicate insert
+Transaction tx_1774973991046_4 begun for duplicate insert
 Duplicate insert operation added
 Prepare result: success=False, error=SQL prepare failed: SQL insert failed
 Transaction aborted due to constraint violation
@@ -158,7 +158,7 @@ Transaction aborted due to constraint violation
 }
 ```
 
-**Timing:** 0.005 seconds
+**Timing:** 0.004 seconds
 
 ---
 
@@ -166,7 +166,7 @@ Transaction aborted due to constraint violation
 
 **Objective:** Verify foreign key constraints maintain referential integrity
 
-**Setup:** Parent record: 2026-03-26T18:14:05.539284+00:00.001
+**Setup:** Parent record: 2026-03-31T16:19:51.053543+00:00.001
 
 **Execution Log:**
 ```
@@ -201,7 +201,7 @@ Delete committed
 
 **Execution Log:**
 ```
-Transaction tx_1774548845549_6 begun
+Transaction tx_1774973991062_6 begun
 Insert with invalid type added
 Prepare: success=False, error=SQL prepare failed: SQL insert failed
 ```
@@ -211,7 +211,7 @@ Prepare: success=False, error=SQL prepare failed: SQL insert failed
 - ✓ Type constraint enforced - transaction rejected
 - ✓ PASS: Type constraint handled appropriately
 
-**Timing:** 0.004 seconds
+**Timing:** 0.003 seconds
 
 ---
 
@@ -248,7 +248,7 @@ Prepare: success=False, error=SQL prepare failed: SQL insert failed
 }
 ```
 
-**Timing:** 0.507 seconds
+**Timing:** 0.531 seconds
 
 ---
 
@@ -259,11 +259,11 @@ Prepare: success=False, error=SQL prepare failed: SQL insert failed
 **Execution Log:**
 ```
 [T1] Transaction started
-[T2] Transaction started
-[T3] Transaction started
-[T2] Committed successfully
 [T1] Committed successfully
+[T3] Transaction started
 [T3] Committed successfully
+[T2] Transaction started
+[T2] Committed successfully
 ```
 
 **Validation:**
@@ -280,7 +280,7 @@ Prepare: success=False, error=SQL prepare failed: SQL insert failed
 }
 ```
 
-**Timing:** 0.013 seconds
+**Timing:** 0.047 seconds
 
 ---
 
@@ -311,7 +311,7 @@ Prepare: success=False, error=SQL prepare failed: SQL insert failed
 }
 ```
 
-**Timing:** 0.303 seconds
+**Timing:** 0.333 seconds
 
 ---
 
@@ -344,7 +344,7 @@ Connections reopened
 }
 ```
 
-**Timing:** 0.060 seconds
+**Timing:** 0.034 seconds
 
 ---
 
@@ -372,7 +372,7 @@ Second transaction aborted
 }
 ```
 
-**Timing:** 0.008 seconds
+**Timing:** 0.010 seconds
 
 ---
 
@@ -402,7 +402,7 @@ Final transaction aborted
 }
 ```
 
-**Timing:** 0.020 seconds
+**Timing:** 0.023 seconds
 
 ---
 
@@ -447,4 +447,4 @@ The hybrid transaction coordinator implements a 2-phase commit protocol:
 
 ---
 
-*Report generated on 2026-03-26 18:14:06 UTC*
+*Report generated on 2026-03-31 16:19:52 UTC*
