@@ -382,14 +382,53 @@ async def get_transaction_status() -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=str(e))
 
 
+def _enrich_field_metadata(field_name: str, field_meta: Dict[str, Any], total_instances: int) -> Dict[str, Any]:
+    """Enrich field metadata with type inference and coverage calculations."""
+    
+    # Get field statistics
+    appearances = field_meta.get('appearances', 0)
+    coverage = (appearances / total_instances * 100) if total_instances > 0 else 0
+    
+    # Infer field type from type_counts
+    type_counts = field_meta.get('type_counts', {})
+    inferred_type = 'unknown'
+    
+    if type_counts:
+        # Get the most common type
+        most_common_type = max(type_counts.items(), key=lambda x: x[1])[0] if type_counts else 'unknown'
+        inferred_type = most_common_type
+    
+    # Get sample values
+    sample_value = field_meta.get('sample_value', None)
+    first_seen = field_meta.get('first_seen')
+    last_seen = field_meta.get('last_seen')
+    
+    # Determine cardinality
+    cardinality = 'optional' if coverage < 100 else 'required'
+    
+    return {
+        "name": field_name,
+        "type": inferred_type,
+        "cardinality": cardinality,
+        "coverage": round(coverage, 1),
+        "instances": appearances,
+        "sample_value": sample_value,
+        "first_seen": first_seen,
+        "last_seen": last_seen,
+        "type_distribution": type_counts
+    }
+
+
 @app.get("/api/dashboard/entities")
 async def get_entity_catalog() -> Dict[str, Any]:
-    """GET /api/dashboard/entities - Get catalog of logical entities without exposing backend details"""
+    """GET /api/dashboard/entities - Get catalog of logical entities with detailed field information"""
     if not pipeline:
         raise HTTPException(status_code=503, detail=f"System not initialized: {initialization_error}")
 
     try:
         metadata = pipeline.metadata_store.metadata
+        fields_metadata = metadata.get('fields', {})
+        total_records = metadata.get('total_records', 0)
 
         entities = []
 
@@ -406,12 +445,31 @@ async def get_entity_catalog() -> Dict[str, Any]:
             except:
                 instance_count = 0
 
+            # Enrich fields with metadata
+            column_names = table_info.get('columns', [])
+            enriched_fields = []
+            
+            for col in column_names:
+                # Try to find field metadata with various prefixes
+                field_meta = fields_metadata.get(col, {})
+                if not field_meta:
+                    # Try with entity prefix
+                    field_meta = fields_metadata.get(f"{entity_path}.{col}", {})
+                
+                enriched_field = _enrich_field_metadata(col, field_meta, instance_count)
+                enriched_fields.append(enriched_field)
+
             entities.append({
                 "name": entity_path,
                 "type": "repeating",
-                "fields": table_info.get('columns', []),
+                "fields": enriched_fields,
+                "field_count": len(enriched_fields),
                 "instance_count": instance_count,
-                "registered_at": table_info.get('registered_at')
+                "registered_at": table_info.get('registered_at'),
+                "relationships": {
+                    "parent": None,
+                    "children": []
+                }
             })
 
         # Get MongoDB entities (nested/embedded objects)
@@ -419,31 +477,32 @@ async def get_entity_catalog() -> Dict[str, Any]:
         for entity_name, entity_info in mongo_entities.items():
             # Skip if already added as SQL entity
             if any(e['name'] == entity_name for e in entities):
-                # Update with MongoDB info if needed
                 continue
 
             # For embedded entities, get field list from metadata
-            entity_fields = []
-            for field_name, field_meta in metadata.get('fields', {}).items():
+            enriched_fields = []
+            entity_field_names = []
+            
+            for field_name, field_meta in fields_metadata.items():
                 if field_name.startswith(f"{entity_name}."):
                     clean_field = field_name.replace(f"{entity_name}.", "")
-                    entity_fields.append(clean_field)
+                    entity_field_names.append(clean_field)
+                    
+                    enriched_field = _enrich_field_metadata(clean_field, field_meta, total_records)
+                    enriched_fields.append(enriched_field)
 
             # Get instance count
             mode = entity_info.get('mode', 'embed')
             instance_count = 0
 
             if mode == 'embed':
-                # For embedded, count records in main table that have this entity
                 try:
                     cursor = pipeline.sql_manager.cursor
-                    # Check if there's a field with this entity prefix
                     cursor.execute("SELECT COUNT(*) FROM ingested_records")
                     instance_count = cursor.fetchone()[0]
                 except:
                     instance_count = 0
             elif mode == 'reference':
-                # For reference, count from MongoDB collection
                 collection = entity_info.get('collection')
                 if collection:
                     try:
@@ -451,13 +510,31 @@ async def get_entity_catalog() -> Dict[str, Any]:
                     except:
                         instance_count = 0
 
+            # Detect parent entity (if entity name contains a dot, it's a child)
+            parent_entity = None
+            if '.' in entity_name:
+                parent_entity = entity_name.split('.')[0]
+
             entities.append({
                 "name": entity_name,
                 "type": "nested",
-                "fields": entity_fields,
+                "fields": enriched_fields,
+                "field_count": len(enriched_fields),
                 "instance_count": instance_count,
-                "registered_at": entity_info.get('registered_at')
+                "registered_at": entity_info.get('registered_at'),
+                "relationships": {
+                    "parent": parent_entity,
+                    "children": []
+                }
             })
+
+        # Build parent-child relationships
+        for entity in entities:
+            if entity["relationships"]["parent"]:
+                parent_name = entity["relationships"]["parent"]
+                parent = next((e for e in entities if e["name"] == parent_name), None)
+                if parent:
+                    parent["relationships"]["children"].append(entity["name"])
 
         # Sort by name
         entities.sort(key=lambda x: x['name'])
