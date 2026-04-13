@@ -4,6 +4,8 @@ Metadata Store - Persists schema, placement, normalization, and query metadata.
 import json
 import os
 import threading
+import tempfile
+import shutil
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 from logging_utils import get_logger
@@ -111,14 +113,29 @@ class MetadataStore:
         return base
 
     def save(self):
-        """Persist metadata to disk."""
+        """Persist metadata to disk using atomic writes."""
         with self.lock:
             self.metadata["last_updated"] = datetime.now(timezone.utc).isoformat()
             try:
-                with open(self.storage_file, "w", encoding="utf-8") as file:
-                    json.dump(self.metadata, file, indent=2)
+                # Use atomic writes: write to temp file, then move
+                storage_dir = os.path.dirname(self.storage_file) or "."
+                with tempfile.NamedTemporaryFile(
+                    mode="w", dir=storage_dir, delete=False, encoding="utf-8"
+                ) as temp_file:
+                    json.dump(self.metadata, temp_file, indent=2)
+                    temp_path = temp_file.name
+                
+                # Atomic replace
+                shutil.move(temp_path, self.storage_file)
+                logger.debug("Metadata saved successfully to %s", self.storage_file)
             except Exception as error:
                 logger.error("Error saving metadata to %s: %s", self.storage_file, error)
+                # Clean up temp file if it still exists
+                try:
+                    if 'temp_path' in locals() and os.path.exists(temp_path):
+                        os.unlink(temp_path)
+                except Exception:
+                    pass
 
     def increment_total_records(self):
         """Increment processed record count."""
