@@ -222,11 +222,40 @@ class TransactionCoordinator:
                 )
                 op.rollback_data = {'original_records': original_records}
 
-                # Execute update (delete + insert pattern)
-                self.sql_manager.delete_records('ingested_records', filters)
-                success = self.sql_manager.insert_record(op.data.get('new_data', {}))
-                if not success:
-                    return False, "SQL update failed"
+                # Check if all fields in new_data have corresponding columns
+                new_data = op.data.get('new_data', {})
+                existing_columns = self.sql_manager.get_existing_columns('ingested_records')
+                missing_columns = []
+                update_fields = {}
+                for field, value in new_data.items():
+                    safe_field = self.sql_manager._sanitize_identifier(field)
+                    if safe_field not in existing_columns:
+                        missing_columns.append(field)
+                    else:
+                        update_fields[safe_field] = value
+
+                if missing_columns:
+                    return False, f"Columns do not exist for update: {', '.join(missing_columns)}"
+
+                # Check if fields being updated have initial values in the records
+                fields_without_values = []
+                for safe_field in update_fields.keys():
+                    for record in original_records:
+                        if record.get(safe_field) is None:
+                            fields_without_values.append(safe_field)
+                            break  # Found one record without value, error
+
+                if fields_without_values:
+                    return False, f"Cannot update fields with no initial values: {', '.join(fields_without_values)}"
+
+                # Execute SQL UPDATE
+                if update_fields:
+                    success = self._execute_sql_update(filters, update_fields)
+                    if not success:
+                        return False, "SQL update failed"
+                else:
+                    # No fields to update
+                    pass
 
             elif op.op_type == 'delete':
                 # Store original state for rollback
@@ -248,6 +277,48 @@ class TransactionCoordinator:
         except Exception as e:
             logger.error("SQL operation prepare failed: %s", e)
             return False, str(e)
+
+    def _execute_sql_update(self, filters: Dict[str, Any], update_fields: Dict[str, Any]) -> bool:
+        """
+        Execute SQL UPDATE statement.
+
+        Args:
+            filters: WHERE conditions
+            update_fields: SET field = value pairs
+
+        Returns:
+            True if successful
+        """
+        try:
+            # Build WHERE clause
+            where_parts = []
+            where_values = []
+            for key, value in filters.items():
+                safe_key = self.sql_manager._sanitize_identifier(key)
+                where_parts.append(f"{safe_key} = ?")
+                where_values.append(value)
+
+            where_clause = " AND ".join(where_parts) if where_parts else "1=1"
+
+            # Build SET clause
+            set_parts = []
+            set_values = []
+            for key, value in update_fields.items():
+                set_parts.append(f"{key} = ?")
+                set_values.append(value)
+
+            set_clause = ", ".join(set_parts)
+
+            query = f"UPDATE ingested_records SET {set_clause} WHERE {where_clause}"
+
+            self.sql_manager.cursor.execute(query, set_values + where_values)
+            if not self.sql_manager.in_transaction:
+                self.sql_manager.connection.commit()
+            return True
+
+        except Exception as e:
+            logger.error("SQL update failed: %s", e)
+            return False
 
     def _prepare_mongo_operation(
         self,
@@ -287,12 +358,24 @@ class TransactionCoordinator:
                 )
                 op.rollback_data = {'original_docs': original_docs}
 
+                # Check if fields being updated have initial values in the documents
+                new_data = op.data.get('new_data', {})
+                fields_without_values = []
+                for field in new_data.keys():
+                    for doc in original_docs:
+                        if field not in doc:
+                            fields_without_values.append(field)
+                            break  # Found one doc without field
+
+                if fields_without_values:
+                    return False, f"Cannot update fields with no initial values: {', '.join(fields_without_values)}"
+
                 # Mark updates as pending in temp collection
                 success = self.mongo_manager.insert_record({
                     '_tx_id': tx.tx_id,
                     '_tx_operation': 'update',
                     '_tx_filters': filters,
-                    '_tx_data': op.data.get('new_data', {})
+                    '_tx_data': new_data
                 }, collection_name='_transaction_temp')
 
                 if not success:

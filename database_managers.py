@@ -487,6 +487,53 @@ class SQLManager:
             self.connection.commit()
         return deleted_count
 
+    def update_records(self, table_name: str, filters: Dict[str, Any], updates: Dict[str, Any]) -> int:
+        """
+        Update records in the table matching filters with the given updates.
+
+        Args:
+            table_name: Name of the table
+            filters: WHERE conditions
+            updates: SET field = value pairs
+
+        Returns:
+            Number of rows updated
+        """
+        try:
+            safe_table = self._sanitize_identifier(table_name)
+
+            # Build WHERE clause
+            where_clauses = []
+            where_values = []
+            for key, value in filters.items():
+                safe_key = self._sanitize_identifier(key)
+                where_clauses.append(f"{safe_key} = ?")
+                where_values.append(value)
+
+            where_clause = " AND ".join(where_clauses) if where_clauses else "1 = 1"
+
+            # Build SET clause
+            set_clauses = []
+            set_values = []
+            for key, value in updates.items():
+                safe_key = self._sanitize_identifier(key)
+                set_clauses.append(f"{safe_key} = ?")
+                set_values.append(value)
+
+            set_clause = ", ".join(set_clauses)
+
+            query = f"UPDATE {safe_table} SET {set_clause} WHERE {where_clause}"
+
+            self.cursor.execute(query, set_values + where_values)
+            updated_count = self.cursor.rowcount
+            if not self.in_transaction:
+                self.connection.commit()
+            return updated_count
+
+        except Exception as e:
+            sql_logger.error("Update error: %s", e)
+            return 0
+
     def list_child_tables(self) -> List[str]:
         """List user tables excluding the root table."""
         query = (
@@ -702,6 +749,47 @@ class MongoDBManager:
         if not updated_target or not updated_target.get('fields'):
             collection.delete_one({'_id': target['_id']})
 
+        return True
+
+    def update_records(
+        self,
+        filters: Dict[str, Any],
+        updates: Dict[str, Any],
+        collection_name: str = 'ingested_records',
+    ) -> int:
+        """
+        Update records in MongoDB matching filters with the given updates.
+
+        Args:
+            filters: Query filters
+            updates: Fields to update
+            collection_name: Collection name
+
+        Returns:
+            Number of documents updated
+        """
+        collection = self._get_collection(collection_name)
+        if collection is None:
+            return 0
+
+        if self.using_memory_fallback:
+            updated_count = 0
+            for index, doc in enumerate(collection.documents):
+                if self._matches_filters(doc, filters):
+                    updated = dict(doc)
+                    updated.update(updates)
+                    collection.documents[index] = updated
+                    updated_count += 1
+            return updated_count
+
+        result = collection.update_many(filters, {'$set': updates})
+        return result.modified_count
+
+    def _matches_filters(self, doc: Dict[str, Any], filters: Dict[str, Any]) -> bool:
+        """Check if document matches filters (simple implementation)"""
+        for key, value in filters.items():
+            if doc.get(key) != value:
+                return False
         return True
 
     def list_collections(self) -> List[str]:

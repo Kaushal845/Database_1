@@ -376,7 +376,21 @@ class MetadataDrivenQueryEngine:
         return {"sql": sql_filters, "mongo": mongo_filters}
 
     def _read(self, request: Dict[str, Any]) -> Dict[str, Any]:
-        fields = request.get("fields") or list(self.metadata_store.metadata.get("field_mappings", {}).keys())
+        fields = request.get("fields")
+        if fields:
+            # Check if all requested fields exist in metadata
+            missing_fields = []
+            for field in fields:
+                if field in ["username", "sys_ingested_at", "t_stamp"]:
+                    continue  # These are always available
+                mapping = self.metadata_store.get_field_mapping(field)
+                if not mapping:
+                    missing_fields.append(field)
+            if missing_fields:
+                return {"success": False, "error": f"Fields do not exist: {', '.join(missing_fields)}"}
+        else:
+            fields = list(self.metadata_store.metadata.get("field_mappings", {}).keys())
+
         filters = request.get("filters", {})
         limit = int(request.get("limit", 100))
 
@@ -597,25 +611,70 @@ class MetadataDrivenQueryEngine:
         if data is None:
             return {"success": False, "error": "Missing 'data' for update"}
 
-        delete_result = self._delete({"operation": "delete", "filters": filters})
-        if not delete_result.get("success"):
-            return {
-                "success": False,
-                "operation": "update",
-                "error": "Delete phase failed",
-                "delete_result": delete_result,
-            }
+        # Check if all fields in data have corresponding columns
+        existing_columns = self.sql_manager.get_existing_columns('ingested_records')
+        missing_columns = []
+        update_fields = {}
+        for field, value in data.items():
+            safe_field = self.sql_manager._sanitize_identifier(field)
+            if safe_field not in existing_columns:
+                missing_columns.append(field)
+            else:
+                update_fields[safe_field] = value
 
-        insert_result = self._insert({"operation": "insert", "data": data})
-        logger.info(
-            "Update completed with delete_then_insert: delete_success=%s insert_success=%s",
-            delete_result.get("success", False),
-            insert_result.get("success", False),
+        if missing_columns:
+            return {"success": False, "error": f"Columns do not exist for update: {', '.join(missing_columns)}"}
+
+        # Fetch original records to check for initial values
+        original_records = self.sql_manager.fetch_records(
+            table_name='ingested_records',
+            filters=filters,
+            limit=1000
         )
+
+        # Check if fields being updated have initial values
+        fields_without_values = []
+        for safe_field in update_fields.keys():
+            for record in original_records:
+                if record.get(safe_field) is None:
+                    fields_without_values.append(safe_field)
+                    break
+
+        if fields_without_values:
+            return {"success": False, "error": f"Cannot update fields with no initial values: {', '.join(fields_without_values)}"}
+
+        # Execute SQL UPDATE
+        if update_fields:
+            updated = self.sql_manager.update_records('ingested_records', filters, update_fields)
+            success = updated > 0
+        else:
+            success = True  # No fields to update, consider success
+
+        # Also update MongoDB if needed
+        # For simplicity, assuming updates are only for SQL fields, but to be complete, update MongoDB too
+        original_docs = self.mongo_manager.find_records(
+            filters=filters,
+            collection_name='ingested_records',
+            limit=1000
+        )
+
+        # Check if fields being updated have initial values in MongoDB
+        mongo_fields_without_values = []
+        for field in data.keys():
+            for doc in original_docs:
+                if field not in doc:
+                    mongo_fields_without_values.append(field)
+                    break
+
+        if mongo_fields_without_values:
+            return {"success": False, "error": f"Cannot update fields with no initial values: {', '.join(mongo_fields_without_values)}"}
+
+        mongo_updated = self.mongo_manager.update_records(filters, data, 'ingested_records')
+
+        logger.info("Update completed: sql_updated=%s mongo_updated=%s", updated, mongo_updated)
         return {
-            "success": insert_result.get("success", False),
+            "success": success,
             "operation": "update",
-            "strategy": "delete_then_insert",
-            "delete_result": delete_result,
-            "insert_result": insert_result,
+            "updated": updated,
+            "mongo_updated": mongo_updated,
         }
