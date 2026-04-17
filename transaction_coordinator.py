@@ -222,40 +222,24 @@ class TransactionCoordinator:
                 )
                 op.rollback_data = {'original_records': original_records}
 
-                # Check if all fields in new_data have corresponding columns
+                # Only update fields that actually exist as SQL columns.
+                # MongoDB-only fields (e.g. `country`, `profile`) will be handled
+                # by _prepare_mongo_operation and should be silently ignored here.
                 new_data = op.data.get('new_data', {})
                 existing_columns = self.sql_manager.get_existing_columns('ingested_records')
-                missing_columns = []
                 update_fields = {}
                 for field, value in new_data.items():
                     safe_field = self.sql_manager._sanitize_identifier(field)
-                    if safe_field not in existing_columns:
-                        missing_columns.append(field)
-                    else:
+                    if safe_field in existing_columns:
                         update_fields[safe_field] = value
+                    # else: field lives in MongoDB — skip here, handled by Mongo prepare
 
-                if missing_columns:
-                    return False, f"Columns do not exist for update: {', '.join(missing_columns)}"
-
-                # Check if fields being updated have initial values in the records
-                fields_without_values = []
-                for safe_field in update_fields.keys():
-                    for record in original_records:
-                        if record.get(safe_field) is None:
-                            fields_without_values.append(safe_field)
-                            break  # Found one record without value, error
-
-                if fields_without_values:
-                    return False, f"Cannot update fields with no initial values: {', '.join(fields_without_values)}"
-
-                # Execute SQL UPDATE
+                # Execute SQL partial UPDATE (no initial-value check — allow setting new values)
                 if update_fields:
                     success = self._execute_sql_update(filters, update_fields)
                     if not success:
                         return False, "SQL update failed"
-                else:
-                    # No fields to update
-                    pass
+
 
             elif op.op_type == 'delete':
                 # Store original state for rollback
@@ -358,19 +342,10 @@ class TransactionCoordinator:
                 )
                 op.rollback_data = {'original_docs': original_docs}
 
-                # Check if fields being updated have initial values in the documents
+                # Stage the partial update — no initial-value check (allow adding new fields)
                 new_data = op.data.get('new_data', {})
-                fields_without_values = []
-                for field in new_data.keys():
-                    for doc in original_docs:
-                        if field not in doc:
-                            fields_without_values.append(field)
-                            break  # Found one doc without field
 
-                if fields_without_values:
-                    return False, f"Cannot update fields with no initial values: {', '.join(fields_without_values)}"
-
-                # Mark updates as pending in temp collection
+                # Stage update in temp collection for 2-phase commit
                 success = self.mongo_manager.insert_record({
                     '_tx_id': tx.tx_id,
                     '_tx_operation': 'update',
@@ -477,13 +452,14 @@ class TransactionCoordinator:
                     operation = record.get('_tx_operation')
 
                     if operation == 'update':
-                        # Execute pending update
-                        self.mongo_manager.delete_records(
+                        # Execute pending partial update using $set so all other fields are preserved.
+                        # The old code did delete+insert which wiped the entire document.
+                        clean_data = {k: v for k, v in record['_tx_data'].items() if not k.startswith('_tx_')}
+                        self.mongo_manager.update_records(
                             record['_tx_filters'],
+                            clean_data,
                             'ingested_records'
                         )
-                        clean_data = {k: v for k, v in record['_tx_data'].items() if not k.startswith('_tx_')}
-                        self.mongo_manager.insert_record(clean_data, 'ingested_records')
 
                     elif operation == 'delete':
                         # Execute pending delete

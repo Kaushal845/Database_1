@@ -428,7 +428,7 @@ class MetadataDrivenQueryEngine:
         if not results_by_key:
             mongo_rows = self.mongo_manager.find_records(
                 filters=filter_plan["mongo"],
-                fields=plan["mongo_root_fields"],
+                fields=None,  # No projection — return full document
                 collection_name="ingested_records",
                 limit=limit,
             )
@@ -438,22 +438,30 @@ class MetadataDrivenQueryEngine:
                     continue
                 results_by_key[key] = dict(row)
 
-        # OPTIMIZATION: Batch fetch MongoDB root records instead of N+1 queries
-        if results_by_key and plan["mongo_root_fields"]:
+
+        # OPTIMIZATION: Batch fetch MongoDB root records instead of N+1 queries.
+        # Fetch the FULL document (no field projection) so that any field updated
+        # via $set (e.g. `country` set after insert) is always included in results.
+        if results_by_key:
             keys_list = list(results_by_key.keys())
             mongo_records = self.mongo_manager.find_records(
-                filters={"sys_ingested_at": {"$in": keys_list}},  # Fetch all in one query
-                fields=plan["mongo_root_fields"],
+                filters={"sys_ingested_at": {"$in": keys_list}},
+                fields=None,  # No projection — return entire document
                 collection_name="ingested_records",
-                limit=len(keys_list) * 2,  # Allow some buffer
+                limit=len(keys_list) * 2,
             )
             # Create a map for O(1) lookup
             mongo_by_key = {rec.get("sys_ingested_at"): rec for rec in mongo_records}
-            
-            # Merge MongoDB data into results
+
+            # Merge MongoDB data into results (SQL data takes precedence for shared fields)
             for key in results_by_key.keys():
                 if key in mongo_by_key:
-                    results_by_key[key].update(mongo_by_key[key])
+                    # Merge mongo fields in, but don't overwrite SQL fields already present
+                    mongo_doc = mongo_by_key[key]
+                    for mongo_field, mongo_val in mongo_doc.items():
+                        if mongo_field not in results_by_key[key]:
+                            results_by_key[key][mongo_field] = mongo_val
+
 
         # OPTIMIZATION: Batch fetch child entities per table instead of per-record queries
         for field_name, table_name in plan["sql_child_entities"].items():
@@ -618,70 +626,100 @@ class MetadataDrivenQueryEngine:
         if data is None:
             return {"success": False, "error": "Missing 'data' for update"}
 
-        # Check if all fields in data have corresponding columns
-        existing_columns = self.sql_manager.get_existing_columns('ingested_records')
-        missing_columns = []
-        update_fields = {}
+        # Require filters to avoid accidentally updating every record
+        if not filters and not request.get("allow_all", False):
+            return {
+                "success": False,
+                "error": "Refusing update without filters. Set allow_all=true to override.",
+            }
+
+        # -----------------------------------------------------------------------
+        # Route each update field to the correct backend using metadata mappings.
+        # A field can go to SQL, MongoDB, or both — determined by its stored mapping.
+        # This fixes the bug where MongoDB-only fields (e.g. `country`) were
+        # incorrectly rejected because they have no SQL column.
+        # -----------------------------------------------------------------------
+        sql_updates: Dict[str, Any] = {}
+        mongo_updates: Dict[str, Any] = {}
+
+        existing_sql_columns = set(self.sql_manager.get_existing_columns("ingested_records"))
+
         for field, value in data.items():
-            safe_field = self.sql_manager._sanitize_identifier(field)
-            if safe_field not in existing_columns:
-                missing_columns.append(field)
+            mapping = self.metadata_store.get_field_mapping(field)
+
+            if mapping:
+                sql_table = mapping.get("sql_table", "")
+                mongo_collection = mapping.get("mongo_collection", "")
+                backend = mapping.get("backend", "")
+
+                # Route to SQL root table if the mapping points there
+                if sql_table == "ingested_records" or backend in ("SQL", "Both"):
+                    safe_field = self.sql_manager._sanitize_identifier(field)
+                    if safe_field in existing_sql_columns:
+                        sql_updates[safe_field] = value
+                    else:
+                        # Column missing but mapping says SQL — add it dynamically
+                        from type_detector import TypeDetector
+                        detected_type = TypeDetector().detect_type(value)
+                        self.sql_manager.add_column_if_not_exists(field, detected_type, unique=False)
+                        existing_sql_columns = set(
+                            self.sql_manager.get_existing_columns("ingested_records")
+                        )
+                        safe_field = self.sql_manager._sanitize_identifier(field)
+                        sql_updates[safe_field] = value
+
+                # Route to MongoDB root collection if the mapping points there
+                if mongo_collection == "ingested_records" or backend in ("MongoDB", "Both"):
+                    mongo_updates[field] = value
+
             else:
-                update_fields[safe_field] = value
+                # No mapping yet — field may be new.
+                # Try SQL if the column already exists; always attempt MongoDB ($set adds new fields).
+                safe_field = self.sql_manager._sanitize_identifier(field)
+                if safe_field in existing_sql_columns:
+                    sql_updates[safe_field] = value
+                # MongoDB is schema-less — always include unmapped fields there
+                mongo_updates[field] = value
 
-        if missing_columns:
-            return {"success": False, "error": f"Columns do not exist for update: {', '.join(missing_columns)}"}
+        # Split filters for each backend
+        filter_plan = self._split_filters(filters)
 
-        # Fetch original records to check for initial values
-        original_records = self.sql_manager.fetch_records(
-            table_name='ingested_records',
-            filters=filters,
-            limit=1000
+        # Execute SQL partial UPDATE (only the specified columns, leaves rest intact)
+        sql_updated = 0
+        if sql_updates and filter_plan["sql"]:
+            sql_updated = self.sql_manager.update_records(
+                "ingested_records", filter_plan["sql"], sql_updates
+            )
+        elif sql_updates:
+            logger.warning(
+                "Skipping SQL update — no SQL-compatible filters for fields: %s",
+                list(sql_updates.keys()),
+            )
+
+        # Execute MongoDB partial UPDATE using $set (leaves all other fields intact)
+        mongo_updated = 0
+        if mongo_updates and filter_plan["mongo"]:
+            mongo_updated = self.mongo_manager.update_records(
+                filter_plan["mongo"], mongo_updates, "ingested_records"
+            )
+        elif mongo_updates:
+            logger.warning(
+                "Skipping MongoDB update — no Mongo-compatible filters for fields: %s",
+                list(mongo_updates.keys()),
+            )
+
+        success = sql_updated > 0 or mongo_updated > 0
+
+        logger.info(
+            "Update completed: sql_updated=%s mongo_updated=%s sql_fields=%s mongo_fields=%s",
+            sql_updated,
+            mongo_updated,
+            list(sql_updates.keys()),
+            list(mongo_updates.keys()),
         )
-
-        # Check if fields being updated have initial values
-        fields_without_values = []
-        for safe_field in update_fields.keys():
-            for record in original_records:
-                if record.get(safe_field) is None:
-                    fields_without_values.append(safe_field)
-                    break
-
-        if fields_without_values:
-            return {"success": False, "error": f"Cannot update fields with no initial values: {', '.join(fields_without_values)}"}
-
-        # Execute SQL UPDATE
-        if update_fields:
-            updated = self.sql_manager.update_records('ingested_records', filters, update_fields)
-            success = updated > 0
-        else:
-            success = True  # No fields to update, consider success
-
-        # Also update MongoDB if needed
-        # For simplicity, assuming updates are only for SQL fields, but to be complete, update MongoDB too
-        original_docs = self.mongo_manager.find_records(
-            filters=filters,
-            collection_name='ingested_records',
-            limit=1000
-        )
-
-        # Check if fields being updated have initial values in MongoDB
-        mongo_fields_without_values = []
-        for field in data.keys():
-            for doc in original_docs:
-                if field not in doc:
-                    mongo_fields_without_values.append(field)
-                    break
-
-        if mongo_fields_without_values:
-            return {"success": False, "error": f"Cannot update fields with no initial values: {', '.join(mongo_fields_without_values)}"}
-
-        mongo_updated = self.mongo_manager.update_records(filters, data, 'ingested_records')
-
-        logger.info("Update completed: sql_updated=%s mongo_updated=%s", updated, mongo_updated)
         return {
             "success": success,
             "operation": "update",
-            "updated": updated,
-            "mongo_updated": mongo_updated,
+            "updated": max(sql_updated, mongo_updated),
         }
+
