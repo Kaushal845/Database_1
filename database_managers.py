@@ -47,7 +47,25 @@ class InMemoryCollection:
         for key, value in filters.items():
             if key not in doc:
                 return False
-            if doc[key] != value:
+            if isinstance(value, dict):
+                if "$in" in value:
+                    if doc[key] not in value.get("$in", []):
+                        return False
+                    continue
+                if "$starts_with" in value:
+                    prefix = str(value.get("$starts_with", ""))
+                    if not str(doc[key]).lower().startswith(prefix.lower()):
+                        return False
+                    continue
+                if "$regex" in value:
+                    import re
+                    pattern = value.get("$regex", "")
+                    options = value.get("$options", "")
+                    flags = re.IGNORECASE if "i" in str(options).lower() else 0
+                    if not re.search(pattern, str(doc[key]), flags):
+                        return False
+                    continue
+            elif doc[key] != value:
                 return False
         return True
 
@@ -179,6 +197,11 @@ class SQLManager:
         if sanitized[0].isdigit():
             sanitized = f"f_{sanitized}"
         return sanitized
+
+    @staticmethod
+    def _escape_like(value: str) -> str:
+        """Escape SQL LIKE wildcards while using backslash as escape char."""
+        return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
     
     def get_existing_columns(self, table_name: str = "ingested_records") -> List[str]:
         """
@@ -412,7 +435,26 @@ class SQLManager:
         if filters:
             clauses = []
             for key, value in filters.items():
-                clauses.append(f"{self._sanitize_identifier(key)} = ?")
+                safe_key = self._sanitize_identifier(key)
+
+                if isinstance(value, dict):
+                    if "$starts_with" in value:
+                        prefix = self._escape_like(str(value.get("$starts_with", "")))
+                        clauses.append(f"{safe_key} LIKE ? ESCAPE '\\'")
+                        values.append(f"{prefix}%")
+                        continue
+
+                    if "$in" in value:
+                        candidates = list(value.get("$in", []))
+                        if not candidates:
+                            clauses.append("1 = 0")
+                        else:
+                            placeholders = ", ".join(["?" for _ in candidates])
+                            clauses.append(f"{safe_key} IN ({placeholders})")
+                            values.extend(candidates)
+                        continue
+
+                clauses.append(f"{safe_key} = ?")
                 values.append(value)
             query += " WHERE " + " AND ".join(clauses)
 
@@ -788,7 +830,26 @@ class MongoDBManager:
     def _matches_filters(self, doc: Dict[str, Any], filters: Dict[str, Any]) -> bool:
         """Check if document matches filters (simple implementation)"""
         for key, value in filters.items():
-            if doc.get(key) != value:
+            doc_value = doc.get(key)
+            if isinstance(value, dict):
+                if "$in" in value:
+                    if doc_value not in value.get("$in", []):
+                        return False
+                    continue
+                if "$starts_with" in value:
+                    prefix = str(value.get("$starts_with", ""))
+                    if not str(doc_value).lower().startswith(prefix.lower()):
+                        return False
+                    continue
+                if "$regex" in value:
+                    import re
+                    pattern = value.get("$regex", "")
+                    options = value.get("$options", "")
+                    flags = re.IGNORECASE if "i" in str(options).lower() else 0
+                    if not re.search(pattern, str(doc_value), flags):
+                        return False
+                    continue
+            elif doc_value != value:
                 return False
         return True
 

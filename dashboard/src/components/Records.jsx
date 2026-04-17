@@ -3,33 +3,66 @@ import axios from 'axios';
 
 function Records({ apiBase }) {
   const [records, setRecords] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [pagination, setPagination] = useState({ limit: 50, offset: 0 });
+  const [filterInput, setFilterInput] = useState('');
   const [filter, setFilter] = useState('');
-  const [selectedLimit, setSelectedLimit] = useState(50);
+  const [pagination, setPagination] = useState({
+    limit: 50,
+    offset: 0,
+    has_more: false,
+    total_returned: 0
+  });
 
   useEffect(() => {
-    fetchRecords();
-  }, [pagination, filter]);
+    const timer = setTimeout(() => {
+      setFilter(filterInput.trim());
+      setPagination((prev) => ({ ...prev, offset: 0 }));
+    }, 300);
 
-  const fetchRecords = async () => {
-    try {
-      setLoading(true);
-      let url = `${apiBase}/api/dashboard/records?limit=${pagination.limit}&offset=${pagination.offset}`;
-      if (filter) {
-        url += `&username=${filter}`;
+    return () => clearTimeout(timer);
+  }, [filterInput]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const fetchRecords = async () => {
+      try {
+        setLoading(true);
+        const params = {
+          limit: pagination.limit,
+          offset: pagination.offset
+        };
+        if (filter) {
+          params.username = filter;
+        }
+
+        const response = await axios.get(`${apiBase}/api/dashboard/records`, {
+          params,
+          signal: controller.signal
+        });
+
+        const pageInfo = response.data.pagination || {};
+        setRecords(response.data.records || []);
+        setPagination((prev) => ({
+          ...prev,
+          has_more: Boolean(pageInfo.has_more),
+          total_returned: pageInfo.total_returned || 0
+        }));
+        setError(null);
+      } catch (err) {
+        if (err.name !== 'CanceledError' && err.code !== 'ERR_CANCELED') {
+          setError(err.message);
+        }
+      } finally {
+        setLoading(false);
       }
-      const response = await axios.get(url);
-      setRecords(response.data.records);
-      setPagination(response.data.pagination);
-      setError(null);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchRecords();
+
+    return () => controller.abort();
+  }, [apiBase, pagination.limit, pagination.offset, filter]);
 
   const handleNextPage = () => {
     setPagination(prev => ({ ...prev, offset: prev.offset + prev.limit }));
@@ -40,9 +73,10 @@ function Records({ apiBase }) {
   };
 
   const handleLimitChange = (newLimit) => {
-    setSelectedLimit(newLimit);
-    setPagination({ limit: newLimit, offset: 0 });
+    setPagination(prev => ({ ...prev, limit: newLimit, offset: 0 }));
   };
+
+  const currentPage = Math.floor(pagination.offset / pagination.limit) + 1;
 
   const renderValue = (value) => {
     if (value === null || value === undefined) return <span style={{ color: '#999' }}>null</span>;
@@ -54,26 +88,25 @@ function Records({ apiBase }) {
   if (error) return <div className="error">Error: {error}</div>;
 
   return (
-    <div className="card">
+    <div className="card records-page">
       <h2>Ingested Records</h2>
 
       <div style={{ marginBottom: '20px', display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
         <div style={{ flex: '1', minWidth: '200px' }}>
-          <label>Filter by username:</label>
+          <label>Search username prefix:</label>
           <input
             type="text"
-            value={filter}
+            value={filterInput}
             onChange={(e) => {
-              setFilter(e.target.value);
-              setPagination(prev => ({ ...prev, offset: 0 }));
+              setFilterInput(e.target.value);
             }}
-            placeholder="Enter username..."
+            placeholder="Type beginning of username..."
           />
         </div>
         <div>
           <label style={{ marginRight: '10px' }}>Records per page:</label>
           <select
-            value={selectedLimit}
+            value={pagination.limit}
             onChange={(e) => handleLimitChange(Number(e.target.value))}
             style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
           >
@@ -139,6 +172,7 @@ function Records({ apiBase }) {
               >
                 Previous
               </button>
+              <span className="page-number">Page {currentPage}</span>
               <button
                 onClick={handleNextPage}
                 disabled={!pagination.has_more}

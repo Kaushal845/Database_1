@@ -201,9 +201,12 @@ async def get_dashboard_records(
         raise HTTPException(status_code=503, detail=f"System not initialized: {initialization_error}")
 
     try:
+        limit = max(1, min(limit, 1000))
+        offset = max(0, offset)
+
         filters = {}
         if username:
-            filters['username'] = username
+            filters['username'] = {'$starts_with': username.strip()}
 
         # Get all fields for maximum visibility
         all_fields = list(pipeline.metadata_store.metadata.get('field_mappings', {}).keys())
@@ -237,12 +240,15 @@ async def get_dashboard_records(
 
         logger.debug(f"Querying with {len(valid_fields)} valid fields from {len(all_fields)} total")
 
+        # Fetch one extra record to determine whether another page exists.
+        fetch_limit = limit + offset + 1
+
         # Execute read query through query engine
         read_result = pipeline.query_engine.execute({
             'operation': 'read',
             'fields': valid_fields,
             'filters': filters,
-            'limit': limit + offset  # Fetch more to handle offset
+            'limit': fetch_limit
         })
 
         if not read_result.get('success'):
@@ -250,8 +256,11 @@ async def get_dashboard_records(
             logger.error(f"Query execution failed: {error_msg}")
             raise HTTPException(status_code=500, detail=error_msg)
 
-        # Apply offset
-        records = read_result.get('records', [])[offset:offset + limit]
+        all_records = read_result.get('records', [])
+
+        # Apply offset and limit for current page.
+        records = all_records[offset:offset + limit]
+        has_more = len(all_records) > (offset + limit)
 
         return {
             "success": True,
@@ -260,7 +269,7 @@ async def get_dashboard_records(
                 "limit": limit,
                 "offset": offset,
                 "total_returned": len(records),
-                "has_more": len(read_result.get('records', [])) > (offset + limit)
+                "has_more": has_more
             },
             "records": records
         }

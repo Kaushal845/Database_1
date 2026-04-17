@@ -2,6 +2,7 @@
 Metadata-driven query engine for Assignment-2 CRUD operations.
 """
 from typing import Any, Callable, Dict, List, Optional
+import re
 
 from database_managers import SQLManager, MongoDBManager
 from metadata_store import MetadataStore
@@ -353,25 +354,31 @@ class MetadataDrivenQueryEngine:
         sql_filters: Dict[str, Any] = {}
         mongo_filters: Dict[str, Any] = {}
 
+        def _mongo_filter_value(value: Any) -> Any:
+            if isinstance(value, dict) and "$starts_with" in value:
+                prefix = re.escape(str(value.get("$starts_with", "")))
+                return {"$regex": f"^{prefix}", "$options": "i"}
+            return value
+
         for key, value in filters.items():
             mapping = self.metadata_store.get_field_mapping(key)
             if not mapping:
                 sql_filters[key] = value
-                mongo_filters[key] = value
+                mongo_filters[key] = _mongo_filter_value(value)
                 continue
 
             if mapping.get("sql_table") == "ingested_records":
                 sql_filters[key] = value
             if mapping.get("mongo_collection") == "ingested_records":
-                mongo_filters[key] = value
+                mongo_filters[key] = _mongo_filter_value(value)
 
         if "username" in filters:
             sql_filters.setdefault("username", filters["username"])
-            mongo_filters.setdefault("username", filters["username"])
+            mongo_filters.setdefault("username", _mongo_filter_value(filters["username"]))
 
         if "sys_ingested_at" in filters:
             sql_filters.setdefault("sys_ingested_at", filters["sys_ingested_at"])
-            mongo_filters.setdefault("sys_ingested_at", filters["sys_ingested_at"])
+            mongo_filters.setdefault("sys_ingested_at", _mongo_filter_value(filters["sys_ingested_at"]))
 
         return {"sql": sql_filters, "mongo": mongo_filters}
 
