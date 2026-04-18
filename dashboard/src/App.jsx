@@ -6,6 +6,8 @@ import QueryBuilder from './components/QueryBuilder';
 import FieldPlacements from './components/FieldPlacements';
 import SessionInfo from './components/SessionInfo';
 import EntityCatalog from './components/EntityCatalog';
+import QueryHistory from './components/QueryHistory';
+import PerformanceView from './components/PerformanceView';
 
 const API_BASE = 'http://localhost:8000';
 
@@ -69,6 +71,18 @@ function App() {
           Query Builder
         </button>
         <button
+          className={`tab ${activeTab === 'history' ? 'active' : ''}`}
+          onClick={() => setActiveTab('history')}
+        >
+          Query History
+        </button>
+        <button
+          className={`tab ${activeTab === 'performance' ? 'active' : ''}`}
+          onClick={() => setActiveTab('performance')}
+        >
+          Performance
+        </button>
+        <button
           className={`tab ${activeTab === 'placements' ? 'active' : ''}`}
           onClick={() => setActiveTab('placements')}
         >
@@ -86,6 +100,8 @@ function App() {
       {activeTab === 'records' && <Records apiBase={API_BASE} />}
       {activeTab === 'entities' && <EntityCatalog apiBase={API_BASE} />}
       {activeTab === 'query' && <QueryBuilder apiBase={API_BASE} />}
+      {activeTab === 'history' && <QueryHistory apiBase={API_BASE} />}
+      {activeTab === 'performance' && <PerformanceView apiBase={API_BASE} />}
       {activeTab === 'placements' && <FieldPlacements apiBase={API_BASE} />}
       {activeTab === 'session' && <SessionInfo apiBase={API_BASE} />}
     </div>

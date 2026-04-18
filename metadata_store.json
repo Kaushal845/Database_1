@@ -2,12 +2,12 @@
   "version": 2,
   "fields": {
     "username": {
-      "appearances": 1004,
+      "appearances": 1006,
       "type_counts": {
-        "string": 1004
+        "string": 1006
       },
       "first_seen": "2026-04-16T21:08:09.765324+00:00",
-      "last_seen": "2026-04-17T09:35:55.030798+00:00",
+      "last_seen": "2026-04-18T03:56:33.760296+00:00",
       "sample_values": [
         "smithannette",
         "laceyrivera",
@@ -56,12 +56,13 @@
       ]
     },
     "country": {
-      "appearances": 878,
+      "appearances": 880,
       "type_counts": {
-        "string": 878
+        "string": 878,
+        "integer": 2
       },
       "first_seen": "2026-04-16T21:08:09.773668+00:00",
-      "last_seen": "2026-04-17T09:35:55.087945+00:00",
+      "last_seen": "2026-04-18T03:56:33.806463+00:00",
       "sample_values": [
         "Morocco",
         "Honduras",
@@ -2591,7 +2592,7 @@
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-04-17T09:35:55.147047+00:00"
+      "updated_at": "2026-04-18T03:56:33.847291+00:00"
     },
     "session_id": {
       "backend": "MongoDB",
@@ -3587,7 +3588,7 @@
     }
   },
   "quarantined_fields": {},
-  "total_records": 502,
-  "last_updated": "2026-04-17T09:35:55.147083+00:00",
+  "total_records": 503,
+  "last_updated": "2026-04-18T03:56:33.847310+00:00",
   "session_start": "2026-04-16T21:08:09.575448+00:00"
 }

@@ -63,10 +63,10 @@ function Dashboard({ apiBase }) {
       </div>
 
       <div className="card">
-        <h2>Database Objects</h2>
+        <h2>Logical Data Objects</h2>
         <div className="stats-grid">
           <div className="stat-card">
-            <div className="stat-label">Total Database Tables</div>
+            <div className="stat-label">Total Logical Objects</div>
             <div className="stat-value">{summary.database_objects.total_tables}</div>
           </div>
         </div>

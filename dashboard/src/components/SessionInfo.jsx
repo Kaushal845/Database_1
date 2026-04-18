@@ -76,9 +76,9 @@ function SessionInfo({ apiBase }) {
               <div style={{ marginTop: '15px' }}>
                 <strong>Guarantees:</strong>
                 <ul style={{ marginTop: '8px', marginLeft: '20px', fontSize: '14px' }}>
-                  <li>All CRUD operations are atomic across SQL and MongoDB</li>
+                  <li>All CRUD operations are atomic across all storage backends</li>
                   <li>Automatic rollback on any failure - no partial writes</li>
-                  <li>Full data consistency maintained across both backends</li>
+                  <li>Full data consistency maintained across the system</li>
                 </ul>
               </div>
             )}

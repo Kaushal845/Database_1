@@ -6,7 +6,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
 import json
+import time
 import traceback
+from pathlib import Path
 
 from ingestion_pipeline import IngestionPipeline
 from metadata_store import MetadataStore
@@ -31,6 +33,10 @@ app.add_middleware(
 pipeline = None
 transaction_coordinator = None
 initialization_error = None
+
+# Query execution history (in-memory, capped at 500 entries)
+query_history: List[Dict[str, Any]] = []
+QUERY_HISTORY_MAX = 500
 
 
 def initialize_system():
@@ -604,13 +610,16 @@ async def get_field_placements() -> Dict[str, Any]:
 
 @app.post("/api/query")
 async def execute_query(request: Dict[str, Any]) -> Dict[str, Any]:
-    """POST /api/query - Execute CRUD operations"""
+    """POST /api/query - Execute CRUD operations with query history tracking"""
+    global query_history
     if not pipeline:
         raise HTTPException(status_code=503, detail=f"System not initialized: {initialization_error}")
 
+    start_time = time.perf_counter()
     try:
         logger.info(f"Executing query: operation={request.get('operation')}")
         result = pipeline.execute_crud(request)
+        elapsed_ms = round((time.perf_counter() - start_time) * 1000, 2)
 
         # Remove backend-specific details from response
         sanitized_result = {
@@ -630,7 +639,20 @@ async def execute_query(request: Dict[str, Any]) -> Dict[str, Any]:
         if 'sql_deleted' in result or 'mongo_deleted' in result:
             sanitized_result['deleted'] = result.get('sql_deleted', 0) + result.get('mongo_deleted', 0)
 
-        # DO NOT include: query_plan, sql_deleted, mongo_deleted, or any backend routing info
+        # Record query in history
+        history_entry = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "operation": request.get('operation', 'unknown'),
+            "filters": request.get('filters', {}),
+            "fields": request.get('fields'),
+            "latency_ms": elapsed_ms,
+            "success": result.get('success', False),
+            "record_count": result.get('count', result.get('updated', result.get('inserted', 0))),
+            "error": result.get('error'),
+        }
+        query_history.append(history_entry)
+        if len(query_history) > QUERY_HISTORY_MAX:
+            query_history = query_history[-QUERY_HISTORY_MAX:]
 
         return {
             "success": result.get('success', False),
@@ -638,9 +660,83 @@ async def execute_query(request: Dict[str, Any]) -> Dict[str, Any]:
             "result": sanitized_result
         }
     except Exception as e:
+        elapsed_ms = round((time.perf_counter() - start_time) * 1000, 2)
+        # Record failed query in history too
+        query_history.append({
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "operation": request.get('operation', 'unknown'),
+            "filters": request.get('filters', {}),
+            "latency_ms": elapsed_ms,
+            "success": False,
+            "error": str(e),
+        })
         logger.error(f"Error executing query: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
 
+
+@app.get("/api/dashboard/query-history")
+async def get_query_history(limit: int = 100) -> Dict[str, Any]:
+    """GET /api/dashboard/query-history - View query execution history"""
+    limit = max(1, min(limit, 500))
+    recent = list(reversed(query_history[-limit:]))  # Most recent first
+    return {
+        "success": True,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "total": len(query_history),
+        "showing": len(recent),
+        "history": recent
+    }
+
+
+@app.delete("/api/dashboard/query-history")
+async def clear_query_history() -> Dict[str, Any]:
+    """DELETE /api/dashboard/query-history - Clear query execution history"""
+    global query_history
+    count = len(query_history)
+    query_history = []
+    return {
+        "success": True,
+        "cleared": count,
+        "timestamp": datetime.now(timezone.utc).isoformat()
+    }
+
+
+@app.get("/api/dashboard/benchmark-results")
+async def get_benchmark_results() -> Dict[str, Any]:
+    """GET /api/dashboard/benchmark-results - Get performance & comparative benchmark results"""
+    docs_dir = Path("docs")
+    results = {}
+
+    # Load performance benchmark results
+    perf_path = docs_dir / "performance_benchmark_results.json"
+    if perf_path.exists():
+        try:
+            results["performance"] = json.loads(perf_path.read_text(encoding="utf-8"))
+        except Exception as e:
+            results["performance"] = {"error": str(e)}
+
+    # Load comparative benchmark results
+    comp_path = docs_dir / "comparative_benchmark_results.json"
+    if comp_path.exists():
+        try:
+            results["comparative"] = json.loads(comp_path.read_text(encoding="utf-8"))
+        except Exception as e:
+            results["comparative"] = {"error": str(e)}
+
+    # Load legacy ingestion benchmark results
+    ingest_path = docs_dir / "ingestion_benchmark_results.json"
+    if ingest_path.exists():
+        try:
+            results["ingestion"] = json.loads(ingest_path.read_text(encoding="utf-8"))
+        except Exception as e:
+            results["ingestion"] = {"error": str(e)}
+
+    return {
+        "success": True,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "has_data": len(results) > 0,
+        "benchmarks": results
+    }
 
 # Transaction API endpoints...
 @app.post("/api/transaction/begin")
