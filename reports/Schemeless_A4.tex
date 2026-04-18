@@ -49,7 +49,9 @@
 % \onehalfspacing
 \setstretch{1.1}   % tighter than 1.5
 
+{\setstretch{1}
 \tableofcontents
+}
 \newpage
 
 \section{Executive Summary}
@@ -73,7 +75,7 @@ Assignment 4 required four phases: dashboard enhancement, performance benchmarki
 	\item System packaging with Docker Compose and documented local setup workflows.
 \end{itemize}
 
-\subsection{Primary Deliverables Produced}
+\subsection{Deliverables}
 \begin{itemize}
 	\item Source code repository with Assignment 4 features integrated.
 	\item Performance and comparative benchmark scripts plus generated artifacts.
@@ -121,6 +123,7 @@ The assignment constraint requires that users interact with logical abstractions
 
 Technical comparative views (Performance tab) intentionally mention direct SQL and MongoDB because Assignment 4 Sections 3 and 4 explicitly require that comparison.
 
+\newpage
 \textbf{Dashboard Screenshots:}
 \begin{figure}[H]
 \centering
@@ -323,12 +326,63 @@ The measurements are consistent with a metadata-driven, dual-write architecture:
 We compared logical framework operations against direct backend access to quantify abstraction cost and benefit. The implemented comparisons were:
 \begin{enumerate}
 	\item Record retrieval: framework read vs direct SQL SELECT vs direct MongoDB find.
+	\begin{table}[H]
+    \centering
+    \begin{tabular}{l r r r r}
+    \toprule
+    \textbf{Method} & \textbf{Avg (ms)} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{P95 (ms)} \\
+    \midrule
+    Framework (logical query) & 2.403 & 1.885 & 3.899 & 3.088 \\
+    Direct SQL (SELECT) & 0.023 & 0.020 & 0.080 & 0.025 \\
+    Direct MongoDB (find) & 1.161 & 0.705 & 1.800 & 1.561 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Record retrieval latency breakdown.}
+    \end{table}
 	\item Nested document access: framework read vs direct MongoDB find with projection.
+	\begin{table}[H]
+        \centering
+        \begin{tabular}{l r r r r}
+        \toprule
+        \textbf{Method} & \textbf{Avg (ms)} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{P95 (ms)} \\
+        \midrule
+        Framework (logical query) & 3.362 & 2.233 & 5.619 & 4.853 \\
+        Direct MongoDB (find + projection) & 1.487 & 1.131 & 3.045 & 2.028 \\
+        \bottomrule
+        \end{tabular}
+        \caption{Nested document access latency breakdown.}
+        \end{table}
 	\item Record update: framework logical update vs direct SQL UPDATE vs direct MongoDB \$set.
+	\begin{table}[H]
+    \centering
+    \begin{tabular}{l r r r r}
+    \toprule
+    \textbf{Method} & \textbf{Avg (ms)} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{P95 (ms)} \\
+    \midrule
+    Framework (logical update) & 8.815 & 6.511 & 16.013 & 11.075 \\
+    Direct SQL (UPDATE) & 0.022 & 0.014 & 0.209 & 0.017 \\
+    Direct MongoDB (\$set) & 1.204 & 0.914 & 1.627 & 1.582 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Record update latency breakdown.}
+    \end{table}
 	\item Record insertion: framework ingest vs direct SQL INSERT vs direct MongoDB insert\_one.
+	\begin{table}[H]
+    \centering
+    \begin{tabular}{l r r r r}
+    \toprule
+    \textbf{Method} & \textbf{Avg (ms)} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{P95 (ms)} \\
+    \midrule
+    Framework (full pipeline) & 366.768 & 274.711 & 1237.725 & 372.490 \\
+    Direct SQL (INSERT) & 0.103 & 0.067 & 0.270 & 0.182 \\
+    Direct MongoDB (insert\_one) & 1.032 & 0.560 & 1.645 & 1.567 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Record insertion latency breakdown.}
+    \end{table}
 \end{enumerate}
 
-\subsection{Comparative Results (Measured)}
+\textbf{Comparative Results Summary:}
 \begin{table}[H]
 \centering
 \begin{tabular}{l r r r r}
@@ -344,67 +398,8 @@ Record Insertion & 366.77 & 0.10 & 1.03 & 32214.4\% \\
 \caption{Comparative summary (framework vs direct access).}
 \end{table}
 
-\subsection{Detailed Per-Test Latency Tables}
-\subsubsection{Record Retrieval}
-\begin{table}[H]
-\centering
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Method} & \textbf{Avg (ms)} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{P95 (ms)} \\
-\midrule
-Framework (logical query) & 2.403 & 1.885 & 3.899 & 3.088 \\
-Direct SQL (SELECT) & 0.023 & 0.020 & 0.080 & 0.025 \\
-Direct MongoDB (find) & 1.161 & 0.705 & 1.800 & 1.561 \\
-\bottomrule
-\end{tabular}
-\caption{Record retrieval latency breakdown.}
-\end{table}
 
-\subsubsection{Nested Document Access}
-\begin{table}[H]
-\centering
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Method} & \textbf{Avg (ms)} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{P95 (ms)} \\
-\midrule
-Framework (logical query) & 3.362 & 2.233 & 5.619 & 4.853 \\
-Direct MongoDB (find + projection) & 1.487 & 1.131 & 3.045 & 2.028 \\
-\bottomrule
-\end{tabular}
-\caption{Nested document access latency breakdown.}
-\end{table}
-
-\subsubsection{Record Update}
-\begin{table}[H]
-\centering
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Method} & \textbf{Avg (ms)} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{P95 (ms)} \\
-\midrule
-Framework (logical update) & 8.815 & 6.511 & 16.013 & 11.075 \\
-Direct SQL (UPDATE) & 0.022 & 0.014 & 0.209 & 0.017 \\
-Direct MongoDB (\$set) & 1.204 & 0.914 & 1.627 & 1.582 \\
-\bottomrule
-\end{tabular}
-\caption{Record update latency breakdown.}
-\end{table}
-
-\subsubsection{Record Insertion}
-\begin{table}[H]
-\centering
-\begin{tabular}{l r r r r}
-\toprule
-\textbf{Method} & \textbf{Avg (ms)} & \textbf{Min (ms)} & \textbf{Max (ms)} & \textbf{P95 (ms)} \\
-\midrule
-Framework (full pipeline) & 366.768 & 274.711 & 1237.725 & 372.490 \\
-Direct SQL (INSERT) & 0.103 & 0.067 & 0.270 & 0.182 \\
-Direct MongoDB (insert\_one) & 1.032 & 0.560 & 1.645 & 1.567 \\
-\bottomrule
-\end{tabular}
-\caption{Record insertion latency breakdown.}
-\end{table}
-
-\subsection{4.6 Discussion: Overhead vs Value}
+\subsection{Discussion: Overhead vs Value}
 
 \subsubsection*{Where the abstraction adds overhead}
 \begin{itemize}
@@ -464,6 +459,8 @@ Launch dashboard instructions & Local frontend workflow and Docker integrated da
 \end{longtable}
 
 \subsection{Docker Packaging Summary}
+Detailed Docker instructions are provided in \href{https://github.com/Kaushal845/Database_1/blob/main/DOCKER_SETUP.md}{\texttt{DOCKER\_SETUP.md}}.
+
 Using \texttt{docker compose up --build} starts:
 \begin{itemize}
 	\item MongoDB container,
@@ -495,27 +492,28 @@ Exposed endpoints include dashboard UI, API docs, and health endpoint. The Docke
 \caption{API evidence from benchmark endpoint output.}
 \end{figure}
 
-\section{Summary of Assignment Requirements}
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.24\textwidth} >{\raggedright\arraybackslash}p{0.70\textwidth}}
-\toprule
-\textbf{Criterion} & \textbf{Coverage in This Submission} \\
-\midrule
-Dashboard Enhancement & Usable and logically-oriented multi-tab dashboard with session tracking, entity catalog, record inspection, query execution, and query history, while preserving abstraction constraints in core views. \\
-\addlinespace
-Performance Evaluation & Dedicated benchmark suite with ingestion, query, metadata, transaction, throughput, and distribution measurements; includes reproducible script outputs and interpretation. \\
-\addlinespace
-Comparative Analysis & Framework-vs-direct benchmarks for retrieval, nested access, updates, insertion; latency and overhead tables plus trade-off discussion and usage recommendations. \\
-\addlinespace
-System Packaging & Complete local and Docker setup instructions, service map, run commands, and demonstration flow for fast evaluator onboarding. \\
-\addlinespace
-Report Quality & Structured technical narrative with data tables, interpretation, constraints, limitations, and checklist-driven evidence mapping to assignment requirements. \\
-\bottomrule
-\end{longtable}
+% \section{Summary of Assignment Requirements}
+% \begin{longtable}{>{\raggedright\arraybackslash}p{0.24\textwidth} >{\raggedright\arraybackslash}p{0.70\textwidth}}
+% \toprule
+% \textbf{Criterion} & \textbf{Coverage in This Submission} \\
+% \midrule
+% Dashboard Enhancement & Usable and logically-oriented multi-tab dashboard with session tracking, entity catalog, record inspection, query execution, and query history, while preserving abstraction constraints in core views. \\
+% \addlinespace
+% Performance Evaluation & Dedicated benchmark suite with ingestion, query, metadata, transaction, throughput, and distribution measurements; includes reproducible script outputs and interpretation. \\
+% \addlinespace
+% Comparative Analysis & Framework-vs-direct benchmarks for retrieval, nested access, updates, insertion; latency and overhead tables plus trade-off discussion and usage recommendations. \\
+% \addlinespace
+% System Packaging & Complete local and Docker setup instructions, service map, run commands, and demonstration flow for fast evaluator onboarding. \\
+% \addlinespace
+% Report Quality & Structured technical narrative with data tables, interpretation, constraints, limitations, and checklist-driven evidence mapping to assignment requirements. \\
+% \bottomrule
+% \end{longtable}
 
 \section{Limitations}
 \begin{itemize}
 	\item Some percentage-overhead values can look unintuitive when direct baseline latency is extremely small.
 	\item Current deployment is single-node and primarily optimized for coursework-scale data volumes.
+	\item Query history is currently maintained in memory at the API layer, so it is cleared when the service restarts.
 \end{itemize}
 
 % \subsection{Planned Improvements}
