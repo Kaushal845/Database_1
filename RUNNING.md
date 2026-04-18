@@ -17,7 +17,7 @@ Complete instructions to install, configure, and run the entire system.
 ## 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-org>/Database_1.git
+git clone https://github.com/Kaushal845/Database_1.git
 cd Database_1
 ```
 
