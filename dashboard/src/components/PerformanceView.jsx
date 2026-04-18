@@ -24,12 +24,28 @@ function PerformanceView({ apiBase }) {
 
     // Pure CSS bar chart renderer
     const BarChart = ({ items, valueKey, labelKey, unit, maxValue, color }) => {
+        const maxLabelChars = Math.max(...items.map(i => String(i[labelKey] ?? '').length), 10);
+        const LABEL_COL_WIDTH = Math.min(240, Math.max(150, maxLabelChars * 7 + 18));
         const max = maxValue || Math.max(...items.map(i => i[valueKey] || 0)) * 1.1 || 1;
         return (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {items.map((item, idx) => (
                     <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{ minWidth: '160px', fontSize: '13px', fontWeight: 'bold', textAlign: 'right' }}>
+                        <div
+                            title={String(item[labelKey] ?? '')}
+                            style={{
+                                flex: `0 0 ${LABEL_COL_WIDTH}px`,
+                                width: `${LABEL_COL_WIDTH}px`,
+                                minWidth: `${LABEL_COL_WIDTH}px`,
+                                maxWidth: `${LABEL_COL_WIDTH}px`,
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                                textAlign: 'left',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                            }}
+                        >
                             {item[labelKey]}
                         </div>
                         <div style={{ flex: 1, height: '28px', backgroundColor: '#e0e0e0', borderRadius: '4px', overflow: 'hidden', position: 'relative' }}>
@@ -436,7 +452,7 @@ function PerformanceView({ apiBase }) {
                         </h2>
                         <p style={sectionSubtextStyle}>
                             Comparison of the hybrid framework's logical abstraction layer versus direct SQL and MongoDB
-                            access. Measures query latency, update latency, system throughput, and query processing overhead.
+                            access. Measures query latency, update latency, and query processing overhead.
                         </p>
                     </div>
 
@@ -533,47 +549,9 @@ function PerformanceView({ apiBase }) {
                         </div>
                     )}
 
-                    {/* 4.N+2 Throughput Under Increasing Workload (Line Graph) */}
-                    {hasPerformance && benchmarks.performance.throughput_scaling && (
-                        <div className="card">
-                            <h2>4.{(benchmarks.comparative.comparisons?.length || 0) + 2} Throughput Under Increasing Workload</h2>
-                            <p style={{ color: '#666', marginBottom: '15px' }}>
-                                System throughput (operations per second) as workload size increases.
-                                This line graph shows how the framework maintains consistent throughput under load,
-                                demonstrating stable performance characteristics of the abstraction layer.
-                            </p>
-                            <LineChart
-                                data={benchmarks.performance.throughput_scaling.map(d => ({
-                                    ...d,
-                                    xLabel: `${d.workload_ops} ops`,
-                                }))}
-                                xKey="xLabel"
-                                yKey="throughput_ops_per_s"
-                                xLabel="Workload Size (operations)"
-                                yLabel="Throughput (ops/s)"
-                            />
-                            <div style={{ overflowX: 'auto', marginTop: '10px' }}>
-                                <table>
-                                    <thead>
-                                        <tr><th>Workload (ops)</th><th>Elapsed (s)</th><th>Throughput (ops/s)</th></tr>
-                                    </thead>
-                                    <tbody>
-                                        {benchmarks.performance.throughput_scaling.map((row, i) => (
-                                            <tr key={i}>
-                                                <td><strong>{row.workload_ops}</strong></td>
-                                                <td>{row.elapsed_s?.toFixed(3)}</td>
-                                                <td style={{ fontWeight: 'bold', color: '#1976d2' }}>{row.throughput_ops_per_s?.toFixed(1)}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* 4.N+3 Discussion */}
+                    {/* 4.N+2 Discussion */}
                     <div className="card">
-                        <h2>4.{(benchmarks.comparative.comparisons?.length || 0) + 3} Discussion: Overhead vs Value</h2>
+                        <h2>4.{(benchmarks.comparative.comparisons?.length || 0) + 2} Discussion: Overhead vs Value</h2>
                         <div style={{ lineHeight: '1.8', fontSize: '14px' }}>
                             <h3 style={{ color: '#c62828', marginTop: '10px' }}>Where the abstraction adds overhead</h3>
                             <ul>

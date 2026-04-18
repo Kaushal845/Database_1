@@ -6,8 +6,8 @@
       "type_counts": {
         "string": 240
       },
-      "first_seen": "2026-04-18T06:47:43.457251+00:00",
-      "last_seen": "2026-04-18T06:48:40.826723+00:00",
+      "first_seen": "2026-04-18T09:15:34.266736+00:00",
+      "last_seen": "2026-04-18T09:16:18.234903+00:00",
       "sample_values": [
         "bench_user_0",
         "bench_user_1",
@@ -24,8 +24,8 @@
       "type_counts": {
         "email": 240
       },
-      "first_seen": "2026-04-18T06:47:43.466936+00:00",
-      "last_seen": "2026-04-18T06:48:40.841614+00:00",
+      "first_seen": "2026-04-18T09:15:34.284044+00:00",
+      "last_seen": "2026-04-18T09:16:18.249683+00:00",
       "sample_values": [
         "lucasteresa@example.com",
         "taylorrichard@example.org",
@@ -42,8 +42,8 @@
       "type_counts": {
         "integer": 240
       },
-      "first_seen": "2026-04-18T06:47:43.478419+00:00",
-      "last_seen": "2026-04-18T06:48:40.855946+00:00",
+      "first_seen": "2026-04-18T09:15:34.298577+00:00",
+      "last_seen": "2026-04-18T09:16:18.262470+00:00",
       "sample_values": [
         "74",
         "31",
@@ -60,8 +60,8 @@
       "type_counts": {
         "string": 240
       },
-      "first_seen": "2026-04-18T06:47:43.489673+00:00",
-      "last_seen": "2026-04-18T06:48:40.870938+00:00",
+      "first_seen": "2026-04-18T09:15:34.311385+00:00",
+      "last_seen": "2026-04-18T09:16:18.274866+00:00",
       "sample_values": [
         "France",
         "Costa Rica",
@@ -78,8 +78,8 @@
       "type_counts": {
         "ip_address": 240
       },
-      "first_seen": "2026-04-18T06:47:43.504014+00:00",
-      "last_seen": "2026-04-18T06:48:40.887399+00:00",
+      "first_seen": "2026-04-18T09:15:34.327666+00:00",
+      "last_seen": "2026-04-18T09:16:18.287053+00:00",
       "sample_values": [
         "80.221.30.47",
         "215.89.225.151",
@@ -96,8 +96,8 @@
       "type_counts": {
         "boolean": 240
       },
-      "first_seen": "2026-04-18T06:47:43.516887+00:00",
-      "last_seen": "2026-04-18T06:48:40.902950+00:00",
+      "first_seen": "2026-04-18T09:15:34.339773+00:00",
+      "last_seen": "2026-04-18T09:16:18.302545+00:00",
       "sample_values": [
         "True",
         "False"
@@ -108,8 +108,8 @@
       "type_counts": {
         "float": 240
       },
-      "first_seen": "2026-04-18T06:47:43.529897+00:00",
-      "last_seen": "2026-04-18T06:48:40.918287+00:00",
+      "first_seen": "2026-04-18T09:15:34.353934+00:00",
+      "last_seen": "2026-04-18T09:16:18.315128+00:00",
       "sample_values": [
         "38.3",
         "25.42",
@@ -126,8 +126,8 @@
       "type_counts": {
         "dict": 120
       },
-      "first_seen": "2026-04-18T06:47:43.542456+00:00",
-      "last_seen": "2026-04-18T06:48:40.927184+00:00",
+      "first_seen": "2026-04-18T09:15:34.367186+00:00",
+      "last_seen": "2026-04-18T09:16:18.321143+00:00",
       "sample_values": [
         "{'bio': 'Around direction soldier strong water clear.', 'website': 'https://morgan-west.com/'}",
         "{'bio': 'Life attack realize prove into lead.', 'website': 'http://thomas-mendoza.org/'}",
@@ -144,8 +144,8 @@
       "type_counts": {
         "string": 240
       },
-      "first_seen": "2026-04-18T06:47:43.549550+00:00",
-      "last_seen": "2026-04-18T06:48:40.942906+00:00",
+      "first_seen": "2026-04-18T09:15:34.373679+00:00",
+      "last_seen": "2026-04-18T09:16:18.333151+00:00",
       "sample_values": [
         "Around direction soldier strong water clear.",
         "Life attack realize prove into lead.",
@@ -162,8 +162,8 @@
       "type_counts": {
         "url": 240
       },
-      "first_seen": "2026-04-18T06:47:43.562576+00:00",
-      "last_seen": "2026-04-18T06:48:40.956075+00:00",
+      "first_seen": "2026-04-18T09:15:34.385332+00:00",
+      "last_seen": "2026-04-18T09:16:18.345930+00:00",
       "sample_values": [
         "https://morgan-west.com/",
         "http://thomas-mendoza.org/",
@@ -180,8 +180,8 @@
       "type_counts": {
         "list": 240
       },
-      "first_seen": "2026-04-18T06:47:43.575519+00:00",
-      "last_seen": "2026-04-18T06:48:40.968325+00:00",
+      "first_seen": "2026-04-18T09:15:34.395994+00:00",
+      "last_seen": "2026-04-18T09:16:18.359167+00:00",
       "sample_values": [
         "[{'order_id': 'ord-0-0', 'item': 'turn', 'price': 102.2}, {'order_id': 'ord-0-1', 'item': 'cell', 'price': 79.67}, {'ord",
         "[{'order_id': 'ord-1-0', 'item': 'social', 'price': 128.94}, {'order_id': 'ord-1-1', 'item': 'smile', 'price': 89.4}]",
@@ -198,8 +198,8 @@
       "type_counts": {
         "string": 240
       },
-      "first_seen": "2026-04-18T06:47:43.588888+00:00",
-      "last_seen": "2026-04-18T06:48:40.981619+00:00",
+      "first_seen": "2026-04-18T09:15:34.409498+00:00",
+      "last_seen": "2026-04-18T09:16:18.373900+00:00",
       "sample_values": [
         "ord-0-0",
         "ord-1-0",
@@ -216,8 +216,8 @@
       "type_counts": {
         "string": 240
       },
-      "first_seen": "2026-04-18T06:47:43.604044+00:00",
-      "last_seen": "2026-04-18T06:48:40.994435+00:00",
+      "first_seen": "2026-04-18T09:15:34.424581+00:00",
+      "last_seen": "2026-04-18T09:16:18.389193+00:00",
       "sample_values": [
         "turn",
         "social",
@@ -234,8 +234,8 @@
       "type_counts": {
         "float": 240
       },
-      "first_seen": "2026-04-18T06:47:43.617655+00:00",
-      "last_seen": "2026-04-18T06:48:41.006261+00:00",
+      "first_seen": "2026-04-18T09:15:34.438087+00:00",
+      "last_seen": "2026-04-18T09:16:18.405430+00:00",
       "sample_values": [
         "102.2",
         "128.94",
@@ -252,8 +252,8 @@
       "type_counts": {
         "string": 154
       },
-      "first_seen": "2026-04-18T06:47:43.631582+00:00",
-      "last_seen": "2026-04-18T06:48:41.020814+00:00",
+      "first_seen": "2026-04-18T09:15:34.450556+00:00",
+      "last_seen": "2026-04-18T09:16:18.418186+00:00",
       "sample_values": [
         "ord-0-1",
         "ord-1-1",
@@ -270,8 +270,8 @@
       "type_counts": {
         "string": 154
       },
-      "first_seen": "2026-04-18T06:47:43.645485+00:00",
-      "last_seen": "2026-04-18T06:48:41.056951+00:00",
+      "first_seen": "2026-04-18T09:15:34.462369+00:00",
+      "last_seen": "2026-04-18T09:16:18.429982+00:00",
       "sample_values": [
         "cell",
         "smile",
@@ -288,8 +288,8 @@
       "type_counts": {
         "float": 154
       },
-      "first_seen": "2026-04-18T06:47:43.659170+00:00",
-      "last_seen": "2026-04-18T06:48:41.071104+00:00",
+      "first_seen": "2026-04-18T09:15:34.473942+00:00",
+      "last_seen": "2026-04-18T09:16:18.448291+00:00",
       "sample_values": [
         "79.67",
         "89.4",
@@ -306,8 +306,8 @@
       "type_counts": {
         "string": 84
       },
-      "first_seen": "2026-04-18T06:47:43.672043+00:00",
-      "last_seen": "2026-04-18T06:48:39.892658+00:00",
+      "first_seen": "2026-04-18T09:15:34.486775+00:00",
+      "last_seen": "2026-04-18T09:16:16.780212+00:00",
       "sample_values": [
         "ord-0-2",
         "ord-5-2",
@@ -324,8 +324,8 @@
       "type_counts": {
         "string": 84
       },
-      "first_seen": "2026-04-18T06:47:43.684910+00:00",
-      "last_seen": "2026-04-18T06:48:39.907604+00:00",
+      "first_seen": "2026-04-18T09:15:34.499116+00:00",
+      "last_seen": "2026-04-18T09:16:16.796755+00:00",
       "sample_values": [
         "student",
         "continue",
@@ -342,8 +342,8 @@
       "type_counts": {
         "float": 84
       },
-      "first_seen": "2026-04-18T06:47:43.699074+00:00",
-      "last_seen": "2026-04-18T06:48:39.922988+00:00",
+      "first_seen": "2026-04-18T09:15:34.511618+00:00",
+      "last_seen": "2026-04-18T09:16:16.819464+00:00",
       "sample_values": [
         "5.22",
         "464.5",
@@ -360,102 +360,102 @@
     "email": {
       "backend": "MongoDB",
       "reason": "Field 'email' has only 2 observations (< 10) - routing to MongoDB (default for unmapped fields)",
-      "decided_at": "2026-04-18T06:47:43.723135+00:00"
+      "decided_at": "2026-04-18T09:15:34.530545+00:00"
     },
     "age": {
       "backend": "MongoDB",
       "reason": "Field 'age' has only 2 observations (< 10) - routing to MongoDB (default for unmapped fields)",
-      "decided_at": "2026-04-18T06:47:43.743698+00:00"
+      "decided_at": "2026-04-18T09:15:34.543820+00:00"
     },
     "country": {
       "backend": "MongoDB",
       "reason": "Field 'country' has only 2 observations (< 10) - routing to MongoDB (default for unmapped fields)",
-      "decided_at": "2026-04-18T06:47:43.758916+00:00"
+      "decided_at": "2026-04-18T09:15:34.555713+00:00"
     },
     "ip_address": {
       "backend": "MongoDB",
       "reason": "Field 'ip_address' has only 2 observations (< 10) - routing to MongoDB (default for unmapped fields)",
-      "decided_at": "2026-04-18T06:47:43.772995+00:00"
+      "decided_at": "2026-04-18T09:15:34.568190+00:00"
     },
     "is_active": {
       "backend": "MongoDB",
       "reason": "Field 'is_active' has only 2 observations (< 10) - routing to MongoDB (default for unmapped fields)",
-      "decided_at": "2026-04-18T06:47:43.788476+00:00"
+      "decided_at": "2026-04-18T09:15:34.580960+00:00"
     },
     "score": {
       "backend": "MongoDB",
       "reason": "Field 'score' has only 2 observations (< 10) - routing to MongoDB (default for unmapped fields)",
-      "decided_at": "2026-04-18T06:47:43.804430+00:00"
+      "decided_at": "2026-04-18T09:15:34.594785+00:00"
     },
     "profile": {
       "backend": "MongoDB",
       "reason": "Field 'profile' contains nested structures (type: dict) - direct MongoDB routing",
-      "decided_at": "2026-04-18T06:47:43.831574+00:00"
+      "decided_at": "2026-04-18T09:15:34.618584+00:00"
     },
     "orders": {
       "backend": "MongoDB",
       "reason": "Field 'orders' contains nested structures (type: list) - direct MongoDB routing",
-      "decided_at": "2026-04-18T06:47:43.858197+00:00"
+      "decided_at": "2026-04-18T09:15:34.638823+00:00"
     },
     "orders[0].item": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362549+00:00"
+      "decided_at": "2026-04-18T09:16:19.279846+00:00"
     },
     "orders[0].order_id": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362576+00:00"
+      "decided_at": "2026-04-18T09:16:19.279852+00:00"
     },
     "orders[0].price": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362594+00:00"
+      "decided_at": "2026-04-18T09:16:19.279855+00:00"
     },
     "orders[1].item": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362613+00:00"
+      "decided_at": "2026-04-18T09:16:19.279858+00:00"
     },
     "orders[1].order_id": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362631+00:00"
+      "decided_at": "2026-04-18T09:16:19.279861+00:00"
     },
     "orders[1].price": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362649+00:00"
+      "decided_at": "2026-04-18T09:16:19.279865+00:00"
     },
     "orders[2].item": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362667+00:00"
+      "decided_at": "2026-04-18T09:16:19.279870+00:00"
     },
     "orders[2].order_id": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362686+00:00"
+      "decided_at": "2026-04-18T09:16:19.279874+00:00"
     },
     "orders[2].price": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362703+00:00"
+      "decided_at": "2026-04-18T09:16:19.279877+00:00"
     },
     "profile.bio": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362721+00:00"
+      "decided_at": "2026-04-18T09:16:19.279879+00:00"
     },
     "profile.website": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362739+00:00"
+      "decided_at": "2026-04-18T09:16:19.279882+00:00"
     },
     "username": {
       "backend": "MongoDB",
       "reason": "Auto-finalized to MongoDB at program completion (unmapped field)",
-      "decided_at": "2026-04-18T06:48:42.362759+00:00"
+      "decided_at": "2026-04-18T09:16:19.279885+00:00"
     }
   },
   "current_placement": {
@@ -486,152 +486,152 @@
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-04-18T06:48:41.085487+00:00"
+      "updated_at": "2026-04-18T09:16:18.461585+00:00"
     },
     "age": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-04-18T06:48:41.093088+00:00"
+      "updated_at": "2026-04-18T09:16:18.467500+00:00"
     },
     "country": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-04-18T06:48:41.102118+00:00"
+      "updated_at": "2026-04-18T09:16:18.473050+00:00"
     },
     "ip_address": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-04-18T06:48:41.109784+00:00"
+      "updated_at": "2026-04-18T09:16:18.478721+00:00"
     },
     "is_active": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-04-18T06:48:41.116030+00:00"
+      "updated_at": "2026-04-18T09:16:18.484679+00:00"
     },
     "score": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-04-18T06:48:41.122412+00:00"
+      "updated_at": "2026-04-18T09:16:18.490880+00:00"
     },
     "profile": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-04-18T06:48:41.137914+00:00"
+      "updated_at": "2026-04-18T09:16:18.520722+00:00"
     },
     "orders": {
       "backend": "Both",
       "sql_table": "norm_orders",
       "mongo_collection": "ingested_records",
       "status": "final",
-      "updated_at": "2026-04-18T06:48:41.168385+00:00"
+      "updated_at": "2026-04-18T09:16:18.555343+00:00"
     },
     "orders[0].item": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362558+00:00",
-      "updated_at": "2026-04-18T06:48:42.362564+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279848+00:00",
+      "updated_at": "2026-04-18T09:16:19.279849+00:00"
     },
     "orders[0].order_id": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362582+00:00",
-      "updated_at": "2026-04-18T06:48:42.362587+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279853+00:00",
+      "updated_at": "2026-04-18T09:16:19.279853+00:00"
     },
     "orders[0].price": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362601+00:00",
-      "updated_at": "2026-04-18T06:48:42.362606+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279856+00:00",
+      "updated_at": "2026-04-18T09:16:19.279857+00:00"
     },
     "orders[1].item": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362618+00:00",
-      "updated_at": "2026-04-18T06:48:42.362624+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279859+00:00",
+      "updated_at": "2026-04-18T09:16:19.279860+00:00"
     },
     "orders[1].order_id": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362637+00:00",
-      "updated_at": "2026-04-18T06:48:42.362641+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279862+00:00",
+      "updated_at": "2026-04-18T09:16:19.279862+00:00"
     },
     "orders[1].price": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362655+00:00",
-      "updated_at": "2026-04-18T06:48:42.362660+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279868+00:00",
+      "updated_at": "2026-04-18T09:16:19.279869+00:00"
     },
     "orders[2].item": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362673+00:00",
-      "updated_at": "2026-04-18T06:48:42.362679+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279871+00:00",
+      "updated_at": "2026-04-18T09:16:19.279872+00:00"
     },
     "orders[2].order_id": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362691+00:00",
-      "updated_at": "2026-04-18T06:48:42.362695+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279875+00:00",
+      "updated_at": "2026-04-18T09:16:19.279876+00:00"
     },
     "orders[2].price": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362709+00:00",
-      "updated_at": "2026-04-18T06:48:42.362713+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279878+00:00",
+      "updated_at": "2026-04-18T09:16:19.279878+00:00"
     },
     "profile.bio": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362726+00:00",
-      "updated_at": "2026-04-18T06:48:42.362732+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279880+00:00",
+      "updated_at": "2026-04-18T09:16:19.279881+00:00"
     },
     "profile.website": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362744+00:00",
-      "updated_at": "2026-04-18T06:48:42.362750+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279883+00:00",
+      "updated_at": "2026-04-18T09:16:19.279883+00:00"
     },
     "username": {
       "backend": "MongoDB",
       "sql_table": null,
       "mongo_collection": "ingested_records",
       "status": "auto_finalized",
-      "finalized_at": "2026-04-18T06:48:42.362766+00:00",
-      "updated_at": "2026-04-18T06:48:42.362772+00:00"
+      "finalized_at": "2026-04-18T09:16:19.279886+00:00",
+      "updated_at": "2026-04-18T09:16:19.279886+00:00"
     }
   },
   "schema_registry": {
@@ -653,7 +653,7 @@
           "price"
         ],
         "foreign_key": "parent_sys_ingested_at",
-        "registered_at": "2026-04-18T06:48:41.160854+00:00"
+        "registered_at": "2026-04-18T09:16:18.547266+00:00"
       }
     }
   },
@@ -667,7 +667,7 @@
         "reference_threshold": 2,
         "decision_reasons": [],
         "schema_hints": {},
-        "registered_at": "2026-04-18T06:48:41.129547+00:00"
+        "registered_at": "2026-04-18T09:16:18.497013+00:00"
       },
       "orders": {
         "mode": "embed",
@@ -678,12 +678,12 @@
           "array_of_objects"
         ],
         "schema_hints": {},
-        "registered_at": "2026-04-18T06:48:41.145243+00:00"
+        "registered_at": "2026-04-18T09:16:18.527168+00:00"
       }
     }
   },
   "quarantined_fields": {},
   "total_records": 120,
-  "last_updated": "2026-04-18T06:48:42.371860+00:00",
-  "session_start": "2026-04-18T06:47:41.781782+00:00"
+  "last_updated": "2026-04-18T09:16:19.287519+00:00",
+  "session_start": "2026-04-18T09:15:34.045924+00:00"
 }

@@ -1,111 +1,111 @@
 {
-  "generated_at": "2026-04-18T12:18:42",
+  "generated_at": "2026-04-18T09:16:19",
   "ingestion": [
     {
       "label": "10 records",
       "count": 10,
-      "total_ms": 5995.07,
-      "avg_ms": 599.507,
-      "throughput": 1.7
+      "total_ms": 3139.24,
+      "avg_ms": 313.924,
+      "throughput": 3.2
     },
     {
       "label": "50 records",
       "count": 50,
-      "total_ms": 26793.57,
-      "avg_ms": 535.871,
-      "throughput": 1.9
+      "total_ms": 17030.27,
+      "avg_ms": 340.605,
+      "throughput": 2.9
     },
     {
       "label": "100 records",
       "count": 100,
-      "total_ms": 55231.76,
-      "avg_ms": 552.318,
-      "throughput": 1.8
+      "total_ms": 35465.78,
+      "avg_ms": 354.658,
+      "throughput": 2.8
     },
     {
       "label": "500 records",
       "count": 500,
-      "total_ms": 223165.87,
-      "avg_ms": 446.332,
-      "throughput": 2.2
+      "total_ms": 183618.26,
+      "avg_ms": 367.237,
+      "throughput": 2.7
     }
   ],
   "queries": [
     {
       "label": "Read (single filter)",
       "iterations": 50,
-      "avg_ms": 3.3505260018864647,
-      "min_ms": 2.2518000041600317,
-      "max_ms": 4.84029998187907,
-      "p95_ms": 3.9431999903172255,
-      "total_ms": 167.52630009432323
+      "avg_ms": 1.7213671600075031,
+      "min_ms": 1.1639009999271366,
+      "max_ms": 5.354463000003307,
+      "p95_ms": 2.8724970002258488,
+      "total_ms": 86.06835800037516
     },
     {
       "label": "Read (all, limit 50)",
       "iterations": 30,
-      "avg_ms": 4.726313330077876,
-      "min_ms": 3.651499981060624,
-      "max_ms": 6.0782999789807945,
-      "p95_ms": 5.79749999451451,
-      "total_ms": 141.7893999023363
+      "avg_ms": 3.0450223666169527,
+      "min_ms": 1.853069999924628,
+      "max_ms": 5.532787999982247,
+      "p95_ms": 4.550483999992139,
+      "total_ms": 91.35067099850858
     },
     {
       "label": "Update (single record)",
       "iterations": 30,
-      "avg_ms": 9.931426667996371,
-      "min_ms": 7.120099995518103,
-      "max_ms": 13.694199995370582,
-      "p95_ms": 11.84390002163127,
-      "total_ms": 297.94280003989115
+      "avg_ms": 10.468218066686555,
+      "min_ms": 2.8708930003631394,
+      "max_ms": 21.683251000013115,
+      "p95_ms": 17.79328600014196,
+      "total_ms": 314.0465420005967
     },
     {
       "label": "Delete + re-insert cycle",
       "iterations": 20,
-      "avg_ms": 439.19529500126373,
-      "min_ms": 313.3065000001807,
-      "max_ms": 1053.6444000026677,
-      "p95_ms": 582.5419999891892,
-      "total_ms": 8783.905900025275
+      "avg_ms": 400.0957112999231,
+      "min_ms": 255.10696499986807,
+      "max_ms": 816.6275869998572,
+      "p95_ms": 702.2596060000978,
+      "total_ms": 8001.914225998462
     }
   ],
   "metadata": [
     {
       "label": "Field mapping lookup",
       "iterations": 200,
-      "avg_ms": 0.0006155006121844053,
-      "min_ms": 0.000300002284348011,
-      "max_ms": 0.005799985956400633,
-      "p95_ms": 0.000800006091594696,
-      "total_ms": 0.12310012243688107
+      "avg_ms": 0.00012048500593664357,
+      "min_ms": 8.899996828404255e-05,
+      "max_ms": 0.0020170000425423495,
+      "p95_ms": 0.0001399998836859595,
+      "total_ms": 0.024097001187328715
     },
     {
       "label": "Placement decision lookup",
       "iterations": 200,
-      "avg_ms": 0.0005235003482084721,
-      "min_ms": 0.000300002284348011,
-      "max_ms": 0.0045000051613897085,
-      "p95_ms": 0.000600004568696022,
-      "total_ms": 0.10470006964169443
+      "avg_ms": 0.00011091500027760048,
+      "min_ms": 9.199993655784056e-05,
+      "max_ms": 0.0015860000530665275,
+      "p95_ms": 0.00012999998943996616,
+      "total_ms": 0.022183000055520097
     }
   ],
   "transactions": [
     {
       "label": "Full 2PC (begin\u2192prepare\u2192commit)",
       "iterations": 20,
-      "avg_ms": 13.226545001089107,
-      "min_ms": 8.653700002469122,
-      "max_ms": 48.60300000291318,
-      "p95_ms": 19.05919998534955,
-      "total_ms": 264.53090002178214
+      "avg_ms": 2.43504350000876,
+      "min_ms": 2.0424469998943096,
+      "max_ms": 4.120014000363881,
+      "p95_ms": 2.94059699990612,
+      "total_ms": 48.7008700001752
     },
     {
       "label": "Direct update (no 2PC)",
       "iterations": 20,
-      "avg_ms": 14.430590001575183,
-      "min_ms": 7.153799990192056,
-      "max_ms": 95.51260000444017,
-      "p95_ms": 19.27879999857396,
-      "total_ms": 288.61180003150366
+      "avg_ms": 2.749448250028763,
+      "min_ms": 2.0002520000161894,
+      "max_ms": 6.6934540000147535,
+      "p95_ms": 5.303116999584745,
+      "total_ms": 54.98896500057526
     }
   ],
   "data_distribution": {
@@ -118,7 +118,7 @@
     },
     "record_counts": {
       "sql_main_table": 100,
-      "mongodb_main_collection": 298,
+      "mongodb_main_collection": 100,
       "buffer_collection": 0
     },
     "storage_objects": {
@@ -129,23 +129,23 @@
   "throughput_scaling": [
     {
       "workload_ops": 10,
-      "elapsed_s": 0.026,
-      "throughput_ops_per_s": 379.5
+      "elapsed_s": 0.027,
+      "throughput_ops_per_s": 372.1
     },
     {
       "workload_ops": 25,
-      "elapsed_s": 0.073,
-      "throughput_ops_per_s": 340.3
+      "elapsed_s": 0.089,
+      "throughput_ops_per_s": 281.6
     },
     {
       "workload_ops": 50,
-      "elapsed_s": 0.147,
-      "throughput_ops_per_s": 340.9
+      "elapsed_s": 0.118,
+      "throughput_ops_per_s": 423.7
     },
     {
       "workload_ops": 100,
-      "elapsed_s": 0.366,
-      "throughput_ops_per_s": 273.1
+      "elapsed_s": 0.372,
+      "throughput_ops_per_s": 268.7
     }
   ]
 }
