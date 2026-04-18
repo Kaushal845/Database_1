@@ -32,7 +32,7 @@ class IngestionPipeline:
     def __init__(self,
                  metadata_file='metadata_store.json',
                  sql_db='ingestion_data.db',
-                 mongo_uri='mongodb://localhost:27017/',
+                 mongo_uri: Optional[str] = None,
                  mongo_db='ingestion_db',
                  use_transactions=True):
 

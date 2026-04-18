@@ -602,7 +602,12 @@ class MongoDBManager:
     Manages MongoDB connection for flexible/nested data storage.
     """
     
-    def __init__(self, connection_string='mongodb://localhost:27017/', db_name='ingestion_db'):
+    def __init__(self, connection_string=None, db_name='ingestion_db'):
+        import os
+        if connection_string is None:
+            mongo_host = os.environ.get('MONGO_HOST', 'localhost')
+            mongo_port = os.environ.get('MONGO_PORT', '27017')
+            connection_string = f'mongodb://{mongo_host}:{mongo_port}/'
         self._memory_collections: Dict[str, InMemoryCollection] = {}
         self.using_memory_fallback = False
 

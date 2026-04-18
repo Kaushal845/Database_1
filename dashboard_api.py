@@ -2,9 +2,12 @@
 Dashboard API - Enhanced version with better error handling and startup validation
 """
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from sse_starlette.sse import EventSourceResponse
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
+import asyncio
 import json
 import time
 import traceback
@@ -19,6 +22,10 @@ from logging_utils import get_logger
 
 logger = get_logger("dashboard_api")
 app = FastAPI(title="Hybrid DB Dashboard API", version="1.0.0")
+
+BASE_DIR = Path(__file__).resolve().parent
+DASHBOARD_DIST_DIR = BASE_DIR / "dashboard" / "dist"
+DASHBOARD_INDEX_FILE = DASHBOARD_DIST_DIR / "index.html"
 
 # Enable CORS for React frontend
 app.add_middleware(
@@ -37,6 +44,29 @@ initialization_error = None
 # Query execution history (in-memory, capped at 500 entries)
 query_history: List[Dict[str, Any]] = []
 QUERY_HISTORY_MAX = 500
+
+# Optional compatibility imports for Assignment-1/2 generator endpoints.
+try:
+    from main import DEFAULT_SCHEMA, generate_record
+except Exception:  # pragma: no cover - fallback only used if import fails
+    DEFAULT_SCHEMA = {
+        "required": ["username", "timestamp", "session_id"],
+        "constraints": {
+            "username": {"not_null": True},
+            "session_id": {"unique": True},
+            "timestamp": {"not_null": True},
+        },
+    }
+
+    def generate_record() -> Dict[str, Any]:
+        now = datetime.now(timezone.utc).isoformat()
+        return {
+            "username": f"user_{int(time.time() * 1000)}",
+            "timestamp": now,
+            "session_id": f"sess_{int(time.time() * 1000)}",
+            "email": "user@example.com",
+            "orders": [{"order_id": "o1", "item": "book", "price": 10.0}],
+        }
 
 
 def initialize_system():
@@ -76,9 +106,12 @@ async def startup_event():
         logger.warning(f"System started with initialization errors: {initialization_error}")
 
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 async def root():
-    """Root endpoint with system status"""
+    """Serve dashboard app if built, otherwise show API status."""
+    if DASHBOARD_INDEX_FILE.exists():
+        return FileResponse(str(DASHBOARD_INDEX_FILE))
+
     return {
         "service": "Hybrid Database Dashboard API",
         "version": "1.0.0",
@@ -128,6 +161,24 @@ async def health_check():
             "error": str(e),
             "timestamp": datetime.now(timezone.utc).isoformat()
         }
+
+
+@app.get("/schema")
+async def schema_definition() -> Dict[str, Any]:
+    """Compatibility endpoint for generator schema discovery."""
+    return DEFAULT_SCHEMA
+
+
+@app.get("/record/{count}")
+async def stream_records(count: int):
+    """Compatibility SSE endpoint used by data_consumer.py."""
+
+    async def event_generator():
+        for _ in range(max(0, count)):
+            await asyncio.sleep(0.01)
+            yield {"event": "record", "data": json.dumps(generate_record())}
+
+    return EventSourceResponse(event_generator())
 
 
 @app.get("/api/dashboard/summary")
@@ -804,6 +855,24 @@ async def list_transactions() -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Error listing transactions: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def serve_dashboard_spa(full_path: str):
+    """Serve built dashboard assets and SPA routes when available."""
+    if full_path.startswith("api/"):
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    if not DASHBOARD_INDEX_FILE.exists():
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    requested = (DASHBOARD_DIST_DIR / full_path).resolve()
+    dist_root = DASHBOARD_DIST_DIR.resolve()
+
+    if str(requested).startswith(str(dist_root)) and requested.exists() and requested.is_file():
+        return FileResponse(str(requested))
+
+    return FileResponse(str(DASHBOARD_INDEX_FILE))
 
 
 if __name__ == "__main__":

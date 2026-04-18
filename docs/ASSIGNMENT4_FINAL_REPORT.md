@@ -111,6 +111,55 @@ Compared the hybrid framework's logical abstraction layer against direct SQL/Mon
 
 ---
 
-## 5. System Setup
+## 5. Final System Packaging
 
-See [RUNNING.md](RUNNING.md) for complete installation, configuration, and usage instructions.
+The system is packaged as a complete, reproducible software package that can be set up with minimal effort.
+
+### Source Code Repository
+- **GitHub**: https://github.com/Kaushal845/Database_1
+
+### Setup Options
+
+#### Option A: Docker (Recommended — single command)
+
+```bash
+git clone https://github.com/Kaushal845/Database_1.git
+cd Database_1
+docker compose up --build
+```
+
+This starts:
+- **MongoDB 7.0** container with persistent volume
+- **Python backend API + pre-built React dashboard** at http://localhost:8000
+
+> See [`docs/DOCKER_SETUP.md`](../docs/DOCKER_SETUP.md) for full Docker commands (benchmarks, data ingestion, troubleshooting).
+
+#### Option B: Local Setup (Manual)
+
+See [`RUNNING.md`](../RUNNING.md) for step-by-step local installation with Python, Node.js, and MongoDB.
+
+### What's Included
+
+| Component | Description |
+|-----------|-------------|
+| Source code repository (GitHub) | All Python backend + React frontend source |
+| Setup instructions for dependencies | `RUNNING.md`, `requirements.txt`, `dashboard/package.json` |
+| SQL backend configuration | SQLite — zero-config, embedded, auto-initialized |
+| MongoDB backend configuration | Docker Compose auto-starts MongoDB; local setup documents manual start |
+| Instructions to run the ingestion API | `RUNNING.md` §4 (dashboard_api.py) and §5 (main.py) |
+| Instructions to run the logical query interface | Query Builder tab in the dashboard, or direct API at `/api/query` |
+| Instructions to launch the dashboard | `RUNNING.md` §6 (local) or `docker compose up` (Docker) |
+| Dockerized deployment | `Dockerfile`, `docker-compose.yml`, `docs/DOCKER_SETUP.md` |
+
+### Key Files
+
+| File | Purpose |
+|------|---------|
+| `Dockerfile` | Multi-stage build (Node.js → Python runtime) |
+| `docker-compose.yml` | MongoDB + App orchestration with health checks |
+| `.dockerignore` | Lean build context |
+| `RUNNING.md` | Complete local setup instructions |
+| `requirements.txt` | Python dependencies |
+| `dashboard/package.json` | Node.js/React dependencies |
+| `docs/DOCKER_SETUP.md` | Full Docker deployment guide |
+

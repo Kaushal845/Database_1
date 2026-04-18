@@ -1,0 +1,35 @@
+# Dependencies & build artifacts
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+node_modules/
+dashboard/node_modules/
+dashboard/dist/
+
+# Databases (rebuilt at runtime)
+*.db
+*.db-wal
+*.db-shm
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Docker (don't copy Docker files into the image)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Large/unnecessary files
+.pytest_cache/
+reports/*.pdf
+*.synctex.gz

@@ -2,7 +2,25 @@
 
 Complete instructions to install, configure, and run the entire system.
 
-## Prerequisites
+## Docker (Recommended — Single Command Setup)
+
+The fastest way to run the entire system with zero manual configuration:
+
+```bash
+git clone https://github.com/Kaushal845/Database_1.git
+cd Database_1
+docker compose up --build
+```
+
+Dashboard: **http://localhost:8000** | API Docs: **http://localhost:8000/docs**
+
+> See [`docs/DOCKER_SETUP.md`](docs/DOCKER_SETUP.md) for full Docker documentation (benchmarks, data ingestion, troubleshooting).
+
+---
+
+## Local Setup (Manual)
+
+### Prerequisites
 
 | Dependency | Version | Purpose |
 |-----------|---------|---------|
@@ -180,6 +198,7 @@ The production build is output to `dashboard/dist/` and is served by the backend
 - `docs/ASSIGNMENT4_FINAL_REPORT.md`
 - `docs/performance_report.md`
 - `docs/comparative_report.md`
+- `docs/DOCKER_SETUP.md`
 
 ---
 
@@ -187,6 +206,9 @@ The production build is output to `dashboard/dist/` and is served by the backend
 
 ```
 Database_1/
+├── Dockerfile                # Multi-stage Docker build
+├── docker-compose.yml        # MongoDB + App orchestration
+├── .dockerignore             # Docker build context filter
 ├── dashboard_api.py          # FastAPI backend (port 8000)
 ├── ingestion_pipeline.py     # Core ingestion + CRUD orchestrator
 ├── query_engine.py           # Metadata-driven query execution
@@ -201,7 +223,7 @@ Database_1/
 ├── dashboard/                # React + Vite frontend
 │   └── src/components/       # Dashboard UI components
 ├── tests/                    # Pytest test suite
-├── docs/                     # Reports and benchmark results
+├── docs/                     # Reports, benchmark results, DOCKER_SETUP.md
 ├── assgns/                   # Assignment specifications
 └── reports/                  # PDF reports
 ```
