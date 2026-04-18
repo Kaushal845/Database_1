@@ -1,0 +1,151 @@
+{
+  "generated_at": "2026-04-18T12:18:42",
+  "ingestion": [
+    {
+      "label": "10 records",
+      "count": 10,
+      "total_ms": 5995.07,
+      "avg_ms": 599.507,
+      "throughput": 1.7
+    },
+    {
+      "label": "50 records",
+      "count": 50,
+      "total_ms": 26793.57,
+      "avg_ms": 535.871,
+      "throughput": 1.9
+    },
+    {
+      "label": "100 records",
+      "count": 100,
+      "total_ms": 55231.76,
+      "avg_ms": 552.318,
+      "throughput": 1.8
+    },
+    {
+      "label": "500 records",
+      "count": 500,
+      "total_ms": 223165.87,
+      "avg_ms": 446.332,
+      "throughput": 2.2
+    }
+  ],
+  "queries": [
+    {
+      "label": "Read (single filter)",
+      "iterations": 50,
+      "avg_ms": 3.3505260018864647,
+      "min_ms": 2.2518000041600317,
+      "max_ms": 4.84029998187907,
+      "p95_ms": 3.9431999903172255,
+      "total_ms": 167.52630009432323
+    },
+    {
+      "label": "Read (all, limit 50)",
+      "iterations": 30,
+      "avg_ms": 4.726313330077876,
+      "min_ms": 3.651499981060624,
+      "max_ms": 6.0782999789807945,
+      "p95_ms": 5.79749999451451,
+      "total_ms": 141.7893999023363
+    },
+    {
+      "label": "Update (single record)",
+      "iterations": 30,
+      "avg_ms": 9.931426667996371,
+      "min_ms": 7.120099995518103,
+      "max_ms": 13.694199995370582,
+      "p95_ms": 11.84390002163127,
+      "total_ms": 297.94280003989115
+    },
+    {
+      "label": "Delete + re-insert cycle",
+      "iterations": 20,
+      "avg_ms": 439.19529500126373,
+      "min_ms": 313.3065000001807,
+      "max_ms": 1053.6444000026677,
+      "p95_ms": 582.5419999891892,
+      "total_ms": 8783.905900025275
+    }
+  ],
+  "metadata": [
+    {
+      "label": "Field mapping lookup",
+      "iterations": 200,
+      "avg_ms": 0.0006155006121844053,
+      "min_ms": 0.000300002284348011,
+      "max_ms": 0.005799985956400633,
+      "p95_ms": 0.000800006091594696,
+      "total_ms": 0.12310012243688107
+    },
+    {
+      "label": "Placement decision lookup",
+      "iterations": 200,
+      "avg_ms": 0.0005235003482084721,
+      "min_ms": 0.000300002284348011,
+      "max_ms": 0.0045000051613897085,
+      "p95_ms": 0.000600004568696022,
+      "total_ms": 0.10470006964169443
+    }
+  ],
+  "transactions": [
+    {
+      "label": "Full 2PC (begin\u2192prepare\u2192commit)",
+      "iterations": 20,
+      "avg_ms": 13.226545001089107,
+      "min_ms": 8.653700002469122,
+      "max_ms": 48.60300000291318,
+      "p95_ms": 19.05919998534955,
+      "total_ms": 264.53090002178214
+    },
+    {
+      "label": "Direct update (no 2PC)",
+      "iterations": 20,
+      "avg_ms": 14.430590001575183,
+      "min_ms": 7.153799990192056,
+      "max_ms": 95.51260000444017,
+      "p95_ms": 19.27879999857396,
+      "total_ms": 288.61180003150366
+    }
+  ],
+  "data_distribution": {
+    "field_distribution": {
+      "sql": 0,
+      "mongodb": 7,
+      "both": 1,
+      "buffer": 0,
+      "total": 8
+    },
+    "record_counts": {
+      "sql_main_table": 100,
+      "mongodb_main_collection": 298,
+      "buffer_collection": 0
+    },
+    "storage_objects": {
+      "sql_child_tables": 1,
+      "mongodb_collections": 3
+    }
+  },
+  "throughput_scaling": [
+    {
+      "workload_ops": 10,
+      "elapsed_s": 0.026,
+      "throughput_ops_per_s": 379.5
+    },
+    {
+      "workload_ops": 25,
+      "elapsed_s": 0.073,
+      "throughput_ops_per_s": 340.3
+    },
+    {
+      "workload_ops": 50,
+      "elapsed_s": 0.147,
+      "throughput_ops_per_s": 340.9
+    },
+    {
+      "workload_ops": 100,
+      "elapsed_s": 0.366,
+      "throughput_ops_per_s": 273.1
+    }
+  ]
+}

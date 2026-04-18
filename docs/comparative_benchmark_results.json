@@ -1,0 +1,146 @@
+{
+  "generated_at": "2026-04-18T12:02:46",
+  "comparisons": [
+    {
+      "test_name": "Record Retrieval (single filter read)",
+      "results": [
+        {
+          "method": "Framework (logical query)",
+          "iterations": 50,
+          "avg_ms": 2.403,
+          "min_ms": 1.885,
+          "max_ms": 3.899,
+          "p95_ms": 3.088
+        },
+        {
+          "method": "Direct SQL (SELECT)",
+          "iterations": 50,
+          "avg_ms": 0.023,
+          "min_ms": 0.02,
+          "max_ms": 0.08,
+          "p95_ms": 0.025
+        },
+        {
+          "method": "Direct MongoDB (find)",
+          "iterations": 50,
+          "avg_ms": 1.161,
+          "min_ms": 0.705,
+          "max_ms": 1.8,
+          "p95_ms": 1.561
+        }
+      ],
+      "overhead_pct": 103.0
+    },
+    {
+      "test_name": "Nested Document Access (orders + profile)",
+      "results": [
+        {
+          "method": "Framework (logical query)",
+          "iterations": 40,
+          "avg_ms": 3.362,
+          "min_ms": 2.233,
+          "max_ms": 5.619,
+          "p95_ms": 4.853
+        },
+        {
+          "method": "Direct MongoDB (find + projection)",
+          "iterations": 40,
+          "avg_ms": 1.487,
+          "min_ms": 1.131,
+          "max_ms": 3.045,
+          "p95_ms": 2.028
+        }
+      ],
+      "overhead_pct": 126.1
+    },
+    {
+      "test_name": "Record Update (single field)",
+      "results": [
+        {
+          "method": "Framework (logical update)",
+          "iterations": 30,
+          "avg_ms": 8.815,
+          "min_ms": 6.511,
+          "max_ms": 16.013,
+          "p95_ms": 11.075
+        },
+        {
+          "method": "Direct SQL (UPDATE)",
+          "iterations": 30,
+          "avg_ms": 0.022,
+          "min_ms": 0.014,
+          "max_ms": 0.209,
+          "p95_ms": 0.017
+        },
+        {
+          "method": "Direct MongoDB ($set)",
+          "iterations": 30,
+          "avg_ms": 1.204,
+          "min_ms": 0.914,
+          "max_ms": 1.627,
+          "p95_ms": 1.582
+        }
+      ],
+      "overhead_pct": 619.0
+    },
+    {
+      "test_name": "Record Insertion",
+      "results": [
+        {
+          "method": "Framework (full pipeline)",
+          "iterations": 20,
+          "avg_ms": 366.768,
+          "min_ms": 274.711,
+          "max_ms": 1237.725,
+          "p95_ms": 372.49
+        },
+        {
+          "method": "Direct SQL (INSERT)",
+          "iterations": 20,
+          "avg_ms": 0.103,
+          "min_ms": 0.067,
+          "max_ms": 0.27,
+          "p95_ms": 0.182
+        },
+        {
+          "method": "Direct MongoDB (insert_one)",
+          "iterations": 20,
+          "avg_ms": 1.032,
+          "min_ms": 0.56,
+          "max_ms": 1.645,
+          "p95_ms": 1.567
+        }
+      ],
+      "overhead_pct": 32214.4
+    }
+  ],
+  "summary": [
+    {
+      "metric": "Record Retrieval (single filter read)",
+      "overhead_pct": 103.0,
+      "framework_ms": 2.403,
+      "direct_sql_ms": 0.023,
+      "direct_mongo_ms": 1.161
+    },
+    {
+      "metric": "Nested Document Access (orders + profile)",
+      "overhead_pct": 126.1,
+      "framework_ms": 3.362,
+      "direct_mongo_ms": 1.487
+    },
+    {
+      "metric": "Record Update (single field)",
+      "overhead_pct": 619.0,
+      "framework_ms": 8.815,
+      "direct_sql_ms": 0.022,
+      "direct_mongo_ms": 1.204
+    },
+    {
+      "metric": "Record Insertion",
+      "overhead_pct": 32214.4,
+      "framework_ms": 366.768,
+      "direct_sql_ms": 0.103,
+      "direct_mongo_ms": 1.032
+    }
+  ]
+}
